@@ -1,0 +1,13 @@
+
+.links .card-link {
+  color: #ecd6d0;
+}
+
+.card a {
+  text-decoration: none;
+}
+
+.card a:hover {
+  font-size: 1.5rem;
+  font-weight: bold;
+}

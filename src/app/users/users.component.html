@@ -1,1 +1,42 @@
-<p>users works!</p>
+
+  <h1 class="text-start">Users</h1>
+  <a class="btn btn-warning mb-3">add</a>
+  <div class="row">
+    <div class="col-6">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+      </div>
+      <table class="table bg-secondary text-light">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Username</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{user.user_id}}</td>
+          <td>{{user.first_name}}</td>
+          <td>{{user.last_name}}</td>
+          <td>{{user.username}}</td>
+
+          <td>
+            <button type="button" class="btn btn-primary " (click)="setUser(user.user_id)">view</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div *ngIf="loadingData">{{message}}</div>
+    </div>
+    <div class="col-6">
+      <app-user-detail *ngIf="action==='view'" [user]="selectedUser"></app-user-detail>
+      <app-user-edit *ngIf="action==='edit'" [user]="selectedUser"  (dataChangedEvent)="loadData()"></app-user-edit>
+    </div>
+  </div>
+
+
+

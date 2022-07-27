@@ -1,1 +1,88 @@
-<p>user-edit works!</p>
+<h1>User</h1>
+
+<div class="bg-warning p-5">message</div>
+
+<form #userForm="ngForm">
+
+  <div class="form-group">
+    <label for="firstName">First name</label>
+    <input type="text" class="form-control" id="firstName" placeholder="first name"
+           [(ngModel)]="formUser.first_name" name="name" (change)="checkIfFirstNameIsValid()" required #firstNameField=
+             "ngModel">
+    <div class="alert alert-danger" *ngIf="firstNameField.invalid && firstNameField.touched">First name is
+      required
+    </div>
+    <div class="alert alert-danger" *ngIf="!firstNameIsValid && firstNameField.touched">Name cane not be blank</div>
+
+  </div>
+
+  <div class="form-group">
+    <label for="firstName">Last name</label>
+    <input type="text" class="form-control" id="lastName" placeholder="last name"
+           [(ngModel)]="formUser.last_name" name="lastName" (change)="checkIfLastNameIsValid()" required
+           #lastNameField=
+             "ngModel">
+    <div class="alert alert-danger" *ngIf="lastNameField.invalid && lastNameField.touched">Last name is
+      required
+    </div>
+    <div class="alert alert-danger" *ngIf="!lastNameIsValid && lastNameField.touched">Name cane not be blank</div>
+
+  </div>
+
+  <div class="form-group">
+    <label for="firstName">Age</label>
+    <input type="text" class="form-control" id="userAge" placeholder="user age"
+           [(ngModel)]="formUser.user_age" name="userAge" (change)="checkIfUserAgeIsValid()" required
+           #userAgeField=
+             "ngModel">
+    <div class="alert alert-danger" *ngIf="userAgeField.invalid && userAgeField.touched">Age is
+      required
+    </div>
+    <div class="alert alert-danger" *ngIf="!userAgeIsValid && userAgeField.touched">Age should be greater then 17</div>
+  </div>
+
+  <div class="form-group">
+    <label for="firstName">User name </label>
+    <input type="text" class="form-control" id="userName" placeholder="username"
+           [(ngModel)]="formUser.username" name="userName" (change)="checkIfUsernameIsValid()" required
+           #userNameField=
+             "ngModel">
+    <div class="alert alert-danger" *ngIf="userNameField.invalid && userNameField.touched">Username is
+      required
+    </div>
+    <div class="alert alert-danger" *ngIf="!usernameIsValid && userNameField.touched">Username can not be blank</div>
+  </div>
+
+  <div class="form-group">
+    <label for="firstName">User email </label>
+    <input type="text" class="form-control" id="userEmail" placeholder="user email"
+           [(ngModel)]="formUser.user_email" name="userEmail" (change)="checkIfUserEmailIsValid()" required
+           #userEmailField=
+             "ngModel">
+    <div class="alert alert-danger" *ngIf="userEmailField.invalid && userEmailField.touched">Email is required
+    </div>
+    <div class="alert alert-danger" *ngIf="!userEmailIsValid && userEmailField.touched">User email can not be
+      blank</div>
+  </div>
+
+  <!-- <div class="form-group" *ngIf="user?.user_id == 0">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" placeholder="password" [(ngModel)]="password"
+             name="password" (change)="checkIfPasswordsAreValid()" required #pass1="ngModel">
+      <div class="alert alert-danger" [hidden]="pass1.valid || pass1.untouched">Password is required</div>
+      <div class="alert alert-danger" [hidden]="passwordsAreValid || pass1.untouched">Password can not be blank</div>
+
+      <label for="password2">Repeat password</label>
+      <input type="password" class="form-control" id="password2" placeholder="password" [(ngModel)]="password2"
+             name="password2" (change)="checkIfPasswordsAreValid()" required #pass2="ngModel">
+      <div class="alert alert-danger" [hidden]="passwordsMatch  || pass1.untouched">The passwords must match</div>
+
+    </div>-->
+
+  <button type="button" class="btn btn-primary" (click)="onSubmit()"
+          [disabled]="userForm.invalid || !firstNameIsValid || !lastNameIsValid || !userAgeIsValid ||
+          !usernameIsValid || !usernameIsValid">Save
+  </button>
+</form>
+
+

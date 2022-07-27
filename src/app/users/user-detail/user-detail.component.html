@@ -1,1 +1,30 @@
-<p>user-detail works!</p>
+<div class="userDetails">
+  <h2>User details</h2>
+  <div class="card col-6 bg-secondary  text-light" style="width: 25rem;">
+    <div class="card-body">
+      <table class="table text-light">
+        <tr>
+          <td>id:</td><td>{{user.user_id}}</td>
+        </tr>
+        <tr>
+          <td>Name:</td><td>{{user.first_name}}{{user.last_name}}</td>
+        </tr>
+        <tr>
+          <td>Age:</td><td>{{user.user_age}}</td>
+        </tr>
+        <tr>
+          <td>User name:</td><td>{{user.username}}</td>
+        </tr>
+        <tr>
+          <td>Email:</td><td>{{user.user_email}}</td>
+        </tr>
+      </table>
+      <div class="links">
+        <a class="card-link" (click)="editUser()">Edit</a>
+        <a class="card-link">Delete</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="bg-warning p-5">message</div>

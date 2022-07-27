@@ -1,1 +1,87 @@
-<p>home works!</p>
+<div>
+  <div id="carouselExampleCaptions" class="carousel slide pt-2" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+              aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+              aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+              aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <a (click)="navigateToBooks()"><img src="./assets/images/book1.jpg" class="d-block w-100" alt="..."></a>
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Books for renting</h5>
+          <p>We offer you a lot of exciting books for renting</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <a (click)="navigateToUsers()"><img src="./assets/images/book2.jpg" class="d-block w-100" alt="..."></a>
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Users</h5>
+          <p>Take a look at our users</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <a (click)="navigateToRentingData()"><img src="../assets/images/book3.jpg" class="d-block w-100" alt="..."></a>
+        <div class="carousel-caption d-none d-md-block">
+          <h5>Renting</h5>
+          <p>You should hurry up, you dont want to miss our free books. Dont you?</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <div class="container p-0">
+    <div class="d-flex justify-content-between" >
+      <div class="card mt-4  bg-secondary text-light" style="width: 18rem;">
+        <div class="card-body">
+          <img src="./assets/images/fontawesome-free-6.1.1-desktop/svgs/solid/book-open-reader.svg"
+               class="card-img mb-2"
+               alt="...">
+          <a (click)="navigateToBookOwner()"><p class="card-text ms-5">If you are curious about book-owner list, check
+            the owner s name now.</p></a>
+        </div>
+      </div>
+      <div class="card mt-4 bg-secondary text-light" style="width: 18rem;">
+        <div class="card-body">
+          <img src="./assets/images/fontawesome-free-6.1.1-desktop/svgs/solid/book.svg"
+               class="card-img mb-2"
+               alt="...">
+          <a (click)="navigateToMyListing()"><p class="card-text ms-5">Go to your book list to find the books you have
+            already bookmarked</p></a>
+        </div>
+      </div>
+      <div class="card mt-4 bg-secondary text-light" style="width: 18rem;">
+        <div class="card-body">
+          <img src="./assets/images/fontawesome-free-6.1.1-desktop/svgs/solid/book-bookmark.svg"
+               class="card-img mb-2"
+               alt="...">
+          <a
+            (click)="navigateToWaitingList()"><p class="card-text ms-5">The waiting list can be very very long. Don t
+            delay. Subscribe to the
+            waiting list.</p></a>
+        </div>
+      </div>
+      <div class="card mt-4 bg-secondary text-light" style="width: 18rem;">
+        <div class="card-body">
+          <img src="./assets/images/fontawesome-free-6.1.1-desktop/svgs/solid/hand-peace.svg"
+               class="card-img mb-2"
+               alt="...">
+          <a (click)="navigateToAvailableBooks()"><p class="card-text ms-5">Books free for renting. Book now.
+            content.</p></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
