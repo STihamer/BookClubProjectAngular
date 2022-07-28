@@ -1,12 +1,33 @@
-<div class=" container row d-flex justify-content-center p-0 m-0">
+<div class=" container row d-flex justify-content-center p-0 m-0" *ngIf="!bookHidden">
   <div class="col-sm-12  col-md-6 col-lg-4 col-xl-3  " *ngFor=" let book of books">
     <div class="card bg-white bg-opacity-50  border-0 m-3" style="width: 18rem;">
-      <a>
-        <div class="card-body">
+      <a (click)="setBook(book.book_id)">
+        <div class="card-body" data-bs-toggle="modal" data-bs-target="#exampleModal">
           <h5 class="card-title ">{{book.book_title}}</h5>
           <h6 class="card-subtitle mb-2">{{book.author_fname }}{{book.author_lname}}</h6>
         </div>
       </a>
     </div>
   </div>
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Book title: {{selectedBook.book_title}}</h5>
+
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <H6>Author name: {{selectedBook.author_fname }} {{selectedBook.author_lname}}</H6>
+          <H6>Published: {{selectedBook.published }}</H6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"(click)="editBook()">Edit</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+<app-edit-book *ngIf="bookHidden"></app-edit-book>
+

@@ -14,7 +14,7 @@ export class DataService {
   }
 
   get users(): Observable<Array<User>> {
-    return this.http.get<Array<User>>(environment.restUrl + 'users')
+    return this.http.get<Array<User>>(environment.restUrl + '/users')
       .pipe(
         map(data => {
           const users = new Array<User>();
@@ -27,7 +27,7 @@ export class DataService {
   }
 
   get books(): Observable<Array<Book>> {
-    return this.http.get<Array<Book>>(environment.restUrl + 'books')
+    return this.http.get<Array<Book>>(environment.restUrl + '/books')
       .pipe(
         map(data => {
           const books= new Array<Book>();
@@ -43,11 +43,18 @@ export class DataService {
 
   updateUser(user: User, id: number): Observable<any> {
 
-    return this.http.put<User>(environment.restUrl + `users/${id}`, this.correctedUser(user));
+    return this.http.put<User>(environment.restUrl + `/users/${id}`,user);
   }
 
   getUserById(id: number): Observable<any> {
-    return this.http.get<User>(environment.restUrl + `users/${id}`)
+    return this.http.get<User>(environment.restUrl + `/users/${id}`)
+      .pipe(map(data => {
+        return User.fromHttp(data);
+      }))
+  }
+
+  getUserByUsername(username: string): Observable<any> {
+    return this.http.get<User>(environment.restUrl + `/users/${username}`)
       .pipe(map(data => {
         return User.fromHttp(data);
       }))
@@ -60,9 +67,7 @@ export class DataService {
       last_name: user.last_name,
       user_age: user.user_age,
       username: user.username,
-      user_email: user.user_email,
-      user_password: user.user_password,
-      role_id: user.role_id
+      user_email: user.user_email
     }
   }
 }

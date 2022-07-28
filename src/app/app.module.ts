@@ -19,6 +19,7 @@ import { AvailableBooksComponent } from './books/available-books/available-books
 import {HttpClientModule} from "@angular/common/http";
 import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { BookEditComponent } from './books/book_edit/book-edit.component';
 
 
 
@@ -38,6 +39,7 @@ import { UserDetailComponent } from './users/user-detail/user-detail.component';
     AvailableBooksComponent,
     UserEditComponent,
     UserDetailComponent,
+    BookEditComponent,
 
 
   ],

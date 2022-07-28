@@ -21,6 +21,7 @@ export class UserDetailComponent implements OnInit {
               private dataService: DataService) { }
 
   ngOnInit(): void {
+
   }
 
   editUser() {

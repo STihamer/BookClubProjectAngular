@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../data.service";
-import {User} from "../model/User";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -10,16 +9,18 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class UsersComponent implements OnInit {
 
-  users: Array<User> = new Array<User>();
+  users: Array<any> = new Array<any>();
   action: string = '';
   message = 'Loading dat ... please wait';
   loadingData = true;
   selectedUser: any;
+  searchingUser: string = '';
 
   constructor(private dataService: DataService,
               private router: Router,
               private route: ActivatedRoute) {
   }
+
 
   ngOnInit(): void {
     this.loadData();
@@ -30,6 +31,7 @@ export class UsersComponent implements OnInit {
     this.dataService.users.subscribe(
       next => {
         this.users = next;
+        console.log(this.users)
         this.loadingData = false;
         this.route.queryParams.subscribe(params => {
           const id = params['id'];
@@ -47,5 +49,24 @@ export class UsersComponent implements OnInit {
 
   setUser(id: number) {
     this.router.navigate(['users'], {queryParams: {id: id, action: 'view'}})
+  }
+
+  findUserByUsername(username: string) {
+    console.log()
+    if (username === '') {
+      this.dataService.users.subscribe(
+        next => {
+          this.users = next;
+        })
+    } else {
+      this.dataService.users.subscribe(next => this.users = next.filter(user => user.username.indexOf(username) > -1))
+      this.router.navigate(['users'], {queryParams: {username: username}})
+    }
+  }
+
+  deleteSearchingByUsername() {
+    this.router.navigate(['users']);
+    this.dataService.users.subscribe(next => this.users = next);
+    this.searchingUser = '';
   }
 }
