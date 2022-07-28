@@ -30,7 +30,14 @@ export class UsersComponent implements OnInit {
   loadData() {
     this.dataService.users.subscribe(
       next => {
-        this.users = next;
+        this.users = next.sort((a, b) => {
+          if (a.user_id > b.user_id) {
+            return 1;
+          } else if (a.user_id < b.user_id) {
+            return -1;
+          }
+          return 0;
+        });
         console.log(this.users)
         this.loadingData = false;
         this.route.queryParams.subscribe(params => {
@@ -48,7 +55,8 @@ export class UsersComponent implements OnInit {
   }
 
   setUser(id: number) {
-    this.router.navigate(['users'], {queryParams: {id: id, action: 'view'}})
+    this.router.navigate(['users'],
+      {queryParams: {id: id, action: 'view'}})
   }
 
   findUserByUsername(username: string) {
@@ -59,8 +67,12 @@ export class UsersComponent implements OnInit {
           this.users = next;
         })
     } else {
-      this.dataService.users.subscribe(next => this.users = next.filter(user => user.username.indexOf(username) > -1))
-      this.router.navigate(['users'], {queryParams: {username: username}})
+      this.dataService.users.subscribe(
+        next => this.users = next.filter(
+          user => user.username.toLowerCase()
+            .indexOf(username.toLowerCase()) > -1))
+      this.router.navigate(['users'],
+        {queryParams: {username: username}})
     }
   }
 

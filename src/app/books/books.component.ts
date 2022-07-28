@@ -14,6 +14,9 @@ export class BooksComponent implements OnInit {
   action: string = '';
   message: string = '';
   bookHidden = false;
+  searchingBook: string = '';
+
+
 
   constructor(private dataService: DataService,
               private router: Router,
@@ -31,7 +34,14 @@ export class BooksComponent implements OnInit {
   loadData() {
     this.dataService.books.subscribe(
       next => {
-        this.books = next;
+        this.books = next.sort((a, b) => {
+          if (a.book_title > b.book_title) {
+            return 1;
+          } else if (a.book_title < b.book_title) {
+            return -1;
+          }
+          return 0;
+        });
         this.route.queryParams.subscribe(params => {
           const id = params['id'];
           this.action = params['action'];
@@ -52,7 +62,37 @@ export class BooksComponent implements OnInit {
 
   editBook() {
     this.bookHidden = true;
-    this.router.navigate(['books'], {queryParams: {action: 'edit', id: this.selectedBook.book_id}})
+    this.router.navigate(['books'],
+      {queryParams: {action: 'edit', id: this.selectedBook.book_id}})
+  }
+
+  findBookByTitle(title: string) {
+    console.log()
+    if (title === '') {
+      this.dataService.books.subscribe(
+        next => {
+          this.books = next.sort((a, b) => {
+            if (a.book_title > b.book_title) {
+              return 1;
+            } else if (a.book_title < b.book_title) {
+              return -1;
+            }
+            return 0;
+          });
+        })
+    } else {
+      this.dataService.books.subscribe(
+        next => this.books = next.filter(
+          book => book.book_title.toLowerCase()
+            .indexOf(title.toLowerCase()) > -1));
+      this.router.navigate(['books'],
+        {queryParams: {title: title}})
+    }
+  }
+  deleteSearchingByTitle() {
+    this.router.navigate(['books']);
+    this.dataService.books.subscribe(next => this.books = next);
+    this.searchingBook = '';
   }
 
 }

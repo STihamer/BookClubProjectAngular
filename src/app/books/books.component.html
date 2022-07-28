@@ -1,4 +1,11 @@
 <div class=" container row d-flex justify-content-center p-0 m-0" *ngIf="!bookHidden">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Book title" aria-label="Book title"
+           aria-describedby="button-addon2" [(ngModel)]="searchingBook"
+           (keyup)="findBookByTitle(searchingBook)">
+    <button class="btn btn-success" type="button" id="button-addon2"
+            (click)="deleteSearchingByTitle()">Abort</button>
+  </div>
   <div class="col-sm-12  col-md-6 col-lg-4 col-xl-3  " *ngFor=" let book of books">
     <div class="card bg-white bg-opacity-50  border-0 m-3" style="width: 18rem;">
       <a (click)="setBook(book.book_id)">
@@ -22,12 +29,12 @@
           <H6>Published: {{selectedBook.published }}</H6>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"(click)="editBook()">Edit</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="editBook()">Edit</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
 </div>
-<app-edit-book *ngIf="bookHidden"></app-edit-book>
+<app-edit-book *ngIf="bookHidden && action==='edit'" [book]="selectedBook" (dataChangedEvent)="loadData()"></app-edit-book>
 

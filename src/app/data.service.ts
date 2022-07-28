@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {User} from "./model/User";
-import {map, Observable} from "rxjs";
+import {map, Observable, of} from "rxjs";
 import {environment} from "../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Book} from "./model/Book";
@@ -30,7 +30,7 @@ export class DataService {
     return this.http.get<Array<Book>>(environment.restUrl + '/books')
       .pipe(
         map(data => {
-          const books= new Array<Book>();
+          const books = new Array<Book>();
           for (const book of data) {
             books.push(Book.fromHttp(book));
           }
@@ -40,10 +40,14 @@ export class DataService {
   }
 
 
-
   updateUser(user: User, id: number): Observable<any> {
 
-    return this.http.put<User>(environment.restUrl + `/users/${id}`,user);
+    return this.http.put<User>(environment.restUrl + `/users/${id}`, user);
+  }
+
+  updateBook(book: Book, id: number): Observable<any> {
+
+    return this.http.put<Book>(environment.restUrl + `/books/${id}`, book);
   }
 
   getUserById(id: number): Observable<any> {
@@ -59,6 +63,10 @@ export class DataService {
         return User.fromHttp(data);
       }))
   }
+
+  addBook(book: Book):Observable<any> {
+    return of(null)
+  };
 
   private correctedUser(user: User) {
     return {
