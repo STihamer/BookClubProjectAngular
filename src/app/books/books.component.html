@@ -3,10 +3,30 @@
     <input type="text" class="form-control" placeholder="Book title" aria-label="Book title"
            aria-describedby="button-addon2" [(ngModel)]="searchingBook"
            (keyup)="findBookByTitle(searchingBook)">
-    <button class="btn btn-success" type="button" id="button-addon2"
+    <button class="btn btn-info" type="button" id="button-addon2"
             (click)="deleteSearchingByTitle()">Abort</button>
+    <button class="btn btn-success border-secondary" type="button" id="button-addon3" (click)="addBook()">Add book</button>
   </div>
   <div class="col-sm-12  col-md-6 col-lg-4 col-xl-3  " *ngFor=" let book of books">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Book title: {{book.book_title}}</h5>
+
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <H6>Author name: {{book.author_fname }} {{book.author_lname}}</H6>
+            <H6>Published: {{book.published }}</H6>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="editBook()">Edit</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="card bg-white bg-opacity-50  border-0 m-3" style="width: 18rem;">
       <a (click)="setBook(book.book_id)">
         <div class="card-body" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -16,25 +36,8 @@
       </a>
     </div>
   </div>
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Book title: {{selectedBook.book_title}}</h5>
 
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <H6>Author name: {{selectedBook.author_fname }} {{selectedBook.author_lname}}</H6>
-          <H6>Published: {{selectedBook.published }}</H6>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="editBook()">Edit</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
-<app-edit-book *ngIf="bookHidden && action==='edit'" [book]="selectedBook" (dataChangedEvent)="loadData()"></app-edit-book>
+<app-edit-book *ngIf="bookHidden && (action==='edit' || action==='add')" [book]="selectedBook"
+               (dataChangedEvent)="loadData()" [action]="action"></app-edit-book>
 

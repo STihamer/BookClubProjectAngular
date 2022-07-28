@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Book} from "../../model/Book";
 import {DataService} from "../../data.service";
 import {Router} from "@angular/router";
@@ -10,7 +10,7 @@ import {Subscription} from "rxjs";
   templateUrl: './book-edit.component.html',
   styleUrls: ['./book-edit.component.css']
 })
-export class BookEditComponent implements OnInit {
+export class BookEditComponent implements OnInit, OnDestroy {
 
 
   @Input()
@@ -19,6 +19,9 @@ export class BookEditComponent implements OnInit {
   @Output()
   dataChangedEvent = new EventEmitter();
   formBook: Book = new Book();
+
+  @Input()
+  action: string = '';
 
 
   message: string = '';
@@ -46,6 +49,10 @@ export class BookEditComponent implements OnInit {
         console.log(this.book)
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.BookResetSubscription.unsubscribe();
   }
 
   checkIfBookTitleIsValid() {
@@ -100,13 +107,23 @@ export class BookEditComponent implements OnInit {
       );
     } else {
       this.dataService.updateBook(this.formBook, this.formBook.book_id).subscribe(
-        (user) => {
+        (book) => {
           this.dataChangedEvent.emit();
           this.router.navigate(['books']);
         },
         error => this.message = 'Something went wrong and the data wasn\'t saved. You may want to try again.'
       );
     }
+  }
+
+  deleteBook() {
+    this.message = 'deleting';
+    this.dataService.deleteBook(this.formBook.book_id).subscribe(
+      next => {
+        this.dataChangedEvent.emit();
+        this.router.navigate(['books']);
+      }, error => this.message = 'Sorry, this user cannot be deleted at this time.'
+    )
   }
 
 }

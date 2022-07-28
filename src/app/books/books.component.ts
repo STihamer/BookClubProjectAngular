@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DataService} from "../data.service";
 import {Book} from "../model/Book";
 import {ActivatedRoute, Router} from "@angular/router";
+import {FormResetService} from "../form-reset.service";
 
 @Component({
   selector: 'app-books',
@@ -17,10 +18,10 @@ export class BooksComponent implements OnInit {
   searchingBook: string = '';
 
 
-
   constructor(private dataService: DataService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private formResetService: FormResetService) {
   }
 
   ngOnInit(): void {
@@ -89,10 +90,19 @@ export class BooksComponent implements OnInit {
         {queryParams: {title: title}})
     }
   }
+
   deleteSearchingByTitle() {
     this.router.navigate(['books']);
     this.dataService.books.subscribe(next => this.books = next);
     this.searchingBook = '';
   }
+
+  addBook() {
+    this.selectedBook = new Book();
+    this.router.navigate(['books'], {queryParams: {action: 'add'}});
+    this.formResetService.resetBookFormEvent.emit(this.selectedBook);
+    this.bookHidden = true;
+  }
+
 
 }

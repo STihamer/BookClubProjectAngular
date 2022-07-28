@@ -1,1 +1,44 @@
-<p>my-listing works!</p>
+<h1 class="text-start">User s listing</h1>
+<a class="btn btn-warning mb-3">add</a>
+<div class="row">
+  <div class="col-6">
+    <!--<div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username"
+             aria-describedby="button-addon2" [(ngModel)]="searchingUser"
+             (keyup)="findUserByUsername(searchingUser)">
+      <button class="btn btn-outline-secondary" type="button" id="button-addon2"
+              (click)="deleteSearchingByUsername()">Abort</button>
+    </div>-->
+    <table class="table bg-secondary text-light">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Book Title</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let person of PersonsListingList">
+        <td>{{person.id}}</td>
+        <td>{{person.firstName}}</td>
+        <td>{{person.lastName}}</td>
+        <td>{{person.bookTitle}}</td>
+
+        <td>
+          <button type="button" class="btn btn-primary ">view</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-6">
+    <app-user-detail *ngIf="action==='view'"></app-user-detail>
+    <app-user-edit *ngIf="action==='edit'" (dataChangedEvent)="loadData()"></app-user-edit>
+  </div>
+</div>
+
+
+
+

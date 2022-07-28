@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {User} from "./model/User";
-import {map, Observable, of} from "rxjs";
+import {map, Observable} from "rxjs";
 import {environment} from "../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Book} from "./model/Book";
+import {MyListing} from "./model/myListing";
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,13 @@ export class DataService {
       }))
   }
 
+  getBookById(id: number): Observable<any> {
+    return this.http.get<Book>(environment.restUrl + `/books/${id}`)
+      .pipe(map(data => {
+        return Book.fromHttp(data);
+      }))
+  }
+
   getUserByUsername(username: string): Observable<any> {
     return this.http.get<User>(environment.restUrl + `/users/${username}`)
       .pipe(map(data => {
@@ -64,9 +72,30 @@ export class DataService {
       }))
   }
 
-  addBook(book: Book):Observable<any> {
-    return of(null)
-  };
+  get myListing(): Observable<Array<MyListing>> {
+    return this.http.get<Array<MyListing>>(environment.restUrl + '/myListing')
+      .pipe(
+        map(data => {
+          const myListings = new Array<MyListing>();
+          for (const myListing of data) {
+            myListings.push(MyListing.fromHttp(myListing));
+          }
+          return myListings
+        })
+      );
+  }
+
+  deleteBook(id: number): Observable<any> {
+    return this.http.delete(environment.restUrl + `/books/${id}`);
+  }
+
+  addBook(newBook: Book): Observable<Book> {
+    const fullBook = {
+      book_title: newBook.book_title, author_fname: newBook.author_fname,
+      author_lname: newBook.author_lname, published: newBook.published
+    };
+    return this.http.post<Book>(environment.restUrl + '/books', fullBook);
+  }
 
   private correctedUser(user: User) {
     return {
