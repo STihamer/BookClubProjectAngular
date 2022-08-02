@@ -38,7 +38,6 @@ export class UsersComponent implements OnInit {
           }
           return 0;
         });
-        console.log(this.users)
         this.loadingData = false;
         this.route.queryParams.subscribe(params => {
           const id = params['id'];
@@ -60,7 +59,6 @@ export class UsersComponent implements OnInit {
   }
 
   findUserByUsername(username: string) {
-    console.log()
     if (username === '') {
       this.dataService.users.subscribe(
         next => {

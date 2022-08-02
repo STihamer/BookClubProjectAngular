@@ -2,9 +2,11 @@ import {Injectable} from '@angular/core';
 import {User} from "./model/User";
 import {map, Observable} from "rxjs";
 import {environment} from "../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Book} from "./model/Book";
-import {MyListing} from "./model/myListing";
+import {MyListing} from "./model/MyListing";
+import {PersonBookListing} from "./model/PersonBookListing";
+import {BookOwner} from "./model/BookOwner";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,7 @@ export class DataService {
   constructor(private http: HttpClient) {
 
   }
+
 
   get users(): Observable<Array<User>> {
     return this.http.get<Array<User>>(environment.restUrl + '/users')
@@ -89,12 +92,28 @@ export class DataService {
     return this.http.delete(environment.restUrl + `/books/${id}`);
   }
 
+  deleteMyListing(id: number): Observable<any> {
+    return this.http.delete(environment.restUrl + `/myListing/${id}`);
+  }
+
+  deleteOwnerBook(id: number): Observable<any> {
+    return this.http.delete(environment.restUrl + `/bookOwner/${id}`);
+  }
+
   addBook(newBook: Book): Observable<Book> {
     const fullBook = {
       book_title: newBook.book_title, author_fname: newBook.author_fname,
       author_lname: newBook.author_lname, published: newBook.published
     };
     return this.http.post<Book>(environment.restUrl + '/books', fullBook);
+  }
+
+  addMyListing(myListing: MyListing): Observable<MyListing> {
+    const params = new HttpParams()
+      .set('reading_person', myListing.reading_person)
+      .set('book_title', myListing.book_title);
+    console.log(params.toString())
+    return this.http.post<MyListing>(environment.restUrl + `/myListing?${params}`, myListing);
   }
 
   private correctedUser(user: User) {
@@ -107,5 +126,19 @@ export class DataService {
       user_email: user.user_email
     }
   }
+
+  get bookOwners(): Observable<Array<BookOwner>> {
+    return this.http.get<Array<BookOwner>>(environment.restUrl + '/bookOwner')
+      .pipe(
+        map(data => {
+          const bookOwners = new Array<BookOwner>();
+          for (const bookOwner of data) {
+           bookOwners.push(BookOwner.fromHttp(bookOwner));
+          }
+          return bookOwners
+        })
+      );
+  }
+
 }
 

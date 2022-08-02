@@ -1,1 +1,70 @@
-<p>book-owners works!</p>
+<div class="container p-5">
+  <h1 class="text-center mt-5 mb-5">Book owners</h1>
+  <div class="accordion  accordion-flush" id="accordionExample">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Searching by first or book title"
+             aria-label="Recipient's username"
+             aria-describedby="button-addon2" [(ngModel)]="searchingText"  (keyup)="findData(searchingText)">
+      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Abort
+      </button>
+    </div>
+    <div class="accordion-item" *ngFor="let item of personNameBookTitleForBookOwners; let i = index">
+      <h2 class="accordion-header" [id]="'heading'+i">
+
+        <button class="accordion-button" [ngClass]="{ 'collapsed': i !=personNameBookTitleForBookOwners.length }"
+                type="button"
+                data-bs-toggle="collapse"
+                [attr.data-bs-target]="'#collapse'+i" aria-expanded="false" [attr.aria-controls]="'collapse'+i"
+                (click)="selectUserAndBookForAccordion(item)">
+          <div class="card p-2 border-0" style="width: 100%;">
+            <div class="card-body p-0">
+              <h5 class="card-title">Owner: {{item.firstName }} {{item.lastName}}</h5>
+            </div>
+            <div class="card-body p-0">
+              <h5 class="card-title">Book title : {{item.bookTitle}}</h5>
+            </div>
+          </div>
+        </button>
+      </h2>
+      <div [id]="'collapse'+i" class="accordion-collapse collapse" [ngClass]="{'hide': i == 1 }"
+           [attr.aria-labelledby]="'heading'+i" data-bs-parent="#accordionExample">
+        <div class="accordion-body row justify-content-center">
+          <div class="card card-inline-block border-start-0 border-top-0 border-bottom-0 border-end-0" style="width:
+         40%;">
+            <ul class="list-group text-center ">
+              <li class="list-group-item border-start-0 border-top-0 border-end-0 text-format">Book detail</li>
+              <li class="list-group-item border-start-0 border-top-0 border-end-0">Author first name:
+                {{ selectedBook.author_fname}}</li>
+              <li class="list-group-item border-start-0 border-end-0">Author last
+                name: {{ selectedBook.author_lname}}</li>
+              <li class="list-group-item border-start-0 border-end-0">Book title: {{selectedBook.book_title}}</li>
+              <li class="list-group-item border-start-0 border-end-0">Published year: {{selectedBook.published}}</li>
+            </ul>
+          </div>
+          <div class="card  ms-5 card-inline-block border-start-0 border-top-0 border-bottom-0 border-end-0"
+               style="width:
+         40%;">
+            <ul class="list-group text-center ">
+              <li class="list-group-item border-start-0 border-top-0 border-end-0 text-format">User detail</li>
+              <li class="list-group-item border-start-0 border-top-0 border-end-0">First
+                name: {{ selectedUser.first_name}}</li>
+              <li class="list-group-item border-start-0 border-end-0">Last name: {{ selectedUser.last_name}}</li>
+              <li class="list-group-item border-start-0 border-end-0">Age: {{selectedUser.user_age}}</li>
+              <li class="list-group-item border-start-0 border-end-0">User name: {{selectedUser.username}}</li>
+              <li class="list-group-item border-start-0 border-bottom-0 border-end-0">
+                Email: {{selectedUser.user_email}}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="container d-flex  row justify-content-end m-0 p-0">
+          <button type="button" class="btn btn-secondary col-2 pe-0 me-0"
+                  (click)="deleteOwnerBookField(item.id)">Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+</div>

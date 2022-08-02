@@ -46,7 +46,6 @@ export class BookEditComponent implements OnInit, OnDestroy {
     this.BookResetSubscription = this.formResetService.resetBookFormEvent.subscribe(
       book => {
         this.book = book;
-        console.log(this.book)
       }
     );
   }

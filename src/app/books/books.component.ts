@@ -36,9 +36,9 @@ export class BooksComponent implements OnInit {
     this.dataService.books.subscribe(
       next => {
         this.books = next.sort((a, b) => {
-          if (a.book_title > b.book_title) {
+          if (a.book_id > b.book_id) {
             return 1;
-          } else if (a.book_title < b.book_title) {
+          } else if (a.book_id < b.book_id) {
             return -1;
           }
           return 0;
@@ -53,7 +53,11 @@ export class BooksComponent implements OnInit {
           if (id) {
             this.selectedBook = this.books.find(book => book.book_id === +id);
           }
-
+          if (this.action === 'edit' && id) {
+            this.bookHidden = true;
+            this.router.navigate(['books'],
+              {queryParams: {action: 'edit', id: this.selectedBook.book_id}})
+          }
         });
       }, errors => {
         this.message = 'An error occurred - please contact support';
@@ -68,7 +72,6 @@ export class BooksComponent implements OnInit {
   }
 
   findBookByTitle(title: string) {
-    console.log()
     if (title === '') {
       this.dataService.books.subscribe(
         next => {
@@ -87,7 +90,7 @@ export class BooksComponent implements OnInit {
           book => book.book_title.toLowerCase()
             .indexOf(title.toLowerCase()) > -1));
       this.router.navigate(['books'],
-        {queryParams: {title: title}})
+        {queryParams: {action: title}})
     }
   }
 
@@ -103,6 +106,4 @@ export class BooksComponent implements OnInit {
     this.formResetService.resetBookFormEvent.emit(this.selectedBook);
     this.bookHidden = true;
   }
-
-
 }

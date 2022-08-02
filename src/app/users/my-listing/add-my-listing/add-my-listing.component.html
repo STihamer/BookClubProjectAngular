@@ -1,0 +1,46 @@
+<div class="container row d-flex mt-5 justify-content-center">
+  <div class="card" style="width: 25rem;">
+    <form #myListingForm="ngForm">
+      <div class="card-body">
+
+        <h5 class="card-title">Add your new listing</h5>
+
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item border-bottom-0">
+          <div class="form-group col-12">
+            <label for="user">User</label>
+            <select class="form-select" id="user" [(ngModel)]="myUser.username"  name="username" required #userField =
+              "ngModel">
+              <option *ngFor="let user of users" [ngValue]="user">{{user?.username}}</option>
+
+            </select>
+            <div class="alert alert-danger" *ngIf="userField.invalid && userField.touched">
+              User is required
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item border-bottom-0">
+          <div class="form-group col-12">
+            <label for="book">Book</label>
+            <select class="form-select" id="book" [(ngModel)]="myBook.book_title" name="book_title" #bookField =
+              "ngModel" required>
+              <option *ngFor="let book of books" [ngValue]="book">{{book?.book_title}}</option>
+            </select>
+            <div class="alert alert-danger" *ngIf="bookField.invalid && bookField.touched">
+              Book is required
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item border-bottom-0">
+          <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-3">
+            <button [disabled]="myListingForm.invalid"type="button" class="btn btn-primary mt-3"
+                    (click)="onSubmit()">Save
+            </button>
+          </div>
+        </li>
+      </ul>
+
+    </form>
+  </div>
+</div>
