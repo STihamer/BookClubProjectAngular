@@ -49,11 +49,8 @@ export class AddMyListingComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.myUser.user_id)
-    console.log(this.myBook.book_id)
     this.myNewListing.reading_person = this.myUser.user_id;
     this.myNewListing.book_title = this.myBook.book_id;
-    console.log(this.myNewListing);
     this.dataService.addMyListing(this.myNewListing).subscribe(
       (myListing) => {
         window.location.reload();
@@ -65,11 +62,6 @@ export class AddMyListingComponent implements OnInit {
     );
   }
 
-  checkIfReadingPersonNameIsValid() {
-  }
-
-  checkIfWantedBookTitleIsValid() {
-  }
 
 }
 

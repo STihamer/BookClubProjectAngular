@@ -1,11 +1,16 @@
-<div class="container p-5">
+<div class="container p-5" *ngIf="!bookComponentHidden">
   <h1 class="text-center mt-5 mb-5">Book owners</h1>
   <div class="accordion  accordion-flush" id="accordionExample">
     <div class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Searching by first or book title"
              aria-label="Recipient's username"
-             aria-describedby="button-addon2" [(ngModel)]="searchingText"  (keyup)="findData(searchingText)">
-      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Abort
+             aria-describedby="button-addon2" [(ngModel)]="searchingText"
+             (keyup)="findBookOwnerByNameOrBookTitle(searchingText)"
+             (keydown.backspace)="loadData()">
+      <button class="btn btn-warning" type="button" id="button-addon2"
+              (click)="deleteSearchingByNameOrBookTitle()">Abort
+      </button>
+      <button class="btn btn-secondary border-secondary" type="button" id="button-addon3" (click)="addBookOwner()">Add
       </button>
     </div>
     <div class="accordion-item" *ngFor="let item of personNameBookTitleForBookOwners; let i = index">
@@ -63,8 +68,7 @@
         </div>
       </div>
     </div>
-
-
   </div>
-
 </div>
+<app-add-book-owner *ngIf="bookComponentHidden && (action==='add')" [newBookOwner]="selectedBookOwner"
+></app-add-book-owner>

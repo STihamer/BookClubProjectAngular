@@ -5,7 +5,6 @@ import {environment} from "../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Book} from "./model/Book";
 import {MyListing} from "./model/MyListing";
-import {PersonBookListing} from "./model/PersonBookListing";
 import {BookOwner} from "./model/BookOwner";
 
 @Injectable({
@@ -116,6 +115,14 @@ export class DataService {
     return this.http.post<MyListing>(environment.restUrl + `/myListing?${params}`, myListing);
   }
 
+  addBookOwner(newBookOwner: BookOwner): Observable<BookOwner> {
+    const fullBookOwner = {
+      book_id: newBookOwner.book_id,
+      user_id: newBookOwner.user_id
+    };
+    return this.http.post<BookOwner>(environment.restUrl + '/bookOwner', fullBookOwner);
+  }
+
   private correctedUser(user: User) {
     return {
       user_id: user.user_id,
@@ -133,7 +140,7 @@ export class DataService {
         map(data => {
           const bookOwners = new Array<BookOwner>();
           for (const bookOwner of data) {
-           bookOwners.push(BookOwner.fromHttp(bookOwner));
+            bookOwners.push(BookOwner.fromHttp(bookOwner));
           }
           return bookOwners
         })

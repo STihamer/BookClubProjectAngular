@@ -10,7 +10,7 @@
         <li class="list-group-item border-bottom-0">
           <div class="form-group col-12">
             <label for="user">User</label>
-            <select class="form-select" id="user" [(ngModel)]="myUser.username"  name="username" required #userField =
+            <select class="form-select" id="user" [(ngModel)]="myUser"  name="username" required #userField =
               "ngModel">
               <option *ngFor="let user of users" [ngValue]="user">{{user?.username}}</option>
 
@@ -23,7 +23,7 @@
         <li class="list-group-item border-bottom-0">
           <div class="form-group col-12">
             <label for="book">Book</label>
-            <select class="form-select" id="book" [(ngModel)]="myBook.book_title" name="book_title" #bookField =
+            <select class="form-select" id="book" [(ngModel)]="myBook" name="book_title" #bookField =
               "ngModel" required>
               <option *ngFor="let book of books" [ngValue]="book">{{book?.book_title}}</option>
             </select>
