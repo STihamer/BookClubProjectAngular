@@ -6,6 +6,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Book} from "./model/Book";
 import {MyListing} from "./model/MyListing";
 import {BookOwner} from "./model/BookOwner";
+import {WaitingList} from "./model/WaitingList";
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +65,12 @@ export class DataService {
     return this.http.get<Book>(environment.restUrl + `/books/${id}`)
       .pipe(map(data => {
         return Book.fromHttp(data);
+      }))
+  }
+  getBookOwnerById(id: number): Observable<any> {
+    return this.http.get<BookOwner>(environment.restUrl + `/bookOwner/${id}`)
+      .pipe(map(data => {
+        return BookOwner.fromHttp(data);
       }))
   }
 
@@ -146,6 +153,21 @@ export class DataService {
         })
       );
   }
+
+  get waitingLists(): Observable<Array<WaitingList>> {
+    return this.http.get<Array<WaitingList>>(environment.restUrl + '/waitingList')
+      .pipe(
+        map(data => {
+          const waitingLists = new Array<WaitingList>();
+          for (const waitingList of data) {
+            waitingLists.push(WaitingList.fromHttp(waitingList));
+          }
+          return waitingLists
+        })
+      );
+  }
+
+
 
 }
 

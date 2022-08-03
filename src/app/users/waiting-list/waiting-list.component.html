@@ -1,1 +1,51 @@
-<p>waiting-list works!</p>
+
+  <h1 class="text-center mt-2 mb-4">{{action == 'add' ? 'Add to waiting list' : 'Waiting list'}}</h1>
+  <div class="row" *ngIf="action != 'add'">
+    <div class="bg-opacity-25" [ngClass]="setMyListingComponentCol">
+      <div class="input-group mb-3 ">
+        <input type="text" class="form-control" placeholder="Searching by first or book title"
+               aria-label="Recipient's username"
+               aria-describedby="button-addon2">
+        <button class="btn btn-warning" type="button" id="button-addon2">Abort
+        </button>
+        <button class="btn btn-secondary border-secondary" type="button" id="button-addon3" (click)="addWaitingList()">Add
+        </button>
+      </div>
+      <table class="table table-secondary">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Owner name</th>
+          <th scope="col">Book Title</th>
+          <th scope="col">Reader name</th>
+          <th scope="col">Under Reading</th>
+          <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let waitingDetail of waitingListDetailList">
+          <th scope="row" class="opacity-75">{{waitingDetail.id}}</th>
+          <td class="opacity-75">{{waitingDetail.ownerFirstName }} {{ waitingDetail.ownerLastName}}</td>
+          <td class="opacity-75">{{waitingDetail.bookTitle}}</td>
+          <td class="opacity-75">{{waitingDetail.readerFirstName }} {{ waitingDetail.readerLastName}}</td>
+          <td class="opacity-75">{{waitingDetail.underReading == false ? 'No' : 'Yes'}} </td>
+          <td class="opacity-75">
+            <button type="button" class="btn btn-info" (click)="editWaitingList(waitingDetail.id)">Edit</button>
+          </td>
+
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-3">
+      <app-edit-waiting-list *ngIf="action==='edit'" [waitingDetail]="selectedWaitingListDetail"
+                             (dataChangedEvent)="loadData()"
+                             (closeEditComponent)="setWaitingListToOriginalCol()">
+
+      </app-edit-waiting-list>
+
+
+    </div>
+  </div>
+  <app-add-waiting-list *ngIf="action==='add'" ></app-add-waiting-list>

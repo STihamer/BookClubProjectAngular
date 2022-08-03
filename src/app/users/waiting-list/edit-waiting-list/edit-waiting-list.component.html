@@ -1,0 +1,62 @@
+<h3>Edit reading status</h3>
+
+<form #userForm="ngForm">
+
+  <div class="form-group">
+    <label for="ownerFirstName">Owner first name </label>
+    <input class="form-control" id="ownerFirstName" type="text"
+           aria-label="Disabled input example" name="ownerFirstName"
+           [(ngModel)]="waitingDetail.ownerFirstName"
+           disabled readonly #firstNameField=
+             "ngModel">
+  </div>
+
+  <div class="form-group">
+    <label for="ownerLastName">Owner last name</label>
+    <input type="text" class="form-control" id="ownerLastName" name="ownerLastName"
+           [(ngModel)]="waitingDetail.ownerLastName" disabled
+           #lastNameField="ngModel">
+
+  </div>
+
+  <div class="form-group">
+    <label for="bookTitle">Book title</label>
+    <input type="text" class="form-control" id="bookTitle"
+           [(ngModel)]="waitingDetail.bookTitle" name="bookTitle" disabled
+           #bookTitleField="ngModel">
+
+  </div>
+
+  <div class="form-group">
+    <label for="readerFirstName">Reader first name</label>
+    <input type="text" class="form-control" id="readerFirstName"
+           [(ngModel)]="waitingDetail.readerFirstName" name="readerFirstName" disabled
+           #readerFirstNameField="ngModel">
+
+  </div>
+  <div class="form-group">
+    <label for="readerLastName">Reader last name</label>
+    <input type="text" class="form-control" id="readerLastName"
+           [(ngModel)]="waitingDetail.readerLastName" name="readerLastName" disabled
+           #readerLastNameField="ngModel">
+
+  </div>
+
+  <div class="form-group">
+    <label for="underReading">UnderReading</label>
+    <select class="form-select" aria-label="Default select example" id="underReading"
+            [(ngModel)]="waitingDetail.underReading"
+            name="underReading" #underReadingField="ngModel" (mouseenter)="selectOptionHidden()">
+      <option [ngClass]="optionHideClassAddToOption" selected *ngIf="!optionHidden"
+              [ngValue]="waitingDetail.underReading"
+      >{{waitingDetail.underReading == false ? 'No' : 'Yes' }}</option>
+      <option value="false">No</option>
+      <option value="true">Yes</option>
+    </select>
+
+  </div>
+  <button type="button" class="btn btn-primary mt-2 me-3" [disabled]="userForm.invalid" (click)="closeEditWaitingList()">Close
+  </button>
+  <button type="button" class="btn btn-primary mt-2" [disabled]="userForm.invalid" (click)="onSubmit()">Save
+  </button>
+</form>

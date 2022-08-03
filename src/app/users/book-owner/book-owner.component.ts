@@ -117,7 +117,6 @@ export class BookOwnerComponent implements OnInit {
   deleteOwnerBookField(id: number) {
     this.router.navigate(['bookOwner'], {queryParams: {action: 'delete', id: id}})
     this.selectedPersonNameBookTitleForBookOwner = this.personNameBookTitleForBookOwners.find(element => element.id === +id);
-    console.log(this.selectedPersonNameBookTitleForBookOwner.bookOwnerId);
     this.selectedBookOwner = this.bookOwnerList.filter(element => element.id === this.selectedPersonNameBookTitleForBookOwner.bookOwnerId);
     this.dataService.deleteOwnerBook(this.selectedBookOwner[0].id).subscribe(
       next => {

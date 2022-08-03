@@ -1,0 +1,5 @@
+.table.table-secondary tbody tr td:hover {
+  background-color:#f4f4f8;
+  color: black;
+  font-weight: bold;
+}

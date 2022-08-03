@@ -1,0 +1,72 @@
+
+
+<div class="container row d-flex mt-5 justify-content-center">
+  <div class="card" style="width: 25rem;">
+    <form #waitingListForm="ngForm">
+      <div class="card-body">
+
+        <h5 class="card-title">Add your new book owner</h5>
+
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item border-bottom-0">
+          <div class="form-group col-12">
+            <label for="BookTitle">Owner username</label>
+            <select (change)="filterBooksByUseIdForBookOwnerSet(newBookOwner.user_id)" class="form-select"
+                    id="BookTitle"
+                    [(ngModel)]="newBookOwner.user_id"
+                    name="userId" required
+                    #UserField=
+                      "ngModel">
+              <option *ngFor="let owner of newOwnerPersons" [ngValue]="owner?.user_id">{{owner.username }}</option>
+            </select>
+            <div class="alert alert-danger" *ngIf="UserField.invalid">Do something</div>
+          </div>
+
+        </li>
+        <li class="list-group-item border-bottom-0">
+          <div class="form-group col-12">
+            <label for="username">Book title</label>
+            <select class="form-select" id="username" [(ngModel)]="newBookOwner.book_id" name="bookId"
+                    #usernameField=
+                      "ngModel" required (change)="filterBooksByBookIdForBookOwnerSet(newBookOwner.book_id)">
+              <option *ngFor="let book of newBooks" [ngValue]="book?.book_id">{{book?.book_title}}</option>
+            </select>
+            <div class="alert alert-danger" *ngIf="usernameField.invalid">
+              Username is required
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item border-bottom-0">
+          <div class="form-group col-12">
+            <label for="readerName">Reader name</label>
+            <select class="form-select" id="readerName" [(ngModel)]="newWaitingList.user_id" name="waitingList"
+                    #userIdField=
+                      "ngModel" required>
+              <option *ngFor="let user of bookReaders" [ngValue]="user?.user_id">{{user?.username}}</option>
+            </select>
+            <div class="alert alert-danger" *ngIf="userIdField.invalid">
+              Username is required
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item border-bottom-0">
+          <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-3">
+            <button [disabled]="!newWaitingList.user_id || (!newBookOwner.book_id && !newBookOwner.user_id)"
+                    type="button"
+                    class="btn btn-primary mt-3">Save
+            </button>
+            <button [disabled]="newWaitingList.user_id == 0 && newBookOwner.book_id == 0 && newBookOwner.user_id == 0"
+                    type="button"
+                    class="btn btn-primary mt-3"
+                    (click)="clearDataFromAddForm()">Clear
+            </button>
+          </div>
+        </li>
+      </ul>
+
+    </form>
+  </div>
+</div>
+
+

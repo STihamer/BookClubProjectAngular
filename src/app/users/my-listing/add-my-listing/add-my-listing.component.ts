@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {DataService} from "../../../data.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MyListing} from "../../../model/MyListing";
@@ -12,7 +12,7 @@ import {FormResetService} from "../../../form-reset.service";
   templateUrl: './add-my-listing.component.html',
   styleUrls: ['./add-my-listing.component.css']
 })
-export class AddMyListingComponent implements OnInit {
+export class AddMyListingComponent implements OnInit, OnDestroy {
 
   users: Array<User> = new Array<User>();
   books: Array<Book> = new Array<Book>();
@@ -30,6 +30,10 @@ export class AddMyListingComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private formResetService: FormResetService) {
+  }
+
+  ngOnDestroy(): void {
+    this.myListingResetSubscription.unsubscribe();
   }
 
   ngOnInit(): void {

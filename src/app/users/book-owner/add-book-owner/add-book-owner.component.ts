@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {User} from "../../../model/User";
 import {Book} from "../../../model/Book";
 import {DataService} from "../../../data.service";
@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
   templateUrl: './add-book-owner.component.html',
   styleUrls: ['./add-book-owner.component.css']
 })
-export class AddBookOwnerComponent implements OnInit {
+export class AddBookOwnerComponent implements OnInit,OnDestroy {
 
   users: Array<User> = new Array<User>();
   books: Array<Book> = new Array<Book>();
@@ -31,6 +31,10 @@ export class AddBookOwnerComponent implements OnInit {
               private formResetService: FormResetService,
               private router: Router) {
   }
+
+  ngOnDestroy(): void {
+    this.bookOwnerResetSubscription.unsubscribe();
+    }
 
   ngOnInit(): void {
 

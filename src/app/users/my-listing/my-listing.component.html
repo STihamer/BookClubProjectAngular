@@ -60,4 +60,5 @@
   </div>
 </div>
 <app-add-my-listing *ngIf="myListingComponentHidden && (action==='add')" [myNewListing]="selectedMyListing"
+                    (dataChangedEvent)="loadData()"
 ></app-add-my-listing>
