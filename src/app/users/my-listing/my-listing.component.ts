@@ -19,6 +19,7 @@ export class MyListingComponent implements OnInit {
   personsListingList: Array<PersonBookListing> = new Array<PersonBookListing>();
   selectedPersonListing: PersonBookListing = new PersonBookListing();
   myListingComponentHidden = false;
+  searching: string = '';
 
   constructor(private dataService: DataService,
               private router: Router,
@@ -45,11 +46,12 @@ export class MyListingComponent implements OnInit {
 
   findData(myNewListingText: string) {
     this.router.navigate(['myListing'],
-      {queryParams: {action: myNewListingText}})
+      {queryParams: {searching: myNewListingText}})
     this.personsListingList = this.personsListingList.filter
     (element => (element.firstName.toLowerCase().indexOf(myNewListingText.toLowerCase()) > -1)
       || (element.bookTitle.toLowerCase().indexOf(myNewListingText.toLowerCase()) > -1))
     if (myNewListingText === '') {
+      this.router.navigate(['myListing']);
       window.location.reload();
     }
 
@@ -117,7 +119,8 @@ export class MyListingComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const id = params['id'];
       this.action = params['action'];
-      if (!this.action) {
+      this.searching = params['searching'];
+      if (!this.action && !this.searching) {
         this.router.navigate(['myListing']);
         this.myListingComponentHidden = false;
       } else if (this.action === 'edit') {

@@ -5,7 +5,6 @@ import {PersonNameBookTitleForBookOwner} from "../../model/PersonNameBookTitleFo
 import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../model/User";
 import {Book} from "../../model/Book";
-import {MyListing} from "../../model/MyListing";
 import {FormResetService} from "../../form-reset.service";
 
 @Component({

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {RentingTable} from "../model/RentingTable";
+import {DataService} from "../data.service";
 
 @Component({
   selector: 'app-renting-data',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RentingDataComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private dataService: DataService) {
   }
 
+  rentingTables: Array<RentingTable> = new Array<RentingTable>();
+
+  ngOnInit(): void {
+    this.dataService.rentingTables.subscribe(
+      next => {
+        this.rentingTables = next;
+        console.log(this.rentingTables);
+      }
+    )
+  }
 }

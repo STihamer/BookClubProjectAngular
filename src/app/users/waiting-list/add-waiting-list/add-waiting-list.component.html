@@ -54,7 +54,7 @@
           <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-3">
             <button [disabled]="!newWaitingList.user_id || (!newBookOwner.book_id && !newBookOwner.user_id)"
                     type="button"
-                    class="btn btn-primary mt-3">Save
+                    class="btn btn-primary mt-3" (click)="onSubmit()">Save
             </button>
             <button [disabled]="newWaitingList.user_id == 0 && newBookOwner.book_id == 0 && newBookOwner.user_id == 0"
                     type="button"

@@ -7,6 +7,7 @@ import {Book} from "./model/Book";
 import {MyListing} from "./model/MyListing";
 import {BookOwner} from "./model/BookOwner";
 import {WaitingList} from "./model/WaitingList";
+import {RentingTable} from "./model/RentingTable";
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +55,12 @@ export class DataService {
     return this.http.put<Book>(environment.restUrl + `/books/${id}`, book);
   }
 
+  updateWaitingList(waitingList: WaitingList, id:number): Observable<WaitingList> {
+    const param = new HttpParams()
+      .set('finished', waitingList.finished)
+    return this.http.put<WaitingList>(environment.restUrl + `/waitingList/${id}?${param}`, waitingList);
+  }
+
   getUserById(id: number): Observable<any> {
     return this.http.get<User>(environment.restUrl + `/users/${id}`)
       .pipe(map(data => {
@@ -93,54 +100,6 @@ export class DataService {
         })
       );
   }
-
-  deleteBook(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/books/${id}`);
-  }
-
-  deleteMyListing(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/myListing/${id}`);
-  }
-
-  deleteOwnerBook(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/bookOwner/${id}`);
-  }
-
-  addBook(newBook: Book): Observable<Book> {
-    const fullBook = {
-      book_title: newBook.book_title, author_fname: newBook.author_fname,
-      author_lname: newBook.author_lname, published: newBook.published
-    };
-    return this.http.post<Book>(environment.restUrl + '/books', fullBook);
-  }
-
-  addMyListing(myListing: MyListing): Observable<MyListing> {
-    const params = new HttpParams()
-      .set('reading_person', myListing.reading_person)
-      .set('book_title', myListing.book_title);
-    console.log(params.toString())
-    return this.http.post<MyListing>(environment.restUrl + `/myListing?${params}`, myListing);
-  }
-
-  addBookOwner(newBookOwner: BookOwner): Observable<BookOwner> {
-    const fullBookOwner = {
-      book_id: newBookOwner.book_id,
-      user_id: newBookOwner.user_id
-    };
-    return this.http.post<BookOwner>(environment.restUrl + '/bookOwner', fullBookOwner);
-  }
-
-  private correctedUser(user: User) {
-    return {
-      user_id: user.user_id,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      user_age: user.user_age,
-      username: user.username,
-      user_email: user.user_email
-    }
-  }
-
   get bookOwners(): Observable<Array<BookOwner>> {
     return this.http.get<Array<BookOwner>>(environment.restUrl + '/bookOwner')
       .pipe(
@@ -167,6 +126,64 @@ export class DataService {
       );
   }
 
+  get rentingTables(): Observable<Array<RentingTable>> {
+    return this.http.get<Array<RentingTable>>(environment.restUrl + '/rentingTable')
+      .pipe(
+        map(data => {
+          const rentingTables = new Array<RentingTable>();
+          for (const rentingTable of data) {
+            rentingTables.push(RentingTable.fromHttp(rentingTable));
+          }
+          return rentingTables
+        })
+      );
+  }
+  deleteBook(id: number): Observable<any> {
+    return this.http.delete(environment.restUrl + `/books/${id}`);
+  }
+
+  deleteMyListing(id: number): Observable<any> {
+    return this.http.delete(environment.restUrl + `/myListing/${id}`);
+  }
+
+  deleteOwnerBook(id: number): Observable<any> {
+    return this.http.delete(environment.restUrl + `/bookOwner/${id}`);
+  }
+
+  deleteWaitingList(id: number): Observable<any> {
+    return this.http.delete(environment.restUrl + `/waitingList/${id}`);
+  }
+
+  addBook(newBook: Book): Observable<Book> {
+    const fullBook = {
+      book_title: newBook.book_title, author_fname: newBook.author_fname,
+      author_lname: newBook.author_lname, published: newBook.published
+    };
+    return this.http.post<Book>(environment.restUrl + '/books', fullBook);
+  }
+
+  addMyListing(myListing: MyListing): Observable<MyListing> {
+    const params = new HttpParams()
+      .set('reading_person', myListing.reading_person)
+      .set('book_title', myListing.book_title);
+    return this.http.post<MyListing>(environment.restUrl + `/myListing?${params}`, myListing);
+  }
+
+  addBookOwner(newBookOwner: BookOwner): Observable<BookOwner> {
+    const fullBookOwner = {
+      book_id: newBookOwner.book_id,
+      user_id: newBookOwner.user_id
+    };
+    return this.http.post<BookOwner>(environment.restUrl + '/bookOwner', fullBookOwner);
+  }
+  addWaitingList(waitingList: WaitingList): Observable<WaitingList> {
+    const params = new HttpParams()
+      .set('user_id', waitingList.user_id)
+      .set('finished', waitingList.finished)
+      .set('book_for_reading', waitingList.book_for_reading);
+    console.log(params.toString())
+    return this.http.post<WaitingList>(environment.restUrl + `/waitingList?${params}`, waitingList);
+  }
 
 
 }

@@ -5,8 +5,8 @@ import {BookOwner} from "./BookOwner";
 export class WaitingList {
 
   id: number = 0;
-  user_id: number = new User().user_id;
-  book_for_reading = new BookOwner().id;
+  user_id: number = 0;
+  book_for_reading = 0;
   finished = false
 
 

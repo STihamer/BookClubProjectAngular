@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {User} from "../../../model/User";
 import {Book} from "../../../model/Book";
 import {WaitingList} from "../../../model/WaitingList";
@@ -25,6 +25,8 @@ export class AddWaitingListComponent implements OnInit {
   newBooks: Array<Book> = new Array<Book>();
   newOwnerPersons: Array<User> = new Array<User>();
   newWaitingList: WaitingList = new WaitingList()
+  @Output()
+  dataChangeEvent = new EventEmitter();
 
   constructor(private dataService: DataService,
               private router: Router) {
@@ -60,11 +62,6 @@ export class AddWaitingListComponent implements OnInit {
       }
       this.newBooks = this.books;
       this.newOwnerPersons = this.bookOwnerPersons;
-      console.log(this.bookOwnerPersons);
-      console.log(this.books);
-      console.log(this.newBookOwnerList);
-      console.log(this.waitingLists);
-      console.log(this.bookReaders);
     });
   }
 
@@ -78,13 +75,29 @@ export class AddWaitingListComponent implements OnInit {
     this.router.navigate(['waitingList'], {queryParams: {action: 'add', option: 'option'}});
     this.anotherBookOwner = this.newBookOwnerList.find(element => element.book_id == id);
     this.newOwnerPersons = this.bookOwnerPersons.filter(el => el.user_id == this.anotherBookOwner.user_id);
-    console.log(this.anotherBookOwner);
   }
 
   clearDataFromAddForm() {
     this.newBookOwner = new BookOwner();
     this.newOwnerPersons = [];
     this.newBooks = [];
-    window.location.reload();
+    this.bookReaders = [];
+    window.location.reload()
+
+  }
+
+  onSubmit() {
+    this.newWaitingList.book_for_reading = this.anotherBookOwner.id;
+    this.newWaitingList.finished = false;
+    this.dataService.addWaitingList(this.newWaitingList).subscribe(
+      (newWaitingList) => {
+        window.location.reload();
+        console.log(this.newWaitingList);
+        window.location.replace("waitingList");
+        this.dataChangeEvent.emit();
+        this.router.navigate(['waitingList']);
+
+      }
+    );
   }
 }
