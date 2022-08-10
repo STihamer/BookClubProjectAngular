@@ -24,6 +24,8 @@ import {AddMyListingComponent} from "./users/my-listing/add-my-listing/add-my-li
 import { AddBookOwnerComponent } from './users/book-owner/add-book-owner/add-book-owner.component';
 import { EditWaitingListComponent } from './users/waiting-list/edit-waiting-list/edit-waiting-list.component';
 import { AddWaitingListComponent } from './users/waiting-list/add-waiting-list/add-waiting-list.component';
+import { EditRentingDataComponent } from './renting-data/edit-renting-data/edit-renting-data.component';
+import { AddRentingDataComponent } from './renting-data/add-renting-data/add-renting-data.component';
 
 
 @NgModule({
@@ -46,7 +48,9 @@ import { AddWaitingListComponent } from './users/waiting-list/add-waiting-list/a
     BookOwnerComponent,
     AddBookOwnerComponent,
     EditWaitingListComponent,
-    AddWaitingListComponent
+    AddWaitingListComponent,
+    EditRentingDataComponent,
+    AddRentingDataComponent
 
   ],
   imports: [

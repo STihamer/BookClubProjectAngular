@@ -4,7 +4,7 @@
   <div class="row align-self-center">
     <div class="col-6">
       <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="searching by name or book title"
+        <input type="text" class="form-control" placeholder="searching by  first name or last name"
                aria-label="Recipient's username"
                aria-describedby="button-addon2" [(ngModel)]="searchListing"
                (keyup)="findData(searchListing)" (keydown.backspace)="loadData()">
@@ -51,7 +51,7 @@
           <p class="text-dark">Are you sure you want to delete?</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Close</button>
           <button type="button" class="btn btn-primary" (click)="deleteMyListing()" data-bs-dismiss="modal">Delete
           </button>
         </div>

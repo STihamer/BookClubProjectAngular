@@ -1,0 +1,84 @@
+<div class="container row d-flex mt-5 justify-content-center">
+  <div class="card" style="width: 25rem;">
+    <form #rentingTableForm="ngForm">
+      <div class="card-body">
+
+        <h5 class="card-title">Add your new book owner</h5>
+
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item border-bottom-0">
+          <div class="form-group col-12">
+            <label for="readerUsername">Reader username</label>
+            <select class="form-select"
+                    id="readerUsername"
+                    [(ngModel)]="newRentingTable.borrowed_by"
+                    name="userId" required
+                    #readerUsernameField=
+                      "ngModel">
+              <option *ngFor="let reader of users" [ngValue]="reader?.user_id">{{reader.username }}</option>
+            </select>
+          </div>
+
+        </li>
+        <li class="list-group-item border-bottom-0">
+          <div class="form-group col-12">
+            <label for="bookId">Book title</label>
+            <select class="form-select" id="bookId" [(ngModel)]="newRentingTable.book_id" name="bookId"
+                    #bookIdField=
+                      "ngModel" required>
+              <option *ngFor="let book of books" [ngValue]="book?.book_id">{{book?.book_title}}</option>
+            </select>
+          </div>
+        </li>
+        <li class="list-group-item border-bottom-0">
+          <div class="form-group col-12">
+            <label for="readerName">Renting period</label>
+            <select class="form-select" id="readerName" [(ngModel)]="newRentingTable.renting_period" name="waitingList"
+                    #rentingPeriodField=
+                      "ngModel" required (change)="addDays(newRentingTable.renting_period)">
+              <option *ngFor="let rentingPeriod of rentingPeriods"
+                      [ngValue]="rentingPeriod?.id">{{rentingPeriod?.renting_period }} days
+              </option>
+            </select>
+          </div>
+        </li>
+
+        <li class="list-group-item border-bottom-0">
+          <div class="form-group col-12">
+            <label for="rentingDate">Renting date</label>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" [(ngModel)]="selectedDate" name="selectedDate" id="rentingDate"/>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item border-bottom-0">
+          <div class="form-group col-12">
+            <label for="returnDate">Return date</label>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" [(ngModel)]="returnDateString"
+                     id="returnDate"
+                     name="returnDate"/>
+            </div>
+          </div>
+        </li>
+
+        <li class="list-group-item border-bottom-0">
+          <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-3">
+            <button
+                    type="button"
+                    class="btn btn-primary mt-3" (click)="onSubmit()" >Save
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary mt-3"
+              (click)="clearDataFromAddForm()">Clear
+            </button>
+          </div>
+        </li>
+      </ul>
+
+    </form>
+  </div>
+</div>
+

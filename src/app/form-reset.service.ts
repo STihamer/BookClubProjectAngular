@@ -5,6 +5,7 @@ import {MyListing} from "./model/MyListing";
 import {BookOwner} from "./model/BookOwner";
 import {WaitingList} from "./model/WaitingList";
 import {WaitingListDetail} from "./model/WaitingListDetail";
+import {RentingDataForScreen} from "./model/RentingDataForScreen";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class FormResetService {
   resetMyListingFormEvent = new EventEmitter<MyListing>();
   resetOwnerBookFormEvent = new EventEmitter<BookOwner>();
   resetWaitingListFormEvent = new EventEmitter<WaitingListDetail>();
+  resetRentingTableFormEvent = new EventEmitter<RentingDataForScreen>();
 
   constructor() { }
 }

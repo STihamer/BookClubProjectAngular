@@ -1,9 +1,9 @@
 
   <h1 class="text-center mt-2 mb-4">{{action == 'add' ? 'Add to waiting list' : 'Waiting list'}}</h1>
   <div class="row" *ngIf="action != 'add'">
-    <div class="bg-opacity-25" [ngClass]="setMyListingComponentCol">
+    <div class="bg-opacity-25" [ngClass]="setWaitingListComponentCol">
       <div class="input-group mb-3 ">
-        <input type="text" class="form-control" placeholder="Searching by  book title or reader name"
+        <input type="text" class="form-control" placeholder="Searching by  book title"
                aria-label="Recipient's username"
                aria-describedby="button-addon2" [(ngModel)]="textSearching"
                (keyup)="findData(textSearching)" (keydown.backspace)="loadData()">
@@ -58,7 +58,7 @@
            Are you sure you want to delete the selected waiting data?
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Close</button>
             <button type="button" class="btn btn-primary" (click)="onSubmit()">Delete</button>
           </div>
         </div>
@@ -66,13 +66,14 @@
     </div>
 
     <div class="col-3">
-      <app-edit-waiting-list *ngIf="action==='edit'" [waitingDetail]="selectedWaitingListDetail"
+      <app-edit-waiting-list *ngIf="action==='edit' && setWaitingListComponentCol !== 'col-12'"
+                             [waitingDetail]="selectedWaitingListDetail"
                              [newWaitingList]="selectedWaitingList"
                              (closeEditComponent)="setWaitingListToOriginalCol()">
 
       </app-edit-waiting-list>
 
-
     </div>
   </div>
   <app-add-waiting-list *ngIf="action==='add'"></app-add-waiting-list>
+

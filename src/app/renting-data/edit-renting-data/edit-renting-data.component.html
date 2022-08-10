@@ -1,0 +1,60 @@
+<h3>Edit reading status</h3>
+
+<form #rentingForm="ngForm">
+
+  <div class="form-group">
+    <label for="authorLastName">Book title </label>
+    <input class="form-control" id="bookTitle" type="text"
+           aria-label="Disabled input example" name="bookTitle"
+           [(ngModel)]="rentingDetail.bookTitle"
+           disabled readonly #bookTitleField=
+             "ngModel">
+  </div>
+
+  <div class="form-group">
+    <label for="authorFirstName">Author first name</label>
+    <input type="text" class="form-control" id="authorFirstName" name="authorFirstName"
+           [(ngModel)]="rentingDetail.authorFirstName" disabled
+           #authorFirstNameField="ngModel">
+
+  </div>
+
+  <div class="form-group">
+    <label for="authorLastName">Author last name</label>
+    <input type="text" class="form-control" id="authorLastName"
+           [(ngModel)]="rentingDetail.authorLastName" name="authorLastName" disabled
+           #authorLastNameField="ngModel">
+
+  </div>
+  <div class="form-group">
+    <label for="readerUsername">Reader username</label>
+    <input type="text" class="form-control" id="readerUsername"
+           [(ngModel)]="rentingDetail.borrowerUserName" name="readerUsername" disabled
+           #readerUsernameField="ngModel">
+
+  </div>
+
+  <div class="form-group">
+    <label for="returnDate">Return date</label>
+    <input type="text" class="form-control" id="returnDate"
+           [(ngModel)]="rentingDetail.return_date" name="returnDate" disabled
+           #returnDateField="ngModel">
+
+  </div>
+
+  <div class="form-group">
+    <label for="underReading">Extension of the return date</label>
+    <select class="form-select" [disabled]="rentingDetail.return_date_extended" aria-label="Default select example" id="underReading"
+            [(ngModel)]="extensionPeriod" (change)="setExtensionPeriod(extensionPeriod)"
+            name="extension" #extensionField="ngModel">
+      <option value="14">With 14 days</option>
+      <option value=""></option>
+    </select>
+
+  </div>
+  <button type="button" class="btn btn-primary mt-2 me-3" [disabled]="rentingForm.invalid" (click)="closeEditRentingTable()">Close
+  </button>
+  <button type="button" class="btn btn-primary mt-2" [disabled]="rentingForm.invalid" (click)="onSubmit()">Save
+  </button>
+</form>
+

@@ -33,6 +33,8 @@ export class MyListingComponent implements OnInit {
   }
 
   loadData() {
+    this.personsListingList = [];
+    this.myListings = [];
 
     this.dataService.myListing.subscribe(
       next => {
@@ -49,10 +51,9 @@ export class MyListingComponent implements OnInit {
       {queryParams: {searching: myNewListingText}})
     this.personsListingList = this.personsListingList.filter
     (element => (element.firstName.toLowerCase().indexOf(myNewListingText.toLowerCase()) > -1)
-      || (element.bookTitle.toLowerCase().indexOf(myNewListingText.toLowerCase()) > -1))
+      || (element.lastName.toLowerCase().indexOf(myNewListingText.toLowerCase()) > -1));
     if (myNewListingText === '') {
       this.router.navigate(['myListing']);
-      window.location.reload();
     }
 
   }
@@ -127,6 +128,7 @@ export class MyListingComponent implements OnInit {
         this.router.navigate(['myListing'], {queryParams: {action: 'edit'}});
       } else if (this.action === 'add') {
         this.router.navigate(['myListing'], {queryParams: {action: 'add'}});
+        this.myListingComponentHidden = true;
       }
       if (id) {
         // @ts-ignore
@@ -134,5 +136,9 @@ export class MyListingComponent implements OnInit {
         this.selectedMyListing = this.myListings.filter(el => el.id === this.selectedPersonListing.myListingId);
       }
     });
+  }
+
+  closeModal() {
+    this.router.navigate(['myListing']);
   }
 }

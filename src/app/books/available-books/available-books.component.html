@@ -1,1 +1,23 @@
-<p>available-books works!</p>
+<div class=" container row d-flex justify-content-center p-0 m-0">
+  <div class="row d-flex ">
+    <h1 class="text-center text-light"> Books available for renting</h1>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Book title" aria-label="Book title"
+             aria-describedby="button-addon2">
+      <button class="btn btn-info" type="button" id="button-addon2">Abort</button>
+    </div>
+  </div>
+
+  <div class="card col-4 ms-5 mb-2 bg-secondary  m-3 text-light" style="width: 18rem;" *ngFor="let book of
+      booksNonRented">
+    <div class="card-body bg-secondary bg-opacity-50">
+      <h5 class="card-title">Book nr: {{book.id}}</h5>
+
+    </div>
+    <ul class="list-group list-group-flush mb-2 border-1">
+      <li class="list-group-item">Book title: {{book.book_title}}</li>
+      <li class="list-group-item">Author first name: {{book.author_fname}}</li>
+      <li class="list-group-item">Author last name {{book.author_lname}}</li>
+    </ul>
+  </div>
+</div>

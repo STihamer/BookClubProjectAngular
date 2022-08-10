@@ -1,0 +1,14 @@
+.container {
+  background-image: url("src/assets/images/nonRentedBackground.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+ul {
+  border-radius: 5px;
+  font-weight: 400;
+}
+h1 {
+  font-weight: 500;
+}

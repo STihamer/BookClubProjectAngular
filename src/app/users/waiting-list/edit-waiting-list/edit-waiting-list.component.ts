@@ -41,7 +41,6 @@ export class EditWaitingListComponent implements OnInit, OnDestroy {
         this.waitingDetail = detail;
       }
     );
-
   }
 
   ngOnDestroy(): void {
@@ -58,20 +57,19 @@ export class EditWaitingListComponent implements OnInit, OnDestroy {
     this.formWaitingList.book_for_reading = this.newWaitingList.book_for_reading
     this.formWaitingList.finished = this.waitingDetail.underReading;
 
-      this.dataService.updateWaitingList(this.formWaitingList, this.formWaitingList.id).subscribe(
-        (waiting) => {
-          this.dataChangedEvent.emit();
-          this.router.navigate(['waitingList']);
-        },
-        error => this.message = 'Something went wrong and the data wasn\'t saved. You may want to try again.'
-      );
-    this.router.navigate(['waitingList']);
-    this.closeEditComponent.emit();
-    this.dataChangedEvent.emit();
+    this.dataService.updateWaitingList(this.formWaitingList, this.formWaitingList.id).subscribe(
+      (waiting) => {
+
+        this.dataChangedEvent.emit();
+        this.closeEditComponent.emit();
+        this.router.navigate(['waitingList']);
+      },
+    );
   };
 
   closeEditWaitingList() {
     this.router.navigate(['waitingList']);
     this.closeEditComponent.emit();
   }
+
 }

@@ -35,7 +35,8 @@
         </li>
         <li class="list-group-item border-bottom-0">
           <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-3">
-            <button [disabled]="bookOwnerForm.invalid" type="button" class="btn btn-primary mt-3"
+            <button [disabled]="myBook.book_title === '' || myUser.username === ''" type="button"
+                    class="btn btn-primary mt-3"
                     (click)="onSubmit()">Save
             </button>
           </div>

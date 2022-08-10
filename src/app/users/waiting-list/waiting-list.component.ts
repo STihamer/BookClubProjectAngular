@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../data.service";
 import {WaitingList} from "../../model/WaitingList";
 import {WaitingListDetail} from "../../model/WaitingListDetail";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
+import {filter} from "rxjs";
 
 @Component({
   selector: 'app-waiting-list',
@@ -14,12 +15,14 @@ export class WaitingListComponent implements OnInit {
   waitingLists: Array<WaitingList> = new Array<WaitingList>();
   waitingListDetailList: Array<WaitingListDetail> = new Array<WaitingListDetail>();
   selectedWaitingListDetail: any = new WaitingListDetail();
-  setMyListingComponentCol = 'col-12';
+  setWaitingListComponentCol = 'col-12';
   selectedWaitingList: any = new WaitingList()
   action = '';
   option = '';
   searching: string = '';
   textSearching: string = '';
+  previousUrl = '';
+  currentUrl = '';
 
   constructor(private dataService: DataService,
               private route: ActivatedRoute,
@@ -32,11 +35,21 @@ export class WaitingListComponent implements OnInit {
   }
 
   loadData() {
+    this.getPreviousUrl();
     this.waitingListDetailList = [];
     this.dataService.waitingLists.subscribe(
       next => {
         let id = 1;
-        this.waitingLists = next;
+        this.waitingLists = next.sort((a, b) => {
+          if (a.id > b.id) {
+            return 1;
+          } else if (a.id < b.id) {
+            return -1;
+          }
+          return 0;
+
+        });
+
         this.createWaitingListDetailList(this.waitingLists, id);
         this.toManageBookOwnerRouting();
       }
@@ -85,24 +98,28 @@ export class WaitingListComponent implements OnInit {
       if (this.option === 'option') {
         this.router.navigate(['waitingList'], {queryParams: {action: 'add', option: 'option'}});
       }
-      if (id) {
-
+      if (this.router.url === '/waitingList') {
+        this.getPreviousUrl();
+        if (this.previousUrl.indexOf('/waitingList?') == 0) {
+          window.location.reload();
+        }
       }
-
+      if (this.action === 'edit' && this.setWaitingListComponentCol === 'col-12') {
+        window.location.replace('waitingList');
+      }
     });
   }
 
   editWaitingList(id: number) {
-    this.setMyListingComponentCol = 'col-9'
+    this.setWaitingListComponentCol = 'col-9'
     this.router.navigate(['waitingList'], {queryParams: {action: 'edit', id: id}});
     this.selectedWaitingListDetail = this.waitingListDetailList.find(detail => detail.id === +id);
     this.selectedWaitingList = this.waitingLists.find(waiting => waiting.id = this.selectedWaitingListDetail.waitingListId);
 
-
   }
 
   setWaitingListToOriginalCol() {
-    this.setMyListingComponentCol = 'col-12';
+    this.setWaitingListComponentCol = 'col-12';
   }
 
   addWaitingList() {
@@ -116,8 +133,7 @@ export class WaitingListComponent implements OnInit {
     this.router.navigate(['waitingList'],
       {queryParams: {searching: myNewListingText}});
     this.waitingListDetailList = this.waitingListDetailList.filter
-    (element => (element.bookTitle.toLowerCase().indexOf(myNewListingText.toLowerCase()) > -1) ||
-      element.readerUsername.toLowerCase().indexOf(myNewListingText.toLowerCase()) > -1);
+    (element => (element.bookTitle.toLowerCase().indexOf(myNewListingText.toLowerCase()) > -1));
     if (myNewListingText === '') {
       this.router.navigate(['waitingList']);
     }
@@ -131,8 +147,7 @@ export class WaitingListComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.selectedWaitingListDetail.waitingListId);
-    this.dataService.deleteWaitingList(this.selectedWaitingListDetail.id).subscribe(
+    this.dataService.deleteWaitingListById(this.selectedWaitingListDetail.waitingListId).subscribe(
       next => {
         window.location.reload();
         window.location.replace('waitingList')
@@ -146,4 +161,15 @@ export class WaitingListComponent implements OnInit {
     this.selectedWaitingListDetail = this.waitingListDetailList.find(detail => detail.id === +id);
     this.selectedWaitingList = this.waitingLists.find(waiting => waiting.id === this.selectedWaitingListDetail.waitingListId);
   }
+
+  getPreviousUrl() {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: any) => {
+      this.previousUrl = this.currentUrl;
+      this.currentUrl = event.url;
+    })
+  }
+  closeModal(){
+    this.router.navigate(['waitingList']);
+  }
 }
+

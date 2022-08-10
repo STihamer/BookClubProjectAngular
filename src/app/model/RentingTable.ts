@@ -5,6 +5,7 @@ export class RentingTable {
   borrowed_date: Date = new Date();
   renting_period: number = 0;
   return_date: Date = new Date();
+  return_date_extended: boolean = false;
 
   static fromHttp(rentingTable: RentingTable): RentingTable {
     const newRentingTable = new RentingTable();
@@ -14,6 +15,7 @@ export class RentingTable {
     newRentingTable.borrowed_date = rentingTable.borrowed_date;
     newRentingTable.renting_period = rentingTable.renting_period;
     newRentingTable.return_date = rentingTable.return_date;
+    newRentingTable.return_date_extended = rentingTable.return_date_extended;
 
     return newRentingTable;
   }

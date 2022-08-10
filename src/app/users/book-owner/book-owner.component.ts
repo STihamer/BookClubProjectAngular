@@ -2,10 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../data.service";
 import {BookOwner} from "../../model/BookOwner";
 import {PersonNameBookTitleForBookOwner} from "../../model/PersonNameBookTitleForBookOwner";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {User} from "../../model/User";
 import {Book} from "../../model/Book";
 import {FormResetService} from "../../form-reset.service";
+import {filter} from "rxjs";
 
 @Component({
   selector: 'app-book-owners',
@@ -26,6 +27,9 @@ export class BookOwnerComponent implements OnInit {
   toggleAccordion = false;
   searchingText = '';
   bookComponentHidden = false;
+  currentUrl = '';
+  previousUrl = '';
+
 
   constructor(private dataService: DataService,
               private router: Router,
@@ -39,6 +43,11 @@ export class BookOwnerComponent implements OnInit {
   }
 
   loadData() {
+    this.getPreviousUrl();
+    this.users = [];
+    this.books = [];
+    this.personNameBookTitleForBookOwners = [];
+    this.bookOwnerList = [];
     this.dataService.users.subscribe(next => this.users = next);
     this.dataService.books.subscribe(next => this.books = next);
     this.dataService.bookOwners.subscribe(
@@ -77,7 +86,11 @@ export class BookOwnerComponent implements OnInit {
       const idBook = params['idBook'];
       this.action = params['action'];
       if (!this.action) {
-        this.router.navigate(['bookOwner']);
+        this.getPreviousUrl();
+        if (this.previousUrl.indexOf('/bookOwner?action=openAccordion&idUser') == 0) {
+         window.location.reload();
+        }
+
         this.bookComponentHidden = false;
       } else if (this.action === 'add') {
         this.bookComponentHidden = true;
@@ -130,11 +143,7 @@ export class BookOwnerComponent implements OnInit {
     this.router.navigate(['bookOwner'],
       {queryParams: {action: this.searchingText}})
     this.personNameBookTitleForBookOwners = this.personNameBookTitleForBookOwners.filter
-    (element => (element.firstName.toLowerCase().indexOf(text.toLowerCase()) > -1)
-      || (element.bookTitle.toLowerCase().indexOf(text.toLowerCase()) > -1))
-    if (text === '') {
-      window.location.reload();
-    }
+    (element => element.bookTitle.toLowerCase().trim().indexOf(text.trim().toLowerCase()) > -1);
   }
 
   deleteSearchingByNameOrBookTitle() {
@@ -150,4 +159,10 @@ export class BookOwnerComponent implements OnInit {
     this.resetService.resetOwnerBookFormEvent.emit(this.selectedBookOwner);
   }
 
+  getPreviousUrl() {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: any) => {
+      this.previousUrl = this.currentUrl;
+      this.currentUrl = event.url;
+    })
+  }
 }
