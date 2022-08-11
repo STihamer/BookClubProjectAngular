@@ -6,7 +6,6 @@ import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {FormResetService} from "../form-reset.service";
 import {filter} from "rxjs";
 import {formatDate} from "@angular/common";
-import {WaitingList} from "../model/WaitingList";
 
 @Component({
   selector: 'app-renting-data',
@@ -31,6 +30,7 @@ export class RentingDataComponent implements OnInit {
   previousUrl = '';
   currentUrl = '';
   selectedDate = '';
+  switchSearchInput = false;
 
   ngOnInit(): void {
 
@@ -153,5 +153,42 @@ export class RentingDataComponent implements OnInit {
     this.selectedRentingTable = new RentingTable();
     this.router.navigate(['rentingTable'], {queryParams: {action: 'add'}});
     this.formResetService.resetMyListingFormEvent.emit(this.selectedRentingTable);
+  }
+
+  findData(myNewRentingText: string) {
+    this.router.navigate(['rentingTable'],
+      {queryParams: {searching: myNewRentingText}});
+    this.rentingDataForScreenList = this.rentingDataForScreenList.filter
+    (element => (element.bookTitle.toLowerCase().indexOf(myNewRentingText.toLowerCase()) > -1));
+    if (myNewRentingText === '') {
+      this.router.navigate(['rentingTable']);
+    }
+
+  }
+
+  deleteSearchingByBookTitle() {
+    this.router.navigate(['rentingTable']);
+    this.loadData();
+    this.searching = '';
+  }
+
+  switchInputGroup() {
+    if (!this.switchSearchInput) {
+      this.switchSearchInput = true;
+    } else {
+      this.switchSearchInput = false;
+    }
+  }
+
+  findDataByName(myNewRentingText: string) {
+    this.router.navigate(['rentingTable'],
+      {queryParams: {searching: myNewRentingText}});
+    this.rentingDataForScreenList = this.rentingDataForScreenList.filter
+    (element => (element.borrowerFirstName.toLowerCase().indexOf(myNewRentingText.toLowerCase()) > -1)
+      || (element.borrowerLastName.toLowerCase().indexOf(myNewRentingText.toLowerCase())>-1));
+    if (myNewRentingText === '') {
+      this.router.navigate(['rentingTable']);
+    }
+
   }
 }

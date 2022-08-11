@@ -1,79 +1,123 @@
-
-  <h1 class="text-center mt-2 mb-4">{{action == 'add' ? 'Add to waiting list' : 'Waiting list'}}</h1>
-  <div class="row" *ngIf="action != 'add'">
-    <div class="bg-opacity-25" [ngClass]="setWaitingListComponentCol">
-      <div class="input-group mb-3 ">
-        <input type="text" class="form-control" placeholder="Searching by  book title"
-               aria-label="Recipient's username"
-               aria-describedby="button-addon2" [(ngModel)]="textSearching"
-               (keyup)="findData(textSearching)" (keydown.backspace)="loadData()">
-        <button class="btn btn-warning" type="button" id="button-addon2" (click)="deleteSearchingByBookTitleAndUsername()">Abort
-        </button>
-        <button class="btn btn-secondary border-secondary" type="button" id="button-addon3" (click)="addWaitingList()">Add
-        </button>
-      </div>
-      <table class="table table-secondary">
-        <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Owner username</th>
-          <th scope="col">Book Title</th>
-          <th scope="col">Reader username</th>
-          <th scope="col">Under Reading</th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let waitingDetail of waitingListDetailList">
-          <th scope="row" class="opacity-75">{{waitingDetail.id}}</th>
-          <td class="opacity-75">{{waitingDetail.ownerUsername }}</td>
-          <td class="opacity-75">{{waitingDetail.bookTitle}}</td>
-          <td class="opacity-75">{{waitingDetail.readerUsername }}</td>
-          <td class="opacity-75">{{waitingDetail.underReading == false ? 'No' : 'Yes'}} </td>
-          <td class="opacity-75">
-            <button type="button" class="btn btn-outline-info text-dark"
-                    (click)="editWaitingList(waitingDetail.id)">Edit
-            </button>
-          </td>
-          <td class="opacity-75">
-            <button type="button" class="btn btn-outline-danger text-dark" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal" (click)="setDeleteWaitingList(waitingDetail.id)">Delete</button>
-          </td>
-
-        </tr>
-        </tbody>
-      </table>
+<h1 class="text-center mt-2 mb-4">{{action == 'add' ? 'Add to waiting list' : 'Waiting list'}}</h1>
+<div class="row" *ngIf="action != 'add'">
+  <div class="bg-opacity-25" [ngClass]="setWaitingListComponentCol">
+    <div class="input-group mb-3 ">
+      <input type="text" class="form-control" placeholder="Searching by  book title"
+             aria-label="Recipient's username"
+             aria-describedby="button-addon2" [(ngModel)]="textSearching"
+             (keyup)="findData(textSearching)" (keydown.backspace)="loadData()">
+      <button class="btn btn-warning" type="button" id="button-addon2"
+              (click)="deleteSearchingByBookTitleAndUsername()">Abort
+      </button>
+      <button class="btn btn-secondary border-secondary" type="button" id="button-addon3" (click)="addWaitingList()">Add
+      </button>
     </div>
+    <table class="table table-secondary">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Owner username</th>
+        <th scope="col">Book Title</th>
+        <th scope="col">Reader username</th>
+        <th scope="col">Under Reading</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let waitingDetail of waitingListDetailList">
+        <th scope="row" class="opacity-75">{{waitingDetail.id}}</th>
+        <td class="opacity-75">{{waitingDetail.ownerUsername }}</td>
+        <td class="opacity-75">{{waitingDetail.bookTitle}}</td>
+        <td class="opacity-75 searchByUsername" data-toggle="tooltip"
+            title="Search this reader  username in  waiting list." data-bs-toggle="modal"
+            data-bs-target="#exampleModalLong"
+            (click)="editWaitingPersonsAndBookTitles(waitingDetail.id)">{{waitingDetail.readerUsername }}</td>
+        <td class="opacity-75">{{waitingDetail.underReading == false ? 'No' : 'Yes'}} </td>
+        <td class="opacity-75">
+          <button type="button" class="btn btn-outline-info text-dark"
+                  (click)="editWaitingList(waitingDetail.id)">Edit
+          </button>
+        </td>
+        <td class="opacity-75">
+          <button type="button" class="btn btn-outline-danger text-dark" data-bs-toggle="modal"
+                  data-bs-target="#exampleModal" (click)="setDeleteWaitingList(waitingDetail.id)">Delete
+          </button>
+        </td>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
 
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body bg-warning">
-           Are you sure you want to delete the selected waiting data?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Close</button>
-            <button type="button" class="btn btn-primary" (click)="onSubmit()">Delete</button>
-          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-warning">
+          Are you sure you want to delete the selected waiting data?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="onSubmit()">Delete</button>
         </div>
       </div>
     </div>
+  </div>
+  <!-- Modal2 -->
+  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+       aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
 
-    <div class="col-3">
-      <app-edit-waiting-list *ngIf="action==='edit' && setWaitingListComponentCol !== 'col-12'"
-                             [waitingDetail]="selectedWaitingListDetail"
-                             [newWaitingList]="selectedWaitingList"
-                             (closeEditComponent)="setWaitingListToOriginalCol()">
-
-      </app-edit-waiting-list>
-
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">{{selectedWaitingListDetail.readerUsername}} <span>'s waiting list:</span>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let person of waitingPersonList">
+              <td> {{person.id}}</td>
+              <td>{{person.book_title}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Close</button>
+        </div>
+      </div>
     </div>
   </div>
-  <app-add-waiting-list *ngIf="action==='add'"></app-add-waiting-list>
+
+  <div class="col-3">
+    <app-edit-waiting-list *ngIf="action==='edit' && setWaitingListComponentCol !== 'col-12'"
+                           [waitingDetail]="selectedWaitingListDetail"
+                           [newWaitingList]="selectedWaitingList"
+                           (closeEditComponent)="setWaitingListToOriginalCol()">
+
+    </app-edit-waiting-list>
+
+
+    <!-- Tooltip -->
+  </div>
+</div>
+<app-add-waiting-list *ngIf="action==='add'"></app-add-waiting-list>
+
+<div class="tooltip bs-tooltip-top" role="tooltip">
+  <div class="arrow"></div>
+  <div class="tooltip-inner">
+
+  </div>
+</div>
 

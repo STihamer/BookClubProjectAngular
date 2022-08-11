@@ -1,15 +1,30 @@
 <div class="row" *ngIf="!action || action == 'delete'">
   <h1 class="m-2 mb-4 text-center">Book renting system</h1>
-  <div class="input-group mb-3 ">
+  <div class="input-group mb-3 ms-0 me-0 p-0" *ngIf="!switchSearchInput">
     <input type="text" class="form-control" placeholder="Searching by  book title"
            aria-label="Recipient's username"
-           aria-describedby="button-addon2">
-    <button class="btn btn-warning" type="button" id="button-addon2">Abort
+           aria-describedby="button-addon2" [(ngModel)]="searching" (keyup)="findData(searching)"
+           (keydown.backspace)="loadData()">
+    <button class="btn btn-success" type="button" id="button-addon6" (click)="switchInputGroup()">Reader
+    </button>
+    <button class="btn btn-warning" type="button" id="button-addon2" (click)="deleteSearchingByBookTitle()">Abort
     </button>
     <button class="btn btn-secondary border-secondary" type="button" id="button-addon3" (click)="addRentingTable()">Add
     </button>
   </div>
-  <div class="row row-striped" *ngFor="let renting of rentingDataForScreenList">
+  <div class="input-group mb-3 ms-0 me-0 p-0" *ngIf="switchSearchInput">
+    <input type="text" class="form-control" placeholder="Searching by reader first name or last name "
+           aria-label="Recipient's username"
+           aria-describedby="button-addon2" [(ngModel)]="searching" (keyup)="findDataByName(searching)"
+           (keydown.backspace)="loadData()">
+    <button class="btn btn-success" type="button" id="button-addon7" (click)="switchInputGroup()">Title
+    </button>
+    <button class="btn btn-warning" type="button" id="button-addon4" (click)="deleteSearchingByBookTitle()">Abort
+    </button>
+    <button class="btn btn-secondary border-secondary" type="button" id="button-addon5" (click)="addRentingTable()">Add
+    </button>
+  </div>
+  <div class="row row-striped p-0 m-0" *ngFor="let renting of rentingDataForScreenList">
     <div class="text-dark">
       <h3 class="text-uppercase"><strong> {{  renting.bookTitle }}</strong></h3>
       <div class="col-6">
@@ -19,9 +34,9 @@
       <div class="row">
         <h2>Borrowing details</h2>
         <div class="col-6">
-          <p class="mb-0">First name: {{ renting.borrowerFirstName}}</p>
-          <p class="mb-0">Last name: {{ renting.borrowerLastName}}</p>
-          <p class="mb-0">Borrowed date: {{ renting.borrowed_date}}</p>
+          <p class="mb-0">Reader first name: {{ renting.borrowerFirstName}}</p>
+          <p class="mb-0">Reader last name: {{ renting.borrowerLastName}}</p>
+          <p class="mb-0">Renting date: {{ renting.borrowed_date}}</p>
           <p class="mb-0">Return date: {{ renting.return_date}}</p>
         </div>
         <div class="col-6">

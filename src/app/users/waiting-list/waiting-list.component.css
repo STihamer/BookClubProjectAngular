@@ -6,3 +6,9 @@
 .text-dark {
   font-weight:500;
 }
+tr td.searchByUsername:hover {
+  cursor: pointer;
+}
+span {
+  font-weight: normal;
+}

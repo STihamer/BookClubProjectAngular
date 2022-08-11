@@ -3,7 +3,7 @@
     <form #rentingTableForm="ngForm">
       <div class="card-body">
 
-        <h5 class="card-title">Add your new book owner</h5>
+        <h5 class="card-title">Add your new renting detail</h5>
 
       </div>
       <ul class="list-group list-group-flush">
@@ -28,6 +28,7 @@
                     #bookIdField=
                       "ngModel" required>
               <option *ngFor="let book of books" [ngValue]="book?.book_id">{{book?.book_title}}</option>
+              <option value="0" selected></option>
             </select>
           </div>
         </li>
@@ -48,7 +49,8 @@
           <div class="form-group col-12">
             <label for="rentingDate">Renting date</label>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" [(ngModel)]="selectedDate" name="selectedDate" id="rentingDate"/>
+              <input type="text" class="form-control" disabled [(ngModel)]="selectedDate" name="selectedDate"
+                     id="rentingDate"/>
             </div>
           </div>
         </li>
@@ -65,13 +67,14 @@
 
         <li class="list-group-item border-bottom-0">
           <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-3">
-            <button
-                    type="button"
-                    class="btn btn-primary mt-3" (click)="onSubmit()" >Save
+            <button type="button" [disabled]="newRentingTable.borrowed_by == 0 || newRentingTable.book_id == 0 ||
+            newRentingTable.renting_period == 0"
+                    class="btn btn-primary mt-3" (click)="onSubmit()">Save
             </button>
             <button
               type="button"
-              class="btn btn-primary mt-3"
+              class="btn btn-primary mt-3" [disabled]="newRentingTable.borrowed_by == 0 && newRentingTable.book_id
+              == 0 && newRentingTable.renting_period == 0"
               (click)="clearDataFromAddForm()">Clear
             </button>
           </div>

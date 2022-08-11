@@ -5,6 +5,7 @@ import {WaitingListDetail} from "../../model/WaitingListDetail";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
 import {filter} from "rxjs";
+import {WaitingPersonsAndBookTitle} from "../../model/WaitingPersonsAndBookTitle";
 
 @Component({
   selector: 'app-waiting-list',
@@ -23,6 +24,8 @@ export class WaitingListComponent implements OnInit {
   textSearching: string = '';
   previousUrl = '';
   currentUrl = '';
+  waitingPerson: any = new WaitingPersonsAndBookTitle();
+  waitingPersonList: Array<WaitingPersonsAndBookTitle> = new Array<WaitingPersonsAndBookTitle>();
 
   constructor(private dataService: DataService,
               private route: ActivatedRoute,
@@ -118,6 +121,22 @@ export class WaitingListComponent implements OnInit {
 
   }
 
+  editWaitingPersonsAndBookTitles(id: number) {
+    this.setWaitingListComponentCol = 'col-9'
+    this.router.navigate(['waitingList'], {queryParams: {action: 'searchByName', id: id}});
+    this.selectedWaitingListDetail = this.waitingListDetailList.find(detail => detail.id === +id);
+    this.waitingPerson.first_name = this.selectedWaitingListDetail.readerFirstName;
+    this.waitingPerson.last_name = this.selectedWaitingListDetail.readerLastName;
+    this.dataService.getWaitingPersonsAndBookTitle(this.waitingPerson).subscribe(next => {
+      let id = 1;
+      this.waitingPersonList = next;
+      for (let person of this.waitingPersonList) {
+        person.id = id++;
+      }
+    });
+
+  }
+
   setWaitingListToOriginalCol() {
     this.setWaitingListComponentCol = 'col-12';
   }
@@ -168,8 +187,10 @@ export class WaitingListComponent implements OnInit {
       this.currentUrl = event.url;
     })
   }
-  closeModal(){
+
+  closeModal() {
     this.router.navigate(['waitingList']);
   }
+
 }
 

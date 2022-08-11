@@ -6,6 +6,7 @@ import {DataService} from "../../data.service";
 import {RentingTable} from "../../model/RentingTable";
 import {formatDate} from "@angular/common";
 import {Router} from "@angular/router";
+import {BookOwner} from "../../model/BookOwner";
 
 @Component({
   selector: 'app-add-renting-data',
@@ -18,6 +19,7 @@ export class AddRentingDataComponent implements OnInit {
   books: Array<Book> = new Array<Book>();
   rentingPeriods: Array<RentingPeriod> = new Array<RentingPeriod>();
   newRentingPeriod: any = new RentingPeriod();
+  rentingTables: Array<RentingTable> = new Array<RentingTable>();
   @Input()
   newRentingTable: RentingTable = new RentingTable();
 
@@ -48,9 +50,28 @@ export class AddRentingDataComponent implements OnInit {
     this.dataService.users.subscribe(next => this.users = next);
     this.dataService.books.subscribe(next => this.books = next);
     this.newRentingTable.borrowed_date = new Date(this.selectedDate);
+    this.dataService.rentingTables.subscribe(
+      next => {
+        this.rentingTables = next;
+        for (let table of this.rentingTables) {
+          this.dataService.getBookById(table.book_id).subscribe(book => {
+              for(let i in this.books){
+                if(this.books[i].book_id == book.book_id){
+                  this.books.splice(Number(i),1)
+                }
+              }
+            }
+          );
+        }
+      }
+    );
   }
-
   clearDataFromAddForm() {
+     this.newRentingTable.borrowed_by = 0;
+      this.newRentingTable.book_id = 0
+      this.newRentingTable.renting_period = 0;
+      window.location.reload()
+
   }
 
   addDays(id: number) {
@@ -62,7 +83,6 @@ export class AddRentingDataComponent implements OnInit {
     this.returnDateString = formatDate(this.returnDate, 'yyyy-MM-dd', 'en-US');
 
   }
-
 
 
   onSubmit() {

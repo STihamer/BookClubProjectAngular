@@ -10,6 +10,8 @@ import {WaitingList} from "./model/WaitingList";
 import {RentingTable} from "./model/RentingTable";
 import {BooksNonRentedResponse} from "./model/BooksNonRentedResponse";
 import {RentingPeriod} from "./model/RentingPeriod";
+import {WaitingPersonsAndBookTitle} from "./model/WaitingPersonsAndBookTitle";
+import {FindBookByTitleOrAuthorIfAvailable} from "./model/FindBookByTitleOrAuthorIfAvailable";
 
 @Injectable({
   providedIn: 'root'
@@ -176,6 +178,38 @@ export class DataService {
       );
   }
 
+  getWaitingPersonsAndBookTitle(waitingPerson: WaitingPersonsAndBookTitle): Observable<Array<WaitingPersonsAndBookTitle>> {
+    const params = new HttpParams()
+      .set('first_name', waitingPerson.first_name)
+      .set('last_name', waitingPerson.last_name)
+    return this.http.get<Array<WaitingPersonsAndBookTitle>>(environment.restUrl + `/api/waitingPersonsAndBookTitle?${params}`)
+      .pipe(
+        map(data => {
+          const waitingPersonsAndBookTitle = new Array<WaitingPersonsAndBookTitle>();
+          for (const waitingPersonAndBookTitle of data) {
+            waitingPersonsAndBookTitle.push(WaitingPersonsAndBookTitle.fromHttp(waitingPersonAndBookTitle));
+          }
+          return waitingPersonsAndBookTitle
+        })
+      );
+  }
+
+  getBookByAuthorNameOrBookTitle(bookByAuthorAndTitle: FindBookByTitleOrAuthorIfAvailable): Observable<Array<FindBookByTitleOrAuthorIfAvailable>> {
+    const params = new HttpParams()
+      .set('book_title', bookByAuthorAndTitle.book_title)
+      .set('first_name', bookByAuthorAndTitle.author_fname)
+      .set('last_name', bookByAuthorAndTitle.author_lname)
+    return this.http.get<Array<FindBookByTitleOrAuthorIfAvailable>>(environment.restUrl + `/api/bookAvailabilityByAuthorOrTitle?${params}`)
+      .pipe(
+        map(data => {
+          const availableBooksByTitle = new Array<FindBookByTitleOrAuthorIfAvailable>();
+          for (const availableBookByTitle of data) {
+           availableBooksByTitle.push(FindBookByTitleOrAuthorIfAvailable.fromHttp(availableBookByTitle));
+          }
+          return availableBooksByTitle;
+        })
+      );
+  }
 
   deleteBook(id: number): Observable<any> {
     return this.http.delete(environment.restUrl + `/api/books/${id}`);

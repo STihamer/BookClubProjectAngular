@@ -3,6 +3,8 @@ import {DataService} from "../data.service";
 import {Book} from "../model/Book";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormResetService} from "../form-reset.service";
+import {FindBookByTitleOrAuthorIfAvailable} from "../model/FindBookByTitleOrAuthorIfAvailable";
+import {formatDate} from "@angular/common";
 
 @Component({
   selector: 'app-books',
@@ -16,7 +18,8 @@ export class BooksComponent implements OnInit {
   message: string = '';
   bookHidden = false;
   searchingBook: string = '';
-
+  findBookAvailabilityByTitleAndUsername: FindBookByTitleOrAuthorIfAvailable = new FindBookByTitleOrAuthorIfAvailable();
+  returnDate = '';
 
   constructor(private dataService: DataService,
               private router: Router,
@@ -25,11 +28,14 @@ export class BooksComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.returnDate = '';
     this.loadData()
   }
 
   setBook(id: number) {
     this.router.navigate(['books'], {queryParams: {id: id, action: 'view'}})
+    this.selectedBook = this.books.find(book => book.book_id === +id);
+    this.getBookAvailabilityByUsernameAndTitle(id)
   }
 
   loadData() {
@@ -105,5 +111,27 @@ export class BooksComponent implements OnInit {
     this.router.navigate(['books'], {queryParams: {action: 'add'}});
     this.formResetService.resetBookFormEvent.emit(this.selectedBook);
     this.bookHidden = true;
+  }
+
+  getBookAvailabilityByUsernameAndTitle(id: number) {
+    this.returnDate = '';
+    this.dataService.getBookById(id).subscribe(next => this.selectedBook = next);
+    this.findBookAvailabilityByTitleAndUsername.book_title = this.selectedBook.book_title;
+    this.findBookAvailabilityByTitleAndUsername.author_fname = this.selectedBook.author_fname;
+    this.findBookAvailabilityByTitleAndUsername.author_lname = this.selectedBook.author_lname;
+    this.dataService.getBookByAuthorNameOrBookTitle(this.findBookAvailabilityByTitleAndUsername).subscribe(next => {
+
+      if (next[0].return_date !== undefined || null) {
+        this.findBookAvailabilityByTitleAndUsername.return_date = next[0].return_date;
+        this.returnDate = formatDate((this.findBookAvailabilityByTitleAndUsername.return_date), 'yyyy-MM-dd', 'en-US');
+      } else {
+        this.findBookAvailabilityByTitleAndUsername.return_date = new Date();
+      }
+    });
+  }
+
+  closeModal() {
+    this.router.navigate(['books']);
+    window.location.reload();
   }
 }
