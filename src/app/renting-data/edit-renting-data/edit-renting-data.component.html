@@ -54,7 +54,7 @@
   </div>
   <button type="button" class="btn btn-primary mt-2 me-3" [disabled]="rentingForm.invalid" (click)="closeEditRentingTable()">Close
   </button>
-  <button type="button" class="btn btn-primary mt-2" [disabled]="rentingForm.invalid" (click)="onSubmit()">Save
+  <button type="button" class="btn btn-primary mt-2" [disabled]="extensionPeriod < 14" (click)="onSubmit()">Save
   </button>
 </form>
 

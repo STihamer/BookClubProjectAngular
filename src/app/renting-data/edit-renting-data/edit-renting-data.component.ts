@@ -3,7 +3,7 @@ import {Subscription} from "rxjs";
 import {RentingDataForScreen} from "../../model/RentingDataForScreen";
 import {RentingTable} from "../../model/RentingTable";
 import {DataService} from "../../data.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
 
 @Component({
@@ -14,7 +14,7 @@ import {FormResetService} from "../../form-reset.service";
 export class EditRentingDataComponent implements OnInit, OnDestroy {
 
   extensionPeriod: number = 0;
-
+  action = '';
   @Input()
   rentingDetail: RentingDataForScreen = new RentingDataForScreen();
   @Output()
@@ -31,7 +31,8 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
 
   constructor(private dataService: DataService,
               private router: Router,
-              private formResetService: FormResetService) {
+              private formResetService: FormResetService,
+              private route: ActivatedRoute) {
   }
 
   ngOnDestroy(): void {
@@ -39,11 +40,13 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     this.rentingTableResetSubscription = this.formResetService.resetRentingTableFormEvent.subscribe(
       detail => {
         this.rentingDetail = detail;
       }
     );
+    this.toManageRentingTableComponentRouting();
   }
 
 
@@ -66,5 +69,17 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
         this.router.navigate(['rentingTable']);
       },
     );
+  }
+
+  toManageRentingTableComponentRouting() {
+    this.route.queryParams.subscribe(params => {
+      const id = params['id'];
+      this.action = params['action'];
+      if (this.action === 'edit' && id){
+        if(this.rentingDetail.borrowerFirstName === ''){
+          window.location.replace('rentingTable')
+        }
+      }
+    })
   }
 }

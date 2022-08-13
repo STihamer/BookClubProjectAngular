@@ -3,6 +3,7 @@ import {DataService} from "../data.service";
 import {Book} from "../model/Book";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormResetService} from "../form-reset.service";
+import {BooksNonRentedResponse} from "../model/BooksNonRentedResponse";
 import {FindBookByTitleOrAuthorIfAvailable} from "../model/FindBookByTitleOrAuthorIfAvailable";
 import {formatDate} from "@angular/common";
 
@@ -18,8 +19,12 @@ export class BooksComponent implements OnInit {
   message: string = '';
   bookHidden = false;
   searchingBook: string = '';
-  findBookAvailabilityByTitleAndUsername: FindBookByTitleOrAuthorIfAvailable = new FindBookByTitleOrAuthorIfAvailable();
+  nonRentedBooks: Array<BooksNonRentedResponse> = new Array<BooksNonRentedResponse>();
   returnDate = '';
+  filteredBook = false;
+  findBooksAvailability: Array<FindBookByTitleOrAuthorIfAvailable> = new Array<FindBookByTitleOrAuthorIfAvailable>();
+  findBookAvailability: FindBookByTitleOrAuthorIfAvailable = new FindBookByTitleOrAuthorIfAvailable();
+  ifBookIsRented: BooksNonRentedResponse = new BooksNonRentedResponse();
 
   constructor(private dataService: DataService,
               private router: Router,
@@ -114,20 +119,28 @@ export class BooksComponent implements OnInit {
   }
 
   getBookAvailabilityByUsernameAndTitle(id: number) {
-   /* this.returnDate = '';
-    this.dataService.getBookById(id).subscribe(next => this.selectedBook = next);
-    this.findBookAvailabilityByTitleAndUsername.book_title = this.selectedBook.book_title;
-    this.findBookAvailabilityByTitleAndUsername.author_fname = this.selectedBook.author_fname;
-    this.findBookAvailabilityByTitleAndUsername.author_lname = this.selectedBook.author_lname;
-    this.dataService.getBookByAuthorNameOrBookTitle(this.findBookAvailabilityByTitleAndUsername).subscribe(next => {
+    this.dataService.getBookById(id).subscribe(next => this.selectedBook = next)
+    this.dataService.bookNonRented.subscribe(
+      next => {
+        this.nonRentedBooks = next;
+        this.ifBookIsRented = this.nonRentedBooks.filter(element => element.book_id == this.selectedBook.book_id)[0];
+        if (!this.ifBookIsRented) {
+          this.findBookAvailability.book_title = this.selectedBook.book_title;
+          this.findBookAvailability.book_id = this.selectedBook.book_id;
+          this.findBookAvailability.author_fname = this.selectedBook.author_fname;
+          this.findBookAvailability.author_lname = this.selectedBook.author_lname;
+          this.dataService.getBookByAuthorNameOrBookTitle(this.findBookAvailability).subscribe(
+            next => {
+              this.findBookAvailability.return_date = next[0].return_date;
+              this.returnDate = formatDate((this.findBookAvailability.return_date), 'yyyy-MM-dd', 'en-US');
+            }
+            );
 
-      if (next[0].return_date !== undefined || null) {
-        this.findBookAvailabilityByTitleAndUsername.return_date = next[0].return_date;
-        this.returnDate = formatDate((this.findBookAvailabilityByTitleAndUsername.return_date), 'yyyy-MM-dd', 'en-US');
-      } else {
-        this.findBookAvailabilityByTitleAndUsername.return_date = new Date();
+        } else {
+          this.returnDate = '';
+        }
       }
-    });*/
+    );
   }
 
   closeModal() {

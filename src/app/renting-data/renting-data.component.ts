@@ -94,12 +94,6 @@ export class RentingDataComponent implements OnInit {
           window.location.reload();
         }
       }
-      if (this.action === 'edit' && id) {
-        this.router.navigate(['rentingTable'], {queryParams: {action: 'edit', id: id}});
-      }
-      if (this.action === 'delete' && id) {
-        this.router.navigate(['rentingTable'], {queryParams: {action: 'delete', id: id}});
-      }
     });
   }
 

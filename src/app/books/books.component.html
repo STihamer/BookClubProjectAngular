@@ -29,7 +29,8 @@
             <ul class="list-group">
               <li class="list-group-item"> Author name: {{selectedBook.author_fname}} {{selectedBook.author_lname}}</li>
               <li class="list-group-item"> Published {{selectedBook.published}}</li>
-              <li class="list-group-item">Availability: {{returnDate? ' after ' + returnDate: ' available'}}</li>
+              <li class="list-group-item">Availability:
+                {{returnDate ? 'after ' + returnDate : 'available'}}</li>
             </ul>
           </div>
           <div class="modal-footer">

@@ -18,8 +18,8 @@ export class AvailableBooksComponent implements OnInit {
     this.dataService.bookNonRented.subscribe(
       next => {
         this.booksNonRented = next;
-        for(let book of this.booksNonRented){
-          id ++;
+        for (let book of this.booksNonRented) {
+          id++;
           book.id = id;
         }
       }
