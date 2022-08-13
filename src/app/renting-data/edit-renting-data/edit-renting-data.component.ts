@@ -58,9 +58,9 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.newRentingTable.return_date_extended = true;
-    this.dataService.updateRentingTableReturnDate(this.newRentingTable, this.newRentingTable.id, this.extensionPeriod, this.newRentingTable.return_date_extended).subscribe(
+    this.dataService.updateRentingTableReturnDate(this.newRentingTable, this.newRentingTable.id, this.extensionPeriod).subscribe(
       (waiting) => {
-
+        console.log(this.newRentingTable.return_date_extended);
         this.dataChangedEvent.emit();
         this.closeEditComponent.emit();
         this.router.navigate(['rentingTable']);

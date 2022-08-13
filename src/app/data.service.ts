@@ -65,10 +65,9 @@ export class DataService {
     return this.http.put<WaitingList>(environment.restUrl + `/api/waitingLists/${id}?${param}`, waitingList);
   }
 
-  updateRentingTableReturnDate(rentingTable: RentingTable, id: number, period: number, extension: boolean): Observable<RentingTable> {
+  updateRentingTableReturnDate(rentingTable: RentingTable, id: number, period: number): Observable<RentingTable> {
     const param = new HttpParams()
       .set('period', period)
-      .set('extended', extension)
     return this.http.put<RentingTable>(environment.restUrl + `/api/rentingTables/${id}?${param}`, rentingTable);
   }
 

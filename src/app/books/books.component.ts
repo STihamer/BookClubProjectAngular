@@ -114,7 +114,7 @@ export class BooksComponent implements OnInit {
   }
 
   getBookAvailabilityByUsernameAndTitle(id: number) {
-    this.returnDate = '';
+   /* this.returnDate = '';
     this.dataService.getBookById(id).subscribe(next => this.selectedBook = next);
     this.findBookAvailabilityByTitleAndUsername.book_title = this.selectedBook.book_title;
     this.findBookAvailabilityByTitleAndUsername.author_fname = this.selectedBook.author_fname;
@@ -127,7 +127,7 @@ export class BooksComponent implements OnInit {
       } else {
         this.findBookAvailabilityByTitleAndUsername.return_date = new Date();
       }
-    });
+    });*/
   }
 
   closeModal() {
