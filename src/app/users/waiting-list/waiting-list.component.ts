@@ -94,12 +94,12 @@ export class WaitingListComponent implements OnInit {
 
   toManageBookOwnerRouting() {
     this.route.queryParams.subscribe(params => {
-      const id = params['id'];
+      const idBook = params['idBook'];
       this.action = params['action'];
       this.option = params['option'];
       this.searching = params['searching'];
-      if (this.option === 'option') {
-        this.router.navigate(['waitingList'], {queryParams: {action: 'add', option: 'option'}});
+      if (this.option === 'option' && idBook) {
+        this.router.navigate(['waitingList'], {queryParams: {action: 'add', option: 'option', idBook:idBook}});
       }
       if (this.router.url === '/waitingList') {
         this.getPreviousUrl();

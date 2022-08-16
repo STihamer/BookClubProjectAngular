@@ -64,7 +64,14 @@
             </div>
           </div>
         </li>
-
+        <li class="list-group-item border-bottom-0">
+          <button class="btn" type="button" id="button-addon1" *ngIf="message" data-bs-toggle="tooltip"
+                  title="Go to waiting list" (click)="goToWaitingList()">
+            <div class="alert alert-danger" role="alert">
+              {{message}} >>
+            </div>
+          </button>
+        </li>
         <li class="list-group-item border-bottom-0">
           <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-3">
             <button type="button" [disabled]="newRentingTable.borrowed_by == 0 || newRentingTable.book_id == 0 ||
@@ -85,3 +92,9 @@
   </div>
 </div>
 
+<div class="tooltip bs-tooltip-top" role="tooltip">
+  <div class="tooltip-arrow"></div>
+  <div class="tooltip-inner">
+    Some tooltip text!
+  </div>
+</div>

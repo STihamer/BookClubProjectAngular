@@ -5,20 +5,23 @@
     <form #waitingListForm="ngForm">
       <div class="card-body">
 
-        <h5 class="card-title">Add your new book owner</h5>
+        <h5 class="card-title">Add your new waiting detail</h5>
 
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item border-bottom-0">
           <div class="form-group col-12">
             <label for="BookTitle">Owner username</label>
-            <select (change)="filterBooksByUseIdForBookOwnerSet(newBookOwner.user_id)" class="form-select"
+            <select (change)="filterBooksByUseIdForBookOwnerSet(personNameBookTitleForBookOwner.bookOwnerId)"
+                    class="form-select"
                     id="BookTitle"
-                    [(ngModel)]="newBookOwner.user_id"
+                    [(ngModel)]="personNameBookTitleForBookOwner.bookOwnerId"
                     name="userId" required
                     #UserField=
                       "ngModel">
-              <option *ngFor="let owner of newOwnerPersons" [ngValue]="owner?.user_id">{{owner.username }}</option>
+              <option value="0"></option>
+              <option *ngFor="let owner of personNameBookTitleForBookOwners"
+                      [ngValue]="owner?.bookOwnerId">{{owner.firstName }}  {{ owner.lastName}}</option>
             </select>
             <div class="alert alert-danger" *ngIf="UserField.invalid">Do something</div>
           </div>
@@ -27,10 +30,12 @@
         <li class="list-group-item border-bottom-0">
           <div class="form-group col-12">
             <label for="username">Book title</label>
-            <select class="form-select" id="username" [(ngModel)]="newBookOwner.book_id" name="bookId"
+            <select class="form-select" id="username" [(ngModel)]="personNameBookTitleForBookOwner.bookId" name="bookId"
                     #usernameField=
-                      "ngModel" required (change)="filterBooksByBookIdForBookOwnerSet(newBookOwner.book_id)">
-              <option *ngFor="let book of newBooks" [ngValue]="book?.book_id">{{book?.book_title}}</option>
+                      "ngModel" required (change)="filterBooksByBookIdForBookOwnerSet(personNameBookTitleForBookOwner.bookId)">
+              <option value="0"></option>
+              <option *ngFor="let owner of personNameBookTitleForBookOwners"
+                      [ngValue]="owner?.bookId">{{owner?.bookTitle}}</option>
             </select>
             <div class="alert alert-danger" *ngIf="usernameField.invalid">
               Username is required
@@ -52,11 +57,13 @@
         </li>
         <li class="list-group-item border-bottom-0">
           <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-3">
-            <button [disabled]="!newWaitingList.user_id || (!newBookOwner.book_id && !newBookOwner.user_id)"
+            <button [disabled]="!newWaitingList.user_id || (!personNameBookTitleForBookOwner.bookId &&
+            !personNameBookTitleForBookOwner.userId)"
                     type="button"
                     class="btn btn-primary mt-3" (click)="onSubmit()">Save
             </button>
-            <button [disabled]="newWaitingList.user_id == 0 && newBookOwner.book_id == 0 && newBookOwner.user_id == 0"
+            <button [disabled]="newWaitingList.user_id == 0 && personNameBookTitleForBookOwner.bookOwnerId == 0 &&
+            personNameBookTitleForBookOwner.bookId == 0"
                     type="button"
                     class="btn btn-primary mt-3"
                     (click)="clearDataFromAddForm()">Clear

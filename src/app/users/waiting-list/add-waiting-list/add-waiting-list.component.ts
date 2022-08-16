@@ -4,7 +4,8 @@ import {Book} from "../../../model/Book";
 import {WaitingList} from "../../../model/WaitingList";
 import {DataService} from "../../../data.service";
 import {BookOwner} from "../../../model/BookOwner";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {PersonNameBookTitleForBookOwner} from "../../../model/PersonNameBookTitleForBookOwner";
 
 @Component({
   selector: 'app-add-waiting-list',
@@ -15,21 +16,21 @@ export class AddWaitingListComponent implements OnInit {
 
 
   books: Array<Book> = new Array<Book>();
-  newBookOwnerList: Array<BookOwner> = new Array<BookOwner>();
-  waitingLists: Array<WaitingList> = new Array<WaitingList>();
-  bookOwnerPersons: Array<User> = new Array<User>();
   bookReaders: Array<User> = new Array<User>();
-  newBookOwner: BookOwner = new BookOwner();
   option = '';
+  action = '';
   anotherBookOwner: any = new BookOwner();
-  newBooks: Array<Book> = new Array<Book>();
-  newOwnerPersons: Array<User> = new Array<User>();
   newWaitingList: WaitingList = new WaitingList()
+  users: Array<User> = new Array<User>();
+  bookOwnerList: Array<BookOwner> = new Array<BookOwner>();
+  personNameBookTitleForBookOwners: Array<PersonNameBookTitleForBookOwner> = new Array<PersonNameBookTitleForBookOwner>();
+  personNameBookTitleForBookOwner: PersonNameBookTitleForBookOwner = new PersonNameBookTitleForBookOwner();
   @Output()
   dataChangeEvent = new EventEmitter();
 
   constructor(private dataService: DataService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -43,61 +44,85 @@ export class AddWaitingListComponent implements OnInit {
   }
 
   loadData() {
+    this.users = [];
     this.books = [];
-    this.bookOwnerPersons = [];
-    this.dataService.waitingLists.subscribe(next => {
-      this.waitingLists = next;
-      for (let el of next) {
-        this.dataService.getBookOwnerById(el.book_for_reading).subscribe(bookOwner => {
-          this.newBookOwnerList.push(bookOwner);
-          this.dataService.getUserById(bookOwner.user_id).subscribe(
-            user => {
-              this.bookOwnerPersons.push(user)
-            }
-          );
-          this.dataService.getBookById(bookOwner.book_id).subscribe(
-            book => this.books.push(book)
-          );
-        })
-      }
-      this.newBooks = this.books;
-      this.newOwnerPersons = this.bookOwnerPersons;
-    });
+    this.personNameBookTitleForBookOwners = [];
+    this.bookOwnerList = [];
+    this.dataService.users.subscribe(next => this.users = next);
+    this.dataService.books.subscribe(next => this.books = next);
+    this.dataService.bookOwners.subscribe(
+      next => {
+        let id = 1
+        this.bookOwnerList = next;
+        this.createPersonNameBookTitleForBookOwners(this.bookOwnerList, id);
+
+      });
+    this.toManageAddWaitingListRouting();
   }
 
   filterBooksByUseIdForBookOwnerSet(id: number) {
     this.router.navigate(['waitingList'], {queryParams: {action: 'add', option: 'option'}});
-    this.anotherBookOwner = this.newBookOwnerList.find(element => element.user_id == id);
-    this.newBooks = this.books.filter(el => el.book_id == this.anotherBookOwner.book_id);
+    this.personNameBookTitleForBookOwners = this.personNameBookTitleForBookOwners.filter(element => element.bookOwnerId == +id);
   }
 
-  filterBooksByBookIdForBookOwnerSet(id: number) {
-    this.router.navigate(['waitingList'], {queryParams: {action: 'add', option: 'option'}});
-    this.anotherBookOwner = this.newBookOwnerList.find(element => element.book_id == id);
-    this.newOwnerPersons = this.bookOwnerPersons.filter(el => el.user_id == this.anotherBookOwner.user_id);
+  filterBooksByBookIdForBookOwnerSet(idBook: number) {
+    this.router.navigate(['waitingList'], {queryParams: {action: 'add', option: 'option', idBook: idBook}});
+    this.personNameBookTitleForBookOwners = this.personNameBookTitleForBookOwners.filter(element => element.bookId == +idBook);
+
   }
 
   clearDataFromAddForm() {
-    this.newBookOwner = new BookOwner();
-    this.newOwnerPersons = [];
-    this.newBooks = [];
-    this.bookReaders = [];
+    this.personNameBookTitleForBookOwner.bookOwnerId = 0;
+    this.personNameBookTitleForBookOwner.bookId = 0;
+    this.newWaitingList.user_id = 0;
     window.location.reload()
 
   }
 
   onSubmit() {
-    this.newWaitingList.book_for_reading = this.anotherBookOwner.id;
+    console.log(this.personNameBookTitleForBookOwner.bookId);
+    console.log(this.personNameBookTitleForBookOwner.bookOwnerId);
+    this.bookOwnerList = this.bookOwnerList.filter(element => element.book_id == this.personNameBookTitleForBookOwner.bookId && element.user_id == this.personNameBookTitleForBookOwner.bookOwnerId);
+    console.log(this.bookOwnerList)
+    this.newWaitingList.book_for_reading = this.bookOwnerList[0].id;
     this.newWaitingList.finished = false;
     this.dataService.addWaitingList(this.newWaitingList).subscribe(
       (newWaitingList) => {
         window.location.reload();
-        console.log(this.newWaitingList);
         window.location.replace("waitingList");
         this.dataChangeEvent.emit();
         this.router.navigate(['waitingList']);
-
       }
     );
+  }
+
+  createPersonNameBookTitleForBookOwners(bookOwners: Array<BookOwner>, id: number) {
+    for (let el of this.bookOwnerList) {
+      const personNameBookTitleForBookOwner: PersonNameBookTitleForBookOwner = new PersonNameBookTitleForBookOwner()
+
+      this.dataService.getUserById(el.user_id).subscribe(user => {
+        personNameBookTitleForBookOwner.firstName = user.first_name;
+        personNameBookTitleForBookOwner.lastName = user.last_name;
+        personNameBookTitleForBookOwner.userId = user.user_id;
+
+      });
+      this.dataService.getBookById(el.book_id).subscribe(book => {
+        personNameBookTitleForBookOwner.bookTitle = book.book_title;
+        personNameBookTitleForBookOwner.bookId = book.book_id;
+      });
+      personNameBookTitleForBookOwner.id = id++;
+      personNameBookTitleForBookOwner.bookOwnerId = el.user_id;
+      this.personNameBookTitleForBookOwners.push(personNameBookTitleForBookOwner);
+    }
+  }
+
+  toManageAddWaitingListRouting() {
+    this.route.queryParams.subscribe(params => {
+      const idBook = params['idBook'];
+      this.action = params['action'];
+      if (idBook && this.anotherBookOwner == 'add' && this.option) {
+        this.router.navigate(['waitingList'], {queryParams: {action: 'add', id: idBook}})
+      }
+    });
   }
 }

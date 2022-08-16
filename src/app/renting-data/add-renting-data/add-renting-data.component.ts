@@ -5,8 +5,9 @@ import {RentingPeriod} from "../../model/RentingPeriod";
 import {DataService} from "../../data.service";
 import {RentingTable} from "../../model/RentingTable";
 import {formatDate} from "@angular/common";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {BookOwner} from "../../model/BookOwner";
+import {WaitingList} from "../../model/WaitingList";
 
 @Component({
   selector: 'app-add-renting-data',
@@ -20,6 +21,10 @@ export class AddRentingDataComponent implements OnInit {
   rentingPeriods: Array<RentingPeriod> = new Array<RentingPeriod>();
   newRentingPeriod: any = new RentingPeriod();
   rentingTables: Array<RentingTable> = new Array<RentingTable>();
+  bookOwnerList: Array<BookOwner> = new Array<BookOwner>();
+  waitingLists: Array<WaitingList> = new Array<WaitingList>();
+  newWaitingList: Array<WaitingList> = new Array<WaitingList>();
+  message: string = '';
   @Input()
   newRentingTable: RentingTable = new RentingTable();
 
@@ -30,7 +35,8 @@ export class AddRentingDataComponent implements OnInit {
   returnDateString = '';
 
   constructor(private dataService: DataService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -55,9 +61,9 @@ export class AddRentingDataComponent implements OnInit {
         this.rentingTables = next;
         for (let table of this.rentingTables) {
           this.dataService.getBookById(table.book_id).subscribe(book => {
-              for(let i in this.books){
-                if(this.books[i].book_id == book.book_id){
-                  this.books.splice(Number(i),1)
+              for (let i in this.books) {
+                if (this.books[i].book_id == book.book_id) {
+                  this.books.splice(Number(i), 1)
                 }
               }
             }
@@ -66,11 +72,12 @@ export class AddRentingDataComponent implements OnInit {
       }
     );
   }
+
   clearDataFromAddForm() {
-     this.newRentingTable.borrowed_by = 0;
-      this.newRentingTable.book_id = 0
-      this.newRentingTable.renting_period = 0;
-      window.location.reload()
+    this.newRentingTable.borrowed_by = 0;
+    this.newRentingTable.book_id = 0
+    this.newRentingTable.renting_period = 0;
+    window.location.reload()
 
   }
 
@@ -86,17 +93,64 @@ export class AddRentingDataComponent implements OnInit {
 
 
   onSubmit() {
+
     this.newRentingTable.renting_period = this.newRentingPeriod.id;
-    this.dataService.addRentingTable(this.newRentingTable).subscribe(
-      (newRentingTable) => {
-        window.location.reload();
-        console.log(this.newRentingTable);
-        window.location.replace("rentingTable");
-        this.dataChangeEvent.emit();
-        this.router.navigate(['rentingTable']);
+    this.validateRentingTableCreation(this.newRentingTable);
+
+  }
+
+  validateRentingTableCreation(rentingTable: RentingTable) {
+    this.dataService.bookOwners.subscribe(
+      next => {
+        this.bookOwnerList = next.filter(element => element.book_id == rentingTable.book_id);
+        if (!this.bookOwnerList) {
+          return
+        } else {
+          this.dataService.waitingLists.subscribe(
+            next => {
+              this.waitingLists = next.filter(element => element.book_for_reading == this.bookOwnerList[0].id);
+              this.waitingLists = this.waitingLists.sort((a, b) => {
+                if (a.id > b.id) {
+                  return 1;
+                } else if (a.id < b.id) {
+                  return -1;
+                }
+                return 0;
+              });
+              for (let el of this.waitingLists) {
+                if (el.user_id == rentingTable.borrowed_by) {
+                  this.newWaitingList.push(el);
+                }
+              }
+              if (this.newWaitingList.length == 0) {
+                this.message = "Sorry you cant borrow the book if you have not subscribed to the waiting list yet";
+                return;
+              } else if (this.waitingLists[0].user_id != rentingTable.borrowed_by) {
+                this.message = "Sorry it seems there are some users before you for this book. You have to wait your" +
+                  " turn.";
+                return;
+              } else {
+                this.dataService.addRentingTable(this.newRentingTable).subscribe(
+                  (newRentingTable) => {
+                    //window.location.reload();
+                    console.log(this.newRentingTable);
+                    //window.location.replace("rentingTable");
+                    this.dataChangeEvent.emit();
+                    this.router.navigate(['rentingTable']);
+
+                  }
+                );
+              }
+            }
+          );
+        }
 
       }
     );
+  }
+
+  goToWaitingList() {
+    this.router.navigate(['waitingList']);
   }
 
 }
