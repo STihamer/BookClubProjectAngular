@@ -21,8 +21,6 @@ export class BooksComponent implements OnInit {
   searchingBook: string = '';
   nonRentedBooks: Array<BooksNonRentedResponse> = new Array<BooksNonRentedResponse>();
   returnDate = '';
-  filteredBook = false;
-  findBooksAvailability: Array<FindBookByTitleOrAuthorIfAvailable> = new Array<FindBookByTitleOrAuthorIfAvailable>();
   findBookAvailability: FindBookByTitleOrAuthorIfAvailable = new FindBookByTitleOrAuthorIfAvailable();
   ifBookIsRented: BooksNonRentedResponse = new BooksNonRentedResponse();
 

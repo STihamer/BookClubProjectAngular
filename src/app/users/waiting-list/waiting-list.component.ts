@@ -122,7 +122,6 @@ export class WaitingListComponent implements OnInit {
   }
 
   editWaitingPersonsAndBookTitles(id: number) {
-    this.setWaitingListComponentCol = 'col-9'
     this.router.navigate(['waitingList'], {queryParams: {action: 'searchByName', id: id}});
     this.selectedWaitingListDetail = this.waitingListDetailList.find(detail => detail.id === +id);
     this.waitingPerson.first_name = this.selectedWaitingListDetail.readerFirstName;
