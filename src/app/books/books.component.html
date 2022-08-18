@@ -2,7 +2,7 @@
   <div class="input-group mb-3">
     <input type="text" class="form-control" placeholder="Book title" aria-label="Book title"
            aria-describedby="button-addon2" [(ngModel)]="searchingBook"
-           (keyup)="findBookByTitle(searchingBook)">
+           (keyup)="findBookByTitleOrByAuthorName(searchingBook)">
     <button class="btn btn-info" type="button" id="button-addon2"
             (click)="deleteSearchingByTitle()">Abort</button>
     <button class="btn btn-success border-secondary" type="button" id="button-addon3" (click)="addBook()">Add book</button>
@@ -23,12 +23,13 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Book title: {{selectedBook.book_title}}</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Book title: {{selectedBook?.book_title}}</h5>
           </div>
           <div class="modal-body">
             <ul class="list-group">
-              <li class="list-group-item"> Author name: {{selectedBook.author_fname}} {{selectedBook.author_lname}}</li>
-              <li class="list-group-item"> Published {{selectedBook.published}}</li>
+              <li class="list-group-item"> Author name: {{selectedBook?.author_fname}}
+                {{selectedBook?.author_lname}}</li>
+              <li class="list-group-item"> Published {{selectedBook?.published}}</li>
               <li class="list-group-item">Availability:
                 {{returnDate ? 'after ' + returnDate : 'available'}}</li>
             </ul>

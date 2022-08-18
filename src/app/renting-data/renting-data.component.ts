@@ -30,7 +30,10 @@ export class RentingDataComponent implements OnInit {
   previousUrl = '';
   currentUrl = '';
   selectedDate = '';
-  switchSearchInput = false;
+  searchingBookTitle = '';
+  searchingAuthorFirstName = '';
+  searchingAuthorLastName = '';
+  newRentingTables: Array<RentingTable> = new Array<RentingTable>();
 
   ngOnInit(): void {
 
@@ -45,6 +48,7 @@ export class RentingDataComponent implements OnInit {
   }
 
   creatingRentingDataForScreenList() {
+
     this.dataService.rentingTables.subscribe(
       next => {
         let id = 1;
@@ -85,8 +89,12 @@ export class RentingDataComponent implements OnInit {
       this.action = params['action'];
       this.option = params['option'];
       this.searching = params['searching'];
+
       if (this.option === 'option') {
         this.router.navigate(['rentingTable'], {queryParams: {action: 'add', option: 'option'}});
+      }
+      if (this.action === 'searching') {
+        this.router.navigate(['rentingTable'], {queryParams: {action: 'searching'}});
       }
       if (this.router.url === '/rentingTable') {
         this.getPreviousUrl();
@@ -149,40 +157,60 @@ export class RentingDataComponent implements OnInit {
     this.formResetService.resetMyListingFormEvent.emit(this.selectedRentingTable);
   }
 
-  findData(myNewRentingText: string) {
-    this.router.navigate(['rentingTable'],
-      {queryParams: {searching: myNewRentingText}});
-    this.rentingDataForScreenList = this.rentingDataForScreenList.filter
-    (element => (element.bookTitle.toLowerCase().indexOf(myNewRentingText.toLowerCase()) > -1));
-    if (myNewRentingText === '') {
-      this.router.navigate(['rentingTable']);
-    }
-
-  }
 
   deleteSearchingByBookTitle() {
     this.router.navigate(['rentingTable']);
     this.loadData();
-    this.searching = '';
+    this.searchingBookTitle = '';
+    this.searchingAuthorLastName = '';
+    this.searchingAuthorFirstName = '';
   }
 
-  switchInputGroup() {
-    if (!this.switchSearchInput) {
-      this.switchSearchInput = true;
-    } else {
-      this.switchSearchInput = false;
-    }
+  creatingRentingDataForScreenListBySearching(bookTitle: string, authorFirstName: string, authorLastName: string) {
+    this.rentingTables = [];
+    this.rentingDataForScreenList = [];
+    this.dataService.rentingTablesByTitleOrAuthorName(bookTitle, authorFirstName, authorLastName).subscribe(
+      next => {
+        this.rentingTables = next;
+        if (this.rentingTables.length < 1) {
+          window.location.reload();
+        } else {
+          this.router.navigate(["rentingTable"], {
+            queryParams: {
+              title: this.searchingBookTitle.replace(/\s/g, ""),
+              authorFirstName: this.searchingAuthorFirstName.replace(/\s/g, ""),
+              authorLastName: this.searchingAuthorLastName.replace(/\s/g, ""),
+            }
+          })
+          this.createRentingDataForScreen(this.rentingTables)
+        }
+      }
+    );
   }
 
-  findDataByName(myNewRentingText: string) {
-    this.router.navigate(['rentingTable'],
-      {queryParams: {searching: myNewRentingText}});
-    this.rentingDataForScreenList = this.rentingDataForScreenList.filter
-    (element => (element.borrowerFirstName.toLowerCase().indexOf(myNewRentingText.toLowerCase()) > -1)
-      || (element.borrowerLastName.toLowerCase().indexOf(myNewRentingText.toLowerCase())>-1));
-    if (myNewRentingText === '') {
-      this.router.navigate(['rentingTable']);
+  createRentingDataForScreen(rentingTables: Array<RentingTable>) {
+    let id = 1;
+    this.sortingRentingTables(rentingTables);
+    for (let element of rentingTables) {
+      const rentingDataForScreen: RentingDataForScreen = new RentingDataForScreen();
+      this.dataService.getUserById(element.borrowed_by).subscribe(user => {
+        rentingDataForScreen.borrowerFirstName = user.first_name;
+        rentingDataForScreen.borrowerLastName = user.last_name;
+        rentingDataForScreen.borrowerUserName = user.username;
+      });
+      this.dataService.getBookById(element.book_id).subscribe(
+        book => {
+          rentingDataForScreen.bookTitle = book.book_title;
+          rentingDataForScreen.authorFirstName = book.author_fname;
+          rentingDataForScreen.authorLastName = book.author_lname;
+        }
+      );
+      rentingDataForScreen.borrowed_date = element.borrowed_date;
+      rentingDataForScreen.return_date = element.return_date;
+      rentingDataForScreen.id = id++;
+      rentingDataForScreen.rentingTableId = element.id;
+      rentingDataForScreen.return_date_extended = element.return_date_extended;
+      this.rentingDataForScreenList.push(rentingDataForScreen);
     }
-
   }
 }

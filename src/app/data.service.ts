@@ -164,6 +164,38 @@ export class DataService {
       );
   }
 
+  rentingTablesByTitleOrAuthorName(bookTitle: string, authorFirstName: string, authorLastName: string): Observable<Array<RentingTable>> {
+    const params = new HttpParams()
+      .set('book_title', bookTitle)
+      .set('author_fname', authorFirstName)
+      .set('author_lname', authorLastName)
+    return this.http.get<Array<RentingTable>>(environment.restUrl + `/api/rentingTables/findBooksByTitleOrAuthorName?${params}`)
+      .pipe(
+        map(data => {
+          const foundBooks = new Array<RentingTable>();
+          for (const foundBook of data) {
+            foundBooks.push(RentingTable.fromHttp(foundBook));
+          }
+          return foundBooks
+        })
+      );
+  }
+
+  findBookByTitleOrByAuthorName(searching: string): Observable<Array<Book>> {
+    const params = new HttpParams()
+      .set('searching', searching)
+    return this.http.get<Array<Book>>(environment.restUrl + `/api/books/findBooksByTitleOrAuthorName?${params}`)
+      .pipe(
+        map(data => {
+          const foundBooks = new Array<Book>();
+          for (const foundBook of data) {
+            foundBooks.push(Book.fromHttp(foundBook));
+          }
+          return foundBooks
+        })
+      );
+  }
+
   get rentingPeriods(): Observable<Array<RentingPeriod>> {
     return this.http.get<Array<RentingPeriod>>(environment.restUrl + '/api/rentingPeriods')
       .pipe(
@@ -203,7 +235,7 @@ export class DataService {
         map(data => {
           const availableBooksByTitle = new Array<FindBookByTitleOrAuthorIfAvailable>();
           for (const availableBookByTitle of data) {
-           availableBooksByTitle.push(FindBookByTitleOrAuthorIfAvailable.fromHttp(availableBookByTitle));
+            availableBooksByTitle.push(FindBookByTitleOrAuthorIfAvailable.fromHttp(availableBookByTitle));
           }
           return availableBooksByTitle;
         })

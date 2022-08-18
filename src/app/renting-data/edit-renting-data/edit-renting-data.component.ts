@@ -15,6 +15,8 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
 
   extensionPeriod: number = 0;
   action = '';
+  message = '';
+  extensionPeriodConsumed = 'It seems you have already extended the renting period of this books.'
   @Input()
   rentingDetail: RentingDataForScreen = new RentingDataForScreen();
   @Output()
@@ -26,7 +28,7 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
 
   @Input()
   newRentingTable: RentingTable = new RentingTable();
-  message = '';
+
 
 
   constructor(private dataService: DataService,
@@ -63,7 +65,6 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
     this.newRentingTable.return_date_extended = true;
     this.dataService.updateRentingTableReturnDate(this.newRentingTable, this.newRentingTable.id, this.extensionPeriod).subscribe(
       (waiting) => {
-        console.log(this.newRentingTable.return_date_extended);
         this.dataChangedEvent.emit();
         this.closeEditComponent.emit();
         this.router.navigate(['rentingTable']);

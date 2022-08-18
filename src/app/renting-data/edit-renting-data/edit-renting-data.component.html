@@ -50,7 +50,9 @@
       <option value="14">With 14 days</option>
       <option value=""></option>
     </select>
-
+    <div class="alert alert-danger" role="alert" *ngIf="rentingDetail.return_date_extended">
+      {{extensionPeriodConsumed}}
+    </div>
   </div>
   <button type="button" class="btn btn-primary mt-2 me-3" [disabled]="rentingForm.invalid" (click)="closeEditRentingTable()">Close
   </button>

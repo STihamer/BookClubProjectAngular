@@ -132,7 +132,7 @@ export class BooksComponent implements OnInit {
               this.findBookAvailability.return_date = next[0].return_date;
               this.returnDate = formatDate((this.findBookAvailability.return_date), 'yyyy-MM-dd', 'en-US');
             }
-            );
+          );
 
         } else {
           this.returnDate = '';
@@ -144,5 +144,32 @@ export class BooksComponent implements OnInit {
   closeModal() {
     this.router.navigate(['books']);
     window.location.reload();
+  }
+
+  findBookByTitleOrByAuthorName(searching: string) {
+    if (searching.length < 3) {
+      this.router.navigate(['books']);
+      this.dataService.books.subscribe(
+        next => {
+          this.books = next.sort((a, b) => {
+            if (a.book_title > b.book_title) {
+              return 1;
+            } else if (a.book_title < b.book_title) {
+              return -1;
+            }
+            return 0;
+          });
+        })
+    } else {
+      this.router.navigate(['books'],
+        {queryParams: {action: this.searchingBook}});
+      this.dataService.findBookByTitleOrByAuthorName(searching).subscribe(
+        next => {
+          this.books = next;
+        }
+      );
+
+    }
+
   }
 }
