@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {User} from "./model/User";
 import {map, Observable} from "rxjs";
 import {environment} from "../environments/environment";
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Book} from "./model/Book";
 import {MyListing} from "./model/MyListing";
 import {BookOwner} from "./model/BookOwner";
@@ -242,6 +242,7 @@ export class DataService {
       );
   }
 
+
   deleteBook(id: number): Observable<any> {
     return this.http.delete(environment.restUrl + `/api/books/${id}`);
   }
@@ -301,6 +302,10 @@ export class DataService {
     return this.http.post<RentingTable>(environment.restUrl + `/api/rentingTables?${params}`, rentingTable);
   }
 
-
+  validateUser(name: string, password: string): Observable<string> {
+    const authData = btoa(`${name}:${password}`);
+    const headers = new HttpHeaders().append('Authorization', 'Basic ' + authData);
+    return this.http.get<string>(environment.restUrl + '/api/basicAuth/validate', {headers: headers})
+  }
 }
 
