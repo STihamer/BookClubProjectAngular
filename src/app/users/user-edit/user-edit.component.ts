@@ -4,6 +4,7 @@ import {Subscription} from "rxjs";
 import {DataService} from "../../data.service";
 import {Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-user-edit',
@@ -108,7 +109,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
         this.dataChangedEvent.emit();
         this.router.navigate(['users'], {queryParams: {action: 'view', id: user.user_id}});
       },
-      error => this.message = 'Something went wrong and the data wasn\'t saved. You may want to try again.'
+      error => this.message = (error.error)
     );
   }
 }

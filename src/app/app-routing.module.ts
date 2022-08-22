@@ -9,16 +9,19 @@ import {BookOwnerComponent} from "./users/book-owner/book-owner.component";
 import {MyListingComponent} from "./users/my-listing/my-listing.component";
 import {WaitingListComponent} from "./users/waiting-list/waiting-list.component";
 import {AvailableBooksComponent} from "./books/available-books/available-books.component";
+import {LoginComponent} from "./login/login.component";
+import {AuthRouteGuardService} from "./auth-route-guard.service";
 
 const routes: Routes = [
-  {path: 'users', component:UsersComponent},
-  {path: 'books', component:BooksComponent},
+  {path: 'users', component:UsersComponent, canActivate: [AuthRouteGuardService]},
+  {path: 'books', component:BooksComponent, canActivate: [AuthRouteGuardService]},
   {path: '', component:HomeComponent},
-  {path: 'rentingTable', component:RentingDataComponent},
-  {path: 'bookOwner', component:BookOwnerComponent},
-  {path: 'myListing', component:MyListingComponent},
-  {path: 'waitingList', component:WaitingListComponent},
-  {path: 'booksNonRented', component:AvailableBooksComponent},
+  {path: 'rentingTable', component:RentingDataComponent,canActivate: [AuthRouteGuardService]},
+  {path: 'bookOwner', component:BookOwnerComponent, canActivate: [AuthRouteGuardService]},
+  {path: 'myListing', component:MyListingComponent, canActivate: [AuthRouteGuardService]},
+  {path: 'waitingList', component:WaitingListComponent,canActivate: [AuthRouteGuardService]},
+  {path: 'booksNonRented', component:AvailableBooksComponent,canActivate: [AuthRouteGuardService]},
+  {path: 'login', component: LoginComponent},
   {path: '404', component: PageNotFoundComponent},
   {path: '**', redirectTo: '/404'},
 ];
