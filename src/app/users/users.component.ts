@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../data.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-users',
@@ -15,20 +16,24 @@ export class UsersComponent implements OnInit {
   loadingData = true;
   selectedUser: any;
   searchingUser: string = '';
+  isAdminUser = false;
 
   constructor(private dataService: DataService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private authService: AuthService) {
   }
 
 
   ngOnInit(): void {
     this.loadData();
-
+    if (this.authService.getRole() === 'ADMIN') {
+      this.isAdminUser = true;
+    }
   }
 
   loadData() {
-    this.dataService.users.subscribe(
+    this.dataService.getUsers(this.authService.jwtToken).subscribe(
       next => {
         this.users = next.sort((a, b) => {
           if (a.user_id > b.user_id) {
@@ -60,12 +65,12 @@ export class UsersComponent implements OnInit {
 
   findUserByUsername(username: string) {
     if (username === '') {
-      this.dataService.users.subscribe(
+      this.dataService.getUsers(this.authService.jwtToken).subscribe(
         next => {
           this.users = next;
         })
     } else {
-      this.dataService.users.subscribe(
+      this.dataService.getUsers(this.authService.jwtToken).subscribe(
         next => this.users = next.filter(
           user => user.username.toLowerCase()
             .indexOf(username.toLowerCase()) > -1))
@@ -76,7 +81,7 @@ export class UsersComponent implements OnInit {
 
   deleteSearchingByUsername() {
     this.router.navigate(['users']);
-    this.dataService.users.subscribe(next => this.users = next);
+    this.dataService.getUsers(this.authService.jwtToken).subscribe(next => this.users = next);
     this.searchingUser = '';
   }
 }

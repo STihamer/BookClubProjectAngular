@@ -20,8 +20,8 @@
         </tr>
       </table>
       <div class="links">
-        <a class="card-link" (click)="editUser()">Edit</a>
-        <a class="card-link">Delete</a>
+        <a class="card-link" (click)="editUser()" *ngIf="isAdminUser">Edit</a>
+        <a class="card-link" *ngIf="isAdminUser">Delete</a>
       </div>
 
     </div>

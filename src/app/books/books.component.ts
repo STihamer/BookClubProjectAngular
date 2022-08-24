@@ -6,6 +6,7 @@ import {FormResetService} from "../form-reset.service";
 import {BooksNonRentedResponse} from "../model/BooksNonRentedResponse";
 import {FindBookByTitleOrAuthorIfAvailable} from "../model/FindBookByTitleOrAuthorIfAvailable";
 import {formatDate} from "@angular/common";
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-books',
@@ -24,10 +25,12 @@ export class BooksComponent implements OnInit {
   findBookAvailability: FindBookByTitleOrAuthorIfAvailable = new FindBookByTitleOrAuthorIfAvailable();
   ifBookIsRented: BooksNonRentedResponse = new BooksNonRentedResponse();
 
+
   constructor(private dataService: DataService,
               private router: Router,
               private route: ActivatedRoute,
-              private formResetService: FormResetService) {
+              private formResetService: FormResetService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -42,7 +45,7 @@ export class BooksComponent implements OnInit {
   }
 
   loadData() {
-    this.dataService.books.subscribe(
+    this.dataService.getBooks(this.authService.jwtToken).subscribe(
       next => {
         this.books = next.sort((a, b) => {
           if (a.book_id > b.book_id) {
@@ -82,7 +85,7 @@ export class BooksComponent implements OnInit {
 
   findBookByTitle(title: string) {
     if (title === '') {
-      this.dataService.books.subscribe(
+      this.dataService.getBooks(this.authService.jwtToken).subscribe(
         next => {
           this.books = next.sort((a, b) => {
             if (a.book_title > b.book_title) {
@@ -94,7 +97,7 @@ export class BooksComponent implements OnInit {
           });
         })
     } else {
-      this.dataService.books.subscribe(
+      this.dataService.getBooks(this.authService.jwtToken).subscribe(
         next => this.books = next.filter(
           book => book.book_title.toLowerCase()
             .indexOf(title.toLowerCase()) > -1));
@@ -105,7 +108,7 @@ export class BooksComponent implements OnInit {
 
   deleteSearchingByTitle() {
     this.router.navigate(['books']);
-    this.dataService.books.subscribe(next => this.books = next);
+    this.dataService.getBooks(this.authService.jwtToken).subscribe(next => this.books = next);
     this.searchingBook = '';
   }
 
@@ -149,7 +152,7 @@ export class BooksComponent implements OnInit {
   findBookByTitleOrByAuthorName(searching: string) {
     if (searching.length < 3) {
       this.router.navigate(['books']);
-      this.dataService.books.subscribe(
+      this.dataService.getBooks(this.authService.jwtToken).subscribe(
         next => {
           this.books = next.sort((a, b) => {
             if (a.book_title > b.book_title) {

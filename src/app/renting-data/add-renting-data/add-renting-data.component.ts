@@ -8,6 +8,7 @@ import {formatDate} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BookOwner} from "../../model/BookOwner";
 import {WaitingList} from "../../model/WaitingList";
+import {AuthService} from "../../auth.service";
 
 @Component({
   selector: 'app-add-renting-data',
@@ -36,7 +37,8 @@ export class AddRentingDataComponent implements OnInit {
 
   constructor(private dataService: DataService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -53,8 +55,8 @@ export class AddRentingDataComponent implements OnInit {
         this.rentingPeriods = next;
       }
     );
-    this.dataService.users.subscribe(next => this.users = next);
-    this.dataService.books.subscribe(next => this.books = next);
+    this.dataService.getUsers(this.authService.jwtToken).subscribe(next => this.users = next);
+    this.dataService.getBooks(this.authService.jwtToken).subscribe(next => this.books = next);
     this.newRentingTable.borrowed_date = new Date(this.selectedDate);
     this.dataService.rentingTables.subscribe(
       next => {

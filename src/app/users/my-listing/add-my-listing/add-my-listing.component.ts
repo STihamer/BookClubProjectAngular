@@ -6,6 +6,7 @@ import {User} from "../../../model/User";
 import {Book} from "../../../model/Book";
 import {Subscription} from "rxjs";
 import {FormResetService} from "../../../form-reset.service";
+import {AuthService} from "../../../auth.service";
 
 @Component({
   selector: 'app-add-my-listing',
@@ -29,7 +30,8 @@ export class AddMyListingComponent implements OnInit, OnDestroy {
   constructor(private dataService: DataService,
               private router: Router,
               private route: ActivatedRoute,
-              private formResetService: FormResetService) {
+              private formResetService: FormResetService,
+              private authService:AuthService) {
   }
 
   ngOnDestroy(): void {
@@ -39,10 +41,10 @@ export class AddMyListingComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     console.log("Is working")
-    this.dataService.users.subscribe(next => {
+    this.dataService.getUsers(this.authService.jwtToken).subscribe(next => {
       this.users = next;
     });
-    this.dataService.books.subscribe(next => this.books = next);
+    this.dataService.getBooks(this.authService.jwtToken).subscribe(next => this.books = next);
     this.myListingResetSubscription = this.formResetService.resetMyListingFormEvent.subscribe(
       myListing => {
         this.myNewListing = myListing;

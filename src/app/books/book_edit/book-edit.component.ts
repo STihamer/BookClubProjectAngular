@@ -102,7 +102,7 @@ export class BookEditComponent implements OnInit, OnDestroy {
           this.dataChangedEvent.emit();
           this.router.navigate(['books'], {queryParams: {action: 'view', id: book.book_id}});
         },
-        error => this.message = 'Something went wrong and the data wasn\'t saved. You may want to try again.'
+        error => this.message = 'Something went wrong and the data wasn\'t saved. You may want to try again.' + error.status
       );
     } else {
       this.dataService.updateBook(this.formBook, this.formBook.book_id).subscribe(

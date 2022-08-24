@@ -6,6 +6,7 @@ import {Subscription} from "rxjs";
 import {BookOwner} from "../../../model/BookOwner";
 import {FormResetService} from "../../../form-reset.service";
 import {Router} from "@angular/router";
+import {AuthService} from "../../../auth.service";
 
 @Component({
   selector: 'app-add-book-owner',
@@ -29,7 +30,8 @@ export class AddBookOwnerComponent implements OnInit,OnDestroy {
 
   constructor(private dataService: DataService,
               private formResetService: FormResetService,
-              private router: Router) {
+              private router: Router,
+              private authService: AuthService) {
   }
 
   ngOnDestroy(): void {
@@ -38,11 +40,11 @@ export class AddBookOwnerComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
 
-    this.dataService.users.subscribe(next => {
+    this.dataService.getUsers(this.authService.jwtToken).subscribe(next => {
       this.users = next;
       console.log(this.users)
     });
-    this.dataService.books.subscribe(next => {
+    this.dataService.getBooks(this.authService.jwtToken).subscribe(next => {
       this.books = next;
       console.log(this.books)
     });

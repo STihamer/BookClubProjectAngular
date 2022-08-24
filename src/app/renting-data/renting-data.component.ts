@@ -6,6 +6,7 @@ import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {FormResetService} from "../form-reset.service";
 import {filter} from "rxjs";
 import {formatDate} from "@angular/common";
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-renting-data',
@@ -17,7 +18,8 @@ export class RentingDataComponent implements OnInit {
   constructor(private dataService: DataService,
               private router: Router,
               private route: ActivatedRoute,
-              private formResetService: FormResetService) {
+              private formResetService: FormResetService,
+              private authService: AuthService) {
   }
 
   rentingTables: Array<RentingTable> = new Array<RentingTable>();
@@ -56,7 +58,7 @@ export class RentingDataComponent implements OnInit {
         this.sortingRentingTables(this.rentingTables);
         for (let element of this.rentingTables) {
           const rentingDataForScreen: RentingDataForScreen = new RentingDataForScreen();
-          this.dataService.getUserById(element.borrowed_by).subscribe(user => {
+          this.dataService.getUserById(element.borrowed_by, this.authService.jwtToken).subscribe(user => {
             rentingDataForScreen.borrowerFirstName = user.first_name;
             rentingDataForScreen.borrowerLastName = user.last_name;
             rentingDataForScreen.borrowerUserName = user.username;
@@ -193,7 +195,7 @@ export class RentingDataComponent implements OnInit {
     this.sortingRentingTables(rentingTables);
     for (let element of rentingTables) {
       const rentingDataForScreen: RentingDataForScreen = new RentingDataForScreen();
-      this.dataService.getUserById(element.borrowed_by).subscribe(user => {
+      this.dataService.getUserById(element.borrowed_by, this.authService.jwtToken).subscribe(user => {
         rentingDataForScreen.borrowerFirstName = user.first_name;
         rentingDataForScreen.borrowerLastName = user.last_name;
         rentingDataForScreen.borrowerUserName = user.username;

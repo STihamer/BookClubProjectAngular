@@ -39,7 +39,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-
     this.authService.authenticate(this.name, this.password);
   }
 }

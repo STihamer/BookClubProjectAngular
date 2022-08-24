@@ -6,6 +6,7 @@ import {DataService} from "../../../data.service";
 import {BookOwner} from "../../../model/BookOwner";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PersonNameBookTitleForBookOwner} from "../../../model/PersonNameBookTitleForBookOwner";
+import {AuthService} from "../../../auth.service";
 
 @Component({
   selector: 'app-add-waiting-list',
@@ -30,11 +31,12 @@ export class AddWaitingListComponent implements OnInit {
 
   constructor(private dataService: DataService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
-    this.dataService.users.subscribe(
+    this.dataService.getUsers(this.authService.jwtToken).subscribe(
       readers => {
         this.bookReaders = readers;
       }
@@ -48,8 +50,8 @@ export class AddWaitingListComponent implements OnInit {
     this.books = [];
     this.personNameBookTitleForBookOwners = [];
     this.bookOwnerList = [];
-    this.dataService.users.subscribe(next => this.users = next);
-    this.dataService.books.subscribe(next => this.books = next);
+    this.dataService.getUsers(this.authService.jwtToken).subscribe(next => this.users = next);
+    this.dataService.getBooks(this.authService.jwtToken).subscribe(next => this.books = next);
     this.dataService.bookOwners.subscribe(
       next => {
         let id = 1
@@ -100,7 +102,7 @@ export class AddWaitingListComponent implements OnInit {
     for (let el of this.bookOwnerList) {
       const personNameBookTitleForBookOwner: PersonNameBookTitleForBookOwner = new PersonNameBookTitleForBookOwner()
 
-      this.dataService.getUserById(el.user_id).subscribe(user => {
+      this.dataService.getUserById(el.user_id, this.authService.jwtToken).subscribe(user => {
         personNameBookTitleForBookOwner.firstName = user.first_name;
         personNameBookTitleForBookOwner.lastName = user.last_name;
         personNameBookTitleForBookOwner.userId = user.user_id;

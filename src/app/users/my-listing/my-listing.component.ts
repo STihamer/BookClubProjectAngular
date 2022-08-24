@@ -4,6 +4,7 @@ import {MyListing} from "../../model/MyListing";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PersonBookListing} from "../../model/PersonBookListing";
 import {FormResetService} from "../../form-reset.service";
+import {AuthService} from "../../auth.service";
 
 @Component({
   selector: 'app-my-listing',
@@ -24,7 +25,8 @@ export class MyListingComponent implements OnInit {
   constructor(private dataService: DataService,
               private router: Router,
               private route: ActivatedRoute,
-              private resetService: FormResetService) {
+              private resetService: FormResetService,
+              private authService: AuthService) {
   }
 
 
@@ -99,7 +101,7 @@ export class MyListingComponent implements OnInit {
   createPersonsListingList(myListings: Array<MyListing>, id: number) {
     for (let el of this.myListings) {
       const bookReader: PersonBookListing = new PersonBookListing()
-      this.dataService.getUserById(el.reading_person).subscribe(next => {
+      this.dataService.getUserById(el.reading_person,this.authService.jwtToken).subscribe(next => {
         bookReader.firstName = next.first_name;
         bookReader.lastName = next.last_name;
 

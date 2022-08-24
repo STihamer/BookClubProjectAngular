@@ -22,8 +22,10 @@ export class DataService {
   }
 
 
-  get users(): Observable<Array<User>> {
-    return this.http.get<Array<User>>(environment.restUrl + '/api/users')
+   getUsers(token:string): Observable<Array<User>> {
+    const headers = new HttpHeaders().append('Authorization', 'Bearer ' +
+      '' + token);
+    return this.http.get<Array<User>>(environment.restUrl + '/api/users', {headers:headers})
       .pipe(
         map(data => {
           const users = new Array<User>();
@@ -35,8 +37,10 @@ export class DataService {
       );
   }
 
-  get books(): Observable<Array<Book>> {
-    return this.http.get<Array<Book>>(environment.restUrl + '/api/books')
+  getBooks(token:string): Observable<Array<Book>> {
+    const headers = new HttpHeaders().append('Authorization', 'Bearer ' +
+      '' + token);
+    return this.http.get<Array<Book>>(environment.restUrl + '/api/books', {headers:headers})
       .pipe(
         map(data => {
           const books = new Array<Book>();
@@ -49,9 +53,10 @@ export class DataService {
   }
 
 
-  updateUser(user: User, id: number): Observable<any> {
-
-    return this.http.put<User>(environment.restUrl + `/api/users/${id}`, user);
+  updateUser(user: User, id: number, token: string): Observable<any> {
+    const headers = new HttpHeaders().append('Authorization', 'Bearer ' +
+      '' + token);
+    return this.http.put<User>(environment.restUrl + `/api/users/${id}`, user, {headers:headers});
   }
 
   updateBook(book: Book, id: number): Observable<any> {
@@ -71,8 +76,10 @@ export class DataService {
     return this.http.put<RentingTable>(environment.restUrl + `/api/rentingTables/${id}?${param}`, rentingTable);
   }
 
-  getUserById(id: number): Observable<any> {
-    return this.http.get<User>(environment.restUrl + `/api/users/${id}`)
+  getUserById(id: number, token: string): Observable<any> {
+    const headers = new HttpHeaders().append('Authorization', 'Bearer ' +
+      '' + token);
+    return this.http.get<User>(environment.restUrl + `/api/users/${id}`,{headers:headers})
       .pipe(map(data => {
         return User.fromHttp(data);
       }))
@@ -302,10 +309,10 @@ export class DataService {
     return this.http.post<RentingTable>(environment.restUrl + `/api/rentingTables?${params}`, rentingTable);
   }
 
-  validateUser(name: string, password: string): Observable<string> {
+  validateUser(name: string, password: string): Observable<{result: string}> {
     const authData = btoa(`${name}:${password}`);
     const headers = new HttpHeaders().append('Authorization', 'Basic ' + authData);
-    return this.http.get<string>(environment.restUrl + '/api/basicAuth/validate', {headers: headers})
+    return this.http.get<{result:string}>(environment.restUrl + '/api/basicAuth/validate', {headers: headers})
   }
 }
 

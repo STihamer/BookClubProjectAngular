@@ -5,6 +5,7 @@ import {DataService} from "../../data.service";
 import {Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
 import {HttpErrorResponse} from "@angular/common/http";
+import {AuthService} from "../../auth.service";
 
 @Component({
   selector: 'app-user-edit',
@@ -33,7 +34,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   constructor(private dataService: DataService,
               private router: Router,
-              private formResetService: FormResetService) {
+              private formResetService: FormResetService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -104,7 +106,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   onSubmit() {
 
-    this.dataService.updateUser(this.formUser, this.formUser.user_id).subscribe(
+    this.dataService.updateUser(this.formUser, this.formUser.user_id, this.authService.jwtToken).subscribe(
       (user) => {
         this.dataChangedEvent.emit();
         this.router.navigate(['users'], {queryParams: {action: 'view', id: user.user_id}});
