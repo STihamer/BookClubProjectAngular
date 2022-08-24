@@ -36,7 +36,7 @@ export class AddWaitingListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataService.getUsers(this.authService.jwtToken).subscribe(
+    this.dataService.getUsers().subscribe(
       readers => {
         this.bookReaders = readers;
       }
@@ -50,8 +50,8 @@ export class AddWaitingListComponent implements OnInit {
     this.books = [];
     this.personNameBookTitleForBookOwners = [];
     this.bookOwnerList = [];
-    this.dataService.getUsers(this.authService.jwtToken).subscribe(next => this.users = next);
-    this.dataService.getBooks(this.authService.jwtToken).subscribe(next => this.books = next);
+    this.dataService.getUsers().subscribe(next => this.users = next);
+    this.dataService.getBooks().subscribe(next => this.books = next);
     this.dataService.bookOwners.subscribe(
       next => {
         let id = 1
@@ -102,7 +102,7 @@ export class AddWaitingListComponent implements OnInit {
     for (let el of this.bookOwnerList) {
       const personNameBookTitleForBookOwner: PersonNameBookTitleForBookOwner = new PersonNameBookTitleForBookOwner()
 
-      this.dataService.getUserById(el.user_id, this.authService.jwtToken).subscribe(user => {
+      this.dataService.getUserById(el.user_id).subscribe(user => {
         personNameBookTitleForBookOwner.firstName = user.first_name;
         personNameBookTitleForBookOwner.lastName = user.last_name;
         personNameBookTitleForBookOwner.userId = user.user_id;

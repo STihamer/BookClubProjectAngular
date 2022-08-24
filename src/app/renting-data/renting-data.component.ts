@@ -58,7 +58,7 @@ export class RentingDataComponent implements OnInit {
         this.sortingRentingTables(this.rentingTables);
         for (let element of this.rentingTables) {
           const rentingDataForScreen: RentingDataForScreen = new RentingDataForScreen();
-          this.dataService.getUserById(element.borrowed_by, this.authService.jwtToken).subscribe(user => {
+          this.dataService.getUserById(element.borrowed_by).subscribe(user => {
             rentingDataForScreen.borrowerFirstName = user.first_name;
             rentingDataForScreen.borrowerLastName = user.last_name;
             rentingDataForScreen.borrowerUserName = user.username;
@@ -195,7 +195,7 @@ export class RentingDataComponent implements OnInit {
     this.sortingRentingTables(rentingTables);
     for (let element of rentingTables) {
       const rentingDataForScreen: RentingDataForScreen = new RentingDataForScreen();
-      this.dataService.getUserById(element.borrowed_by, this.authService.jwtToken).subscribe(user => {
+      this.dataService.getUserById(element.borrowed_by).subscribe(user => {
         rentingDataForScreen.borrowerFirstName = user.first_name;
         rentingDataForScreen.borrowerLastName = user.last_name;
         rentingDataForScreen.borrowerUserName = user.username;

@@ -27,13 +27,13 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-    if (this.authService.getRole() === 'ADMIN') {
+    if (this.authService.role === 'admin') {
       this.isAdminUser = true;
     }
   }
 
   loadData() {
-    this.dataService.getUsers(this.authService.jwtToken).subscribe(
+    this.dataService.getUsers().subscribe(
       next => {
         this.users = next.sort((a, b) => {
           if (a.user_id > b.user_id) {
@@ -65,12 +65,12 @@ export class UsersComponent implements OnInit {
 
   findUserByUsername(username: string) {
     if (username === '') {
-      this.dataService.getUsers(this.authService.jwtToken).subscribe(
+      this.dataService.getUsers().subscribe(
         next => {
           this.users = next;
         })
     } else {
-      this.dataService.getUsers(this.authService.jwtToken).subscribe(
+      this.dataService.getUsers().subscribe(
         next => this.users = next.filter(
           user => user.username.toLowerCase()
             .indexOf(username.toLowerCase()) > -1))
@@ -81,7 +81,7 @@ export class UsersComponent implements OnInit {
 
   deleteSearchingByUsername() {
     this.router.navigate(['users']);
-    this.dataService.getUsers(this.authService.jwtToken).subscribe(next => this.users = next);
+    this.dataService.getUsers().subscribe(next => this.users = next);
     this.searchingUser = '';
   }
 }

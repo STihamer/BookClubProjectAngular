@@ -45,7 +45,7 @@ export class BooksComponent implements OnInit {
   }
 
   loadData() {
-    this.dataService.getBooks(this.authService.jwtToken).subscribe(
+    this.dataService.getBooks().subscribe(
       next => {
         this.books = next.sort((a, b) => {
           if (a.book_id > b.book_id) {
@@ -85,7 +85,7 @@ export class BooksComponent implements OnInit {
 
   findBookByTitle(title: string) {
     if (title === '') {
-      this.dataService.getBooks(this.authService.jwtToken).subscribe(
+      this.dataService.getBooks().subscribe(
         next => {
           this.books = next.sort((a, b) => {
             if (a.book_title > b.book_title) {
@@ -97,7 +97,7 @@ export class BooksComponent implements OnInit {
           });
         })
     } else {
-      this.dataService.getBooks(this.authService.jwtToken).subscribe(
+      this.dataService.getBooks().subscribe(
         next => this.books = next.filter(
           book => book.book_title.toLowerCase()
             .indexOf(title.toLowerCase()) > -1));
@@ -108,7 +108,7 @@ export class BooksComponent implements OnInit {
 
   deleteSearchingByTitle() {
     this.router.navigate(['books']);
-    this.dataService.getBooks(this.authService.jwtToken).subscribe(next => this.books = next);
+    this.dataService.getBooks().subscribe(next => this.books = next);
     this.searchingBook = '';
   }
 
@@ -152,7 +152,7 @@ export class BooksComponent implements OnInit {
   findBookByTitleOrByAuthorName(searching: string) {
     if (searching.length < 3) {
       this.router.navigate(['books']);
-      this.dataService.getBooks(this.authService.jwtToken).subscribe(
+      this.dataService.getBooks().subscribe(
         next => {
           this.books = next.sort((a, b) => {
             if (a.book_title > b.book_title) {

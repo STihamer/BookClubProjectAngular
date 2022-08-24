@@ -106,7 +106,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   onSubmit() {
 
-    this.dataService.updateUser(this.formUser, this.formUser.user_id, this.authService.jwtToken).subscribe(
+    this.dataService.updateUser(this.formUser, this.formUser.user_id).subscribe(
       (user) => {
         this.dataChangedEvent.emit();
         this.router.navigate(['users'], {queryParams: {action: 'view', id: user.user_id}});

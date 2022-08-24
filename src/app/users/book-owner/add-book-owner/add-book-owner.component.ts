@@ -40,11 +40,11 @@ export class AddBookOwnerComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
 
-    this.dataService.getUsers(this.authService.jwtToken).subscribe(next => {
+    this.dataService.getUsers().subscribe(next => {
       this.users = next;
       console.log(this.users)
     });
-    this.dataService.getBooks(this.authService.jwtToken).subscribe(next => {
+    this.dataService.getBooks().subscribe(next => {
       this.books = next;
       console.log(this.books)
     });

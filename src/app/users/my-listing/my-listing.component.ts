@@ -101,7 +101,7 @@ export class MyListingComponent implements OnInit {
   createPersonsListingList(myListings: Array<MyListing>, id: number) {
     for (let el of this.myListings) {
       const bookReader: PersonBookListing = new PersonBookListing()
-      this.dataService.getUserById(el.reading_person,this.authService.jwtToken).subscribe(next => {
+      this.dataService.getUserById(el.reading_person).subscribe(next => {
         bookReader.firstName = next.first_name;
         bookReader.lastName = next.last_name;
 

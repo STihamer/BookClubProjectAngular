@@ -23,7 +23,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.getRole() === 'admin') {
+    if (this.authService.role === 'admin') {
       this.isAdminUser = true;
     }
   }

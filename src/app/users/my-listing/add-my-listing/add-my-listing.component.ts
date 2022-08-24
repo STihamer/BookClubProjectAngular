@@ -41,10 +41,10 @@ export class AddMyListingComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     console.log("Is working")
-    this.dataService.getUsers(this.authService.jwtToken).subscribe(next => {
+    this.dataService.getUsers().subscribe(next => {
       this.users = next;
     });
-    this.dataService.getBooks(this.authService.jwtToken).subscribe(next => this.books = next);
+    this.dataService.getBooks().subscribe(next => this.books = next);
     this.myListingResetSubscription = this.formResetService.resetMyListingFormEvent.subscribe(
       myListing => {
         this.myNewListing = myListing;

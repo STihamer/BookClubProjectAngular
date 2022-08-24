@@ -65,7 +65,7 @@ export class WaitingListComponent implements OnInit {
     for (let el of newWaitingLists) {
       const waitingListDetail: WaitingListDetail = new WaitingListDetail()
       waitingListDetail.waitingListId = el.id;
-      this.dataService.getUserById(el.user_id, this.authService.jwtToken).subscribe(next => {
+      this.dataService.getUserById(el.user_id).subscribe(next => {
         waitingListDetail.readerFirstName = next.first_name;
         waitingListDetail.readerLastName = next.last_name;
         waitingListDetail.readerUsername = next.username;
@@ -74,7 +74,7 @@ export class WaitingListComponent implements OnInit {
       this.dataService.getBookOwnerById(el.book_for_reading).subscribe(next => {
         waitingListDetail.ownerId = next.user_id;
         waitingListDetail.bookId = next.book_id;
-        this.dataService.getUserById(waitingListDetail.ownerId, this.authService.jwtToken).subscribe(next => {
+        this.dataService.getUserById(waitingListDetail.ownerId).subscribe(next => {
           waitingListDetail.ownerFirstName = next.first_name;
           waitingListDetail.ownerLastName = next.last_name;
           waitingListDetail.ownerUsername = next.username;

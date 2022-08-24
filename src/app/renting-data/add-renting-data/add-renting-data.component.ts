@@ -55,8 +55,8 @@ export class AddRentingDataComponent implements OnInit {
         this.rentingPeriods = next;
       }
     );
-    this.dataService.getUsers(this.authService.jwtToken).subscribe(next => this.users = next);
-    this.dataService.getBooks(this.authService.jwtToken).subscribe(next => this.books = next);
+    this.dataService.getUsers().subscribe(next => this.users = next);
+    this.dataService.getBooks().subscribe(next => this.books = next);
     this.newRentingTable.borrowed_date = new Date(this.selectedDate);
     this.dataService.rentingTables.subscribe(
       next => {
