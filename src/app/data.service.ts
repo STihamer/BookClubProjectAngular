@@ -22,9 +22,9 @@ export class DataService {
   }
 
 
-   getUsers(): Observable<Array<User>> {
+  getUsers(): Observable<Array<User>> {
 
-    return this.http.get<Array<User>>(environment.restUrl + '/api/users', { withCredentials:true})
+    return this.http.get<Array<User>>(environment.restUrl + '/api/users', {withCredentials: true})
       .pipe(
         map(data => {
           const users = new Array<User>();
@@ -38,7 +38,7 @@ export class DataService {
 
   getBooks(): Observable<Array<Book>> {
 
-    return this.http.get<Array<Book>>(environment.restUrl + '/api/books', {withCredentials:true})
+    return this.http.get<Array<Book>>(environment.restUrl + '/api/books', {withCredentials: true})
       .pipe(
         map(data => {
           const books = new Array<Book>();
@@ -53,57 +53,57 @@ export class DataService {
 
   updateUser(user: User, id: number): Observable<any> {
 
-    return this.http.put<User>(environment.restUrl + `/api/users/${id}`, user, {withCredentials:true});
+    return this.http.put<User>(environment.restUrl + `/api/users/${id}`, user, {withCredentials: true});
   }
 
   updateBook(book: Book, id: number): Observable<any> {
 
-    return this.http.put<Book>(environment.restUrl + `/api/books/${id}`, book);
+    return this.http.put<Book>(environment.restUrl + `/api/books/${id}`, book,{withCredentials: true});
   }
 
   updateWaitingList(waitingList: WaitingList, id: number): Observable<WaitingList> {
     const param = new HttpParams()
       .set('finished', waitingList.finished)
-    return this.http.put<WaitingList>(environment.restUrl + `/api/waitingLists/${id}?${param}`, waitingList);
+    return this.http.put<WaitingList>(environment.restUrl + `/api/waitingLists/${id}?${param}`, waitingList,{withCredentials: true});
   }
 
   updateRentingTableReturnDate(rentingTable: RentingTable, id: number, period: number): Observable<RentingTable> {
     const param = new HttpParams()
       .set('period', period)
-    return this.http.put<RentingTable>(environment.restUrl + `/api/rentingTables/${id}?${param}`, rentingTable);
+    return this.http.put<RentingTable>(environment.restUrl + `/api/rentingTables/${id}?${param}`, rentingTable,{withCredentials: true});
   }
 
   getUserById(id: number): Observable<any> {
 
-    return this.http.get<User>(environment.restUrl + `/api/users/${id}`,{withCredentials:true})
+    return this.http.get<User>(environment.restUrl + `/api/users/${id}`, {withCredentials: true})
       .pipe(map(data => {
         return User.fromHttp(data);
       }))
   }
 
   getBookById(id: number): Observable<any> {
-    return this.http.get<Book>(environment.restUrl + `/api/books/${id}`)
+    return this.http.get<Book>(environment.restUrl + `/api/books/${id}`,{withCredentials: true})
       .pipe(map(data => {
         return Book.fromHttp(data);
       }))
   }
 
   getBookOwnerById(id: number): Observable<any> {
-    return this.http.get<BookOwner>(environment.restUrl + `/api/bookOwners/${id}`)
+    return this.http.get<BookOwner>(environment.restUrl + `/api/bookOwners/${id}`,{withCredentials: true})
       .pipe(map(data => {
         return BookOwner.fromHttp(data);
       }))
   }
 
   getUserByUsername(username: string): Observable<any> {
-    return this.http.get<User>(environment.restUrl + `/api/users/${username}`)
+    return this.http.get<User>(environment.restUrl + `/api/users/${username}`,{withCredentials: true})
       .pipe(map(data => {
         return User.fromHttp(data);
       }))
   }
 
-  get myListing(): Observable<Array<MyListing>> {
-    return this.http.get<Array<MyListing>>(environment.restUrl + '/api/myListings')
+  getMyListing(): Observable<Array<MyListing>> {
+    return this.http.get<Array<MyListing>>(environment.restUrl + '/api/myListings', {withCredentials: true})
       .pipe(
         map(data => {
           const myListings = new Array<MyListing>();
@@ -116,7 +116,7 @@ export class DataService {
   }
 
   get bookOwners(): Observable<Array<BookOwner>> {
-    return this.http.get<Array<BookOwner>>(environment.restUrl + '/api/bookOwners')
+    return this.http.get<Array<BookOwner>>(environment.restUrl + '/api/bookOwners',{withCredentials: true})
       .pipe(
         map(data => {
           const bookOwners = new Array<BookOwner>();
@@ -129,7 +129,7 @@ export class DataService {
   }
 
   get waitingLists(): Observable<Array<WaitingList>> {
-    return this.http.get<Array<WaitingList>>(environment.restUrl + '/api/waitingLists')
+    return this.http.get<Array<WaitingList>>(environment.restUrl + '/api/waitingLists',{withCredentials: true})
       .pipe(
         map(data => {
           const waitingLists = new Array<WaitingList>();
@@ -142,7 +142,7 @@ export class DataService {
   }
 
   get rentingTables(): Observable<Array<RentingTable>> {
-    return this.http.get<Array<RentingTable>>(environment.restUrl + '/api/rentingTables')
+    return this.http.get<Array<RentingTable>>(environment.restUrl + '/api/rentingTables', {withCredentials: true})
       .pipe(
         map(data => {
           const rentingTables = new Array<RentingTable>();
@@ -155,7 +155,7 @@ export class DataService {
   }
 
   get bookNonRented(): Observable<Array<BooksNonRentedResponse>> {
-    return this.http.get<Array<BooksNonRentedResponse>>(environment.restUrl + '/api/booksNonRented')
+    return this.http.get<Array<BooksNonRentedResponse>>(environment.restUrl + '/api/booksNonRented',{withCredentials: true})
       .pipe(
         map(data => {
           const booksNonRented = new Array<BooksNonRentedResponse>();
@@ -172,7 +172,7 @@ export class DataService {
       .set('book_title', bookTitle)
       .set('author_fname', authorFirstName)
       .set('author_lname', authorLastName)
-    return this.http.get<Array<RentingTable>>(environment.restUrl + `/api/rentingTables/findBooksByTitleOrAuthorName?${params}`)
+    return this.http.get<Array<RentingTable>>(environment.restUrl + `/api/rentingTables/findBooksByTitleOrAuthorName?${params}`,{withCredentials: true})
       .pipe(
         map(data => {
           const foundBooks = new Array<RentingTable>();
@@ -187,7 +187,7 @@ export class DataService {
   findBookByTitleOrByAuthorName(searching: string): Observable<Array<Book>> {
     const params = new HttpParams()
       .set('searching', searching)
-    return this.http.get<Array<Book>>(environment.restUrl + `/api/books/findBooksByTitleOrAuthorName?${params}`)
+    return this.http.get<Array<Book>>(environment.restUrl + `/api/books/findBooksByTitleOrAuthorName?${params}`,{withCredentials: true})
       .pipe(
         map(data => {
           const foundBooks = new Array<Book>();
@@ -200,7 +200,7 @@ export class DataService {
   }
 
   get rentingPeriods(): Observable<Array<RentingPeriod>> {
-    return this.http.get<Array<RentingPeriod>>(environment.restUrl + '/api/rentingPeriods')
+    return this.http.get<Array<RentingPeriod>>(environment.restUrl + '/api/rentingPeriods',{withCredentials: true})
       .pipe(
         map(data => {
           const rentingPeriods = new Array<RentingPeriod>();
@@ -216,7 +216,7 @@ export class DataService {
     const params = new HttpParams()
       .set('first_name', waitingPerson.first_name)
       .set('last_name', waitingPerson.last_name)
-    return this.http.get<Array<WaitingPersonsAndBookTitle>>(environment.restUrl + `/api/waitingPersonsAndBookTitle?${params}`)
+    return this.http.get<Array<WaitingPersonsAndBookTitle>>(environment.restUrl + `/api/waitingPersonsAndBookTitle?${params}`,{withCredentials: true})
       .pipe(
         map(data => {
           const waitingPersonsAndBookTitle = new Array<WaitingPersonsAndBookTitle>();
@@ -233,7 +233,7 @@ export class DataService {
       .set('book_title', bookByAuthorAndTitle.book_title)
       .set('first_name', bookByAuthorAndTitle.author_fname)
       .set('last_name', bookByAuthorAndTitle.author_lname)
-    return this.http.get<Array<FindBookByTitleOrAuthorIfAvailable>>(environment.restUrl + `/api/bookAvailabilityByAuthorOrTitle?${params}`)
+    return this.http.get<Array<FindBookByTitleOrAuthorIfAvailable>>(environment.restUrl + `/api/bookAvailabilityByAuthorOrTitle?${params}`,{withCredentials: true})
       .pipe(
         map(data => {
           const availableBooksByTitle = new Array<FindBookByTitleOrAuthorIfAvailable>();
@@ -247,23 +247,23 @@ export class DataService {
 
 
   deleteBook(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/api/books/${id}`);
+    return this.http.delete(environment.restUrl + `/api/books/${id}`,{withCredentials: true});
   }
 
   deleteMyListing(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/api/myListings/${id}`);
+    return this.http.delete(environment.restUrl + `/api/myListings/${id}`,{withCredentials: true});
   }
 
   deleteOwnerBook(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/api/bookOwners/${id}`);
+    return this.http.delete(environment.restUrl + `/api/bookOwners/${id}`,{withCredentials: true});
   }
 
   deleteWaitingListById(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/api/waitingLists/${id}`);
+    return this.http.delete(environment.restUrl + `/api/waitingLists/${id}`,{withCredentials: true});
   }
 
   deleteRentingTableById(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/api/rentingTables/${id}`);
+    return this.http.delete(environment.restUrl + `/api/rentingTables/${id}`,{withCredentials: true});
   }
 
   addBook(newBook: Book): Observable<Book> {
@@ -271,14 +271,14 @@ export class DataService {
       book_title: newBook.book_title, author_fname: newBook.author_fname,
       author_lname: newBook.author_lname, published: newBook.published
     };
-    return this.http.post<Book>(environment.restUrl + '/api/books', fullBook);
+    return this.http.post<Book>(environment.restUrl + '/api/books', fullBook,{withCredentials: true});
   }
 
   addMyListing(myListing: MyListing): Observable<MyListing> {
     const params = new HttpParams()
       .set('reading_person', myListing.reading_person)
       .set('book_title', myListing.book_title);
-    return this.http.post<MyListing>(environment.restUrl + `/api/myListings?${params}`, myListing);
+    return this.http.post<MyListing>(environment.restUrl + `/api/myListings?${params}`, myListing,{withCredentials: true});
   }
 
   addBookOwner(newBookOwner: BookOwner): Observable<BookOwner> {
@@ -286,7 +286,7 @@ export class DataService {
       book_id: newBookOwner.book_id,
       user_id: newBookOwner.user_id
     };
-    return this.http.post<BookOwner>(environment.restUrl + '/api/bookOwners', fullBookOwner);
+    return this.http.post<BookOwner>(environment.restUrl + '/api/bookOwners', fullBookOwner,{withCredentials: true});
   }
 
   addWaitingList(waitingList: WaitingList): Observable<WaitingList> {
@@ -294,7 +294,7 @@ export class DataService {
       .set('user_id', waitingList.user_id)
       .set('finished', waitingList.finished)
       .set('book_for_reading', waitingList.book_for_reading);
-    return this.http.post<WaitingList>(environment.restUrl + `/api/waitingLists?${params}`, waitingList);
+    return this.http.post<WaitingList>(environment.restUrl + `/api/waitingLists?${params}`, waitingList,{withCredentials: true});
   }
 
   addRentingTable(rentingTable: RentingTable): Observable<RentingTable> {
@@ -302,17 +302,32 @@ export class DataService {
       .set('borrowed_by', rentingTable.borrowed_by)
       .set('book_id', rentingTable.book_id)
       .set('renting_period', rentingTable.renting_period);
-    return this.http.post<RentingTable>(environment.restUrl + `/api/rentingTables?${params}`, rentingTable);
+    return this.http.post<RentingTable>(environment.restUrl + `/api/rentingTables?${params}`, rentingTable,{withCredentials: true});
   }
 
-  validateUser(name: string, password: string): Observable<{result: string}> {
+  validateUser(name: string, password: string): Observable<{ result: string }> {
     const authData = btoa(`${name}:${password}`);
     const headers = new HttpHeaders().append('Authorization', 'Basic ' + authData);
-    return this.http.get<{result:string}>(environment.restUrl + '/api/basicAuth/validate', {headers: headers, withCredentials:true})
+    return this.http.get<{ result: string }>(environment.restUrl + '/api/basicAuth/validate', {
+      headers: headers,
+      withCredentials: true
+    })
   }
 
-  getRole(): Observable<{role:string}>{
-    return this.http.get<{role:string}>(environment.restUrl + '/api/users/currentUserRole', {withCredentials: true});
+  getRole(): Observable<{ role: string }> {
+    const headers = new HttpHeaders().append("X-Requested-With", "XMLHttpRequest");
+    return this.http.get<{ role: string }>(environment.restUrl + '/api/users/currentUserRole', {headers,
+      withCredentials: true
+    });
+  }
+
+  getId(): Observable<{ id: number }> {
+    return this.http.get<{ id: number }>(environment.restUrl + '/api/users/currentUserId', {withCredentials: true});
+  }
+  logout(): Observable<string>{
+      return this.http.get<string>(environment.restUrl + '/api/users/logout', {
+      withCredentials: true
+    });
   }
 }
 

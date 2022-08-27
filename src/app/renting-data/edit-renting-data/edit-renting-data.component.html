@@ -44,7 +44,8 @@
 
   <div class="form-group">
     <label for="underReading">Extension of the return date</label>
-    <select class="form-select" [disabled]="rentingDetail.return_date_extended" aria-label="Default select example" id="underReading"
+    <select class="form-select" [disabled]="rentingDetail.return_date_extended || !isUsersRentingData"
+            aria-label="Default select example" id="underReading"
             [(ngModel)]="extensionPeriod" (change)="setExtensionPeriod(extensionPeriod)"
             name="extension" #extensionField="ngModel">
       <option value="14">With 14 days</option>
@@ -52,6 +53,9 @@
     </select>
     <div class="alert alert-danger" role="alert" *ngIf="rentingDetail.return_date_extended">
       {{extensionPeriodConsumed}}
+    </div>
+    <div class="alert alert-danger" role="alert" *ngIf="!isUsersRentingData">
+      <p>You are able to edit only your renting data!</p>
     </div>
   </div>
   <button type="button" class="btn btn-primary mt-2 me-3" [disabled]="rentingForm.invalid" (click)="closeEditRentingTable()">Close

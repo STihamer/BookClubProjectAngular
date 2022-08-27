@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-menu',
@@ -7,38 +8,58 @@ import {Router} from "@angular/router";
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
+  userIsLoggedIn = false;
+  constructor(private router: Router,
+              private authService: AuthService) {
+  }
 
-  constructor(private router: Router) { }
+
 
   ngOnInit(): void {
+    this.authService.rolesSetEvent.subscribe(
+      next => {
+        if (next) {
+          this.userIsLoggedIn = true;
+        }
+      }
+    )
   }
 
   navigateToUsers() {
     this.router.navigate(['users'])
   }
-  navigateToBooks(){
+
+  navigateToBooks() {
     this.router.navigate(['books']);
   }
-  navigateToHome(){
+
+  navigateToHome() {
     this.router.navigate(['']);
   }
 
-  navigateToRentingData(){
+  navigateToRentingData() {
     this.router.navigate(['rentingTable']);
   }
-  navigateToBookOwner(){
+
+  navigateToBookOwner() {
     this.router.navigate(['bookOwner']);
   }
 
-  navigateToMyListing(){
+  navigateToMyListing() {
     this.router.navigate(['myListing']);
   }
-  navigateToWaitingList(){
+
+  navigateToWaitingList() {
     this.router.navigate(['waitingList']);
   }
 
-  navigateToNonRentedBooks(){
+  navigateToNonRentedBooks() {
     this.router.navigate(['booksNonRented']);
   }
 
+  logout() {
+    this.authService.logout();
+    this.navigateToHome();
+    this.userIsLoggedIn = false;
+  }
 }

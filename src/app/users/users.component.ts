@@ -17,7 +17,6 @@ export class UsersComponent implements OnInit {
   selectedUser: any;
   searchingUser: string = '';
   isAdminUser = false;
-
   constructor(private dataService: DataService,
               private router: Router,
               private route: ActivatedRoute,
@@ -26,10 +25,23 @@ export class UsersComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.dataService.getRole().subscribe(
+      next => {
+        if (next.role == 'admin') {
+          this.isAdminUser = true;
+        }
+      }
+    )
     this.loadData();
-    if (this.authService.role === 'admin') {
-      this.isAdminUser = true;
-    }
+    this.authService.rolesSetEvent.subscribe(
+      next => {
+        if (next === 'admin') {
+          this.isAdminUser = true;
+        } else {
+          this.isAdminUser = false;
+        }
+      }
+    )
   }
 
   loadData() {
@@ -83,5 +95,9 @@ export class UsersComponent implements OnInit {
     this.router.navigate(['users']);
     this.dataService.getUsers().subscribe(next => this.users = next);
     this.searchingUser = '';
+  }
+  navigateToAddPage(){
+    this.action = 'add';
+    this.router.navigate(['users'], {queryParams: {action: this.action}});
   }
 }

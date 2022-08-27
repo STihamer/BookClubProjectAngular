@@ -12,6 +12,7 @@
             <label for="user">User</label>
             <select class="form-select" id="user" [(ngModel)]="myUser"  name="username" required #userField =
               "ngModel">
+              <option value=""></option>
               <option *ngFor="let user of users" [ngValue]="user">{{user?.username}}</option>
 
             </select>

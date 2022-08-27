@@ -4,7 +4,6 @@ import {Subscription} from "rxjs";
 import {DataService} from "../../data.service";
 import {Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
-import {HttpErrorResponse} from "@angular/common/http";
 import {AuthService} from "../../auth.service";
 
 @Component({
@@ -29,7 +28,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
   usernameIsValid = false;
   userAgeIsValid = false;
   userEmailIsValid = false;
-
+  @Input()
+  isAdminUser = false;
   userResetSubscription: Subscription = new Subscription();
 
   constructor(private dataService: DataService,
@@ -44,7 +44,6 @@ export class UserEditComponent implements OnInit, OnDestroy {
       user => {
         this.user = user;
         this.initializeForm();
-        console.log(this.user)
       }
     );
   }

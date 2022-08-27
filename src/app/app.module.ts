@@ -27,6 +27,7 @@ import { AddWaitingListComponent } from './users/waiting-list/add-waiting-list/a
 import { EditRentingDataComponent } from './renting-data/edit-renting-data/edit-renting-data.component';
 import { AddRentingDataComponent } from './renting-data/add-renting-data/add-renting-data.component';
 import { LoginComponent } from './login/login.component';
+import { AddUserComponent } from './users/add-user/add-user.component';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { LoginComponent } from './login/login.component';
     AddWaitingListComponent,
     EditRentingDataComponent,
     AddRentingDataComponent,
-    LoginComponent
+    LoginComponent,
+    AddUserComponent
 
   ],
   imports: [

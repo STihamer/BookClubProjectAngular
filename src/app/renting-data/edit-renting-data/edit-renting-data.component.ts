@@ -21,6 +21,7 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
   rentingDetail: RentingDataForScreen = new RentingDataForScreen();
   @Output()
   dataChangedEvent = new EventEmitter();
+  isUsersRentingData = false;
 
   @Output()
   closeEditComponent = new EventEmitter();
@@ -28,7 +29,6 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
 
   @Input()
   newRentingTable: RentingTable = new RentingTable();
-
 
 
   constructor(private dataService: DataService,
@@ -42,7 +42,8 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    console.log(this.newRentingTable)
+    this.getOwnerOfSelectedRentingData();
     this.rentingTableResetSubscription = this.formResetService.resetRentingTableFormEvent.subscribe(
       detail => {
         this.rentingDetail = detail;
@@ -76,11 +77,29 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       const id = params['id'];
       this.action = params['action'];
-      if (this.action === 'edit' && id){
-        if(this.rentingDetail.borrowerFirstName === ''){
+      if (this.action === 'edit' && id) {
+        if (this.rentingDetail.borrowerFirstName === '') {
           window.location.replace('rentingTable')
         }
       }
     })
   }
+
+  getOwnerOfSelectedRentingData() {
+    this.dataService.getRole().subscribe(
+      role => {
+        this.dataService.getId().subscribe(
+          message => {console.log(message.id)
+            if (role.role == 'admin') {
+              this.isUsersRentingData = true;
+            } else if (message.id == this.newRentingTable.borrowed_by) {
+              this.isUsersRentingData = true;
+            }
+          }
+        )
+      }
+    )
+  }
+
+
 }

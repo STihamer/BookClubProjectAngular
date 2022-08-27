@@ -21,6 +21,8 @@ export class MyListingComponent implements OnInit {
   selectedPersonListing: PersonBookListing = new PersonBookListing();
   myListingComponentHidden = false;
   searching: string = '';
+  role = '';
+  id = 0;
 
   constructor(private dataService: DataService,
               private router: Router,
@@ -31,20 +33,24 @@ export class MyListingComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.loadData()
+    this.setupRoleAndId();
   }
 
   loadData() {
     this.personsListingList = [];
     this.myListings = [];
 
-    this.dataService.myListing.subscribe(
+    this.dataService.getMyListing().subscribe(
       next => {
         let id = 1
-        this.myListings = next;
+
+        if (this.role == 'admin') {
+          this.myListings = next;
+        } else {
+          this.myListings = next.filter(element => element.reading_person == this.id);
+        }
         this.createPersonsListingList(this.myListings, id);
         this.toManageMyListingRouting();
-
       });
   }
 
@@ -142,5 +148,19 @@ export class MyListingComponent implements OnInit {
 
   closeModal() {
     this.router.navigate(['myListing']);
+  }
+
+  setupRoleAndId() {
+    this.dataService.getRole().subscribe(
+      next => {
+        this.role = next.role;
+        this.dataService.getId().subscribe(
+          next => {
+            this.id = next.id;
+            this.loadData();
+          }
+        )}
+    )
+
   }
 }

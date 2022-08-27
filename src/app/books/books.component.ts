@@ -24,7 +24,7 @@ export class BooksComponent implements OnInit {
   returnDate = '';
   findBookAvailability: FindBookByTitleOrAuthorIfAvailable = new FindBookByTitleOrAuthorIfAvailable();
   ifBookIsRented: BooksNonRentedResponse = new BooksNonRentedResponse();
-
+  isAdminUser = false;
 
   constructor(private dataService: DataService,
               private router: Router,
@@ -35,6 +35,15 @@ export class BooksComponent implements OnInit {
 
   ngOnInit(): void {
     this.returnDate = '';
+    this.authService.rolesSetEvent.subscribe(
+      next => {
+        if (next === 'admin') {
+          this.isAdminUser = true;
+        } else {
+          this.isAdminUser = false;
+        }
+      }
+    )
     this.loadData()
   }
 

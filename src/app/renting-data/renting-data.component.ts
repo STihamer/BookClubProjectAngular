@@ -35,7 +35,7 @@ export class RentingDataComponent implements OnInit {
   searchingBookTitle = '';
   searchingAuthorFirstName = '';
   searchingAuthorLastName = '';
-  newRentingTables: Array<RentingTable> = new Array<RentingTable>();
+
 
   ngOnInit(): void {
 
@@ -55,6 +55,7 @@ export class RentingDataComponent implements OnInit {
       next => {
         let id = 1;
         this.rentingTables = next;
+
         this.sortingRentingTables(this.rentingTables);
         for (let element of this.rentingTables) {
           const rentingDataForScreen: RentingDataForScreen = new RentingDataForScreen();
@@ -117,8 +118,9 @@ export class RentingDataComponent implements OnInit {
   editRentingList(id: number) {
     this.router.navigate(['rentingTable'], {queryParams: {action: 'edit', id: id}});
     this.selectedRentingDetail = this.rentingDataForScreenList.find(element => element.id === +id);
-    this.selectedRentingTable = this.rentingTables.find(element => element.id = this.selectedRentingDetail.rentingTableId);
-
+    console.log(this.selectedRentingDetail);
+    this.selectedRentingTable = this.rentingTables.find(element => element.id == this.selectedRentingDetail.rentingTableId);
+    console.log(this.selectedRentingTable);
   }
 
   sortingRentingTables(rentingTables: Array<RentingTable>) {
@@ -136,7 +138,7 @@ export class RentingDataComponent implements OnInit {
   setDeleteRentingData(id: number) {
     this.router.navigate(['rentingTable'], {queryParams: {action: 'delete', id: id}});
     this.selectedRentingDetail = this.rentingDataForScreenList.find(element => element.id === +id);
-    this.selectedRentingTable = this.rentingTables.find(element => element.id = this.selectedRentingDetail.rentingTableId);
+    this.selectedRentingTable = this.rentingTables.find(element => element.id == this.selectedRentingDetail.rentingTableId);
   }
 
   closeModal() {

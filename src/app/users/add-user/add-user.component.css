@@ -1,0 +1,14 @@
+
+.container.backgroundImage {
+  height: 100vh;
+  background-image: url("src/assets/images/pexels-karolina-grabowska-4218866.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.card.bg-white{
+height:fit-content;
+}
+
+

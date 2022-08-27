@@ -69,7 +69,8 @@
                   [disabled]="bookForm.invalid || !bookTitleIsValid || !authorFNameIsValid || !authorLNameIsValid">Save
           </button>
 
-          <button type="button" class="btn btn-primary mt-3 ml-2" (click)="deleteBook()" *ngIf="action==='edit'">Delete
+          <button type="button" class="btn btn-primary mt-3 ml-2" (click)="deleteBook()"
+                  *ngIf="action==='edit' && isAdminUser == true">Delete
           </button>
         </div>
       </form>

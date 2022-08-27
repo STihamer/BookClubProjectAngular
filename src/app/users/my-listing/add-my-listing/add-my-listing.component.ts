@@ -40,10 +40,21 @@ export class AddMyListingComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    console.log("Is working")
+
     this.dataService.getUsers().subscribe(next => {
       this.users = next;
     });
+    this.dataService.getRole().subscribe(
+      next => {
+        if(next.role != 'admin'){
+          this.dataService.getId().subscribe(
+            message => {
+              this.users = this.users.filter(user => user.user_id == message.id);
+            }
+          )
+        }
+      }
+    )
     this.dataService.getBooks().subscribe(next => this.books = next);
     this.myListingResetSubscription = this.formResetService.resetMyListingFormEvent.subscribe(
       myListing => {

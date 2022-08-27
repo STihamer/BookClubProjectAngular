@@ -4,6 +4,7 @@ import {DataService} from "../../data.service";
 import {Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
 import {Subscription} from "rxjs";
+import {AuthService} from "../../auth.service";
 
 @Component({
   selector: 'app-edit-book',
@@ -30,17 +31,27 @@ export class BookEditComponent implements OnInit, OnDestroy {
   authorFNameIsValid = false;
   authorLNameIsValid = false;
   publishedYearIsValid = false;
-
+  isAdminUser = false;
 
   BookResetSubscription: Subscription = new Subscription();
 
 
   constructor(private dataService: DataService,
               private router: Router,
-              private formResetService: FormResetService) {
+              private formResetService: FormResetService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
+    this.authService.rolesSetEvent.subscribe(
+      next => {
+        if (next === 'admin') {
+          this.isAdminUser = true;
+        } else {
+          this.isAdminUser = false;
+        }
+      }
+    )
     this.initializeForm();
     this.formBook = Object.assign({}, this.book);
     this.BookResetSubscription = this.formResetService.resetBookFormEvent.subscribe(
