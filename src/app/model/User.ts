@@ -2,7 +2,7 @@ export class User {
   user_id: number = 0;
   first_name: string = '';
   last_name: string = '';
-  user_age: number = 0;
+  user_age: number  = 0;
   username: string = '';
   user_email: string = '';
   user_password: string = '';

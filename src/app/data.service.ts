@@ -266,6 +266,18 @@ export class DataService {
     return this.http.delete(environment.restUrl + `/api/rentingTables/${id}`,{withCredentials: true});
   }
 
+  addUser(user: User): Observable<User> {
+    const params = new HttpParams()
+      .set('first_name', user.first_name)
+      .set('last_name', user.last_name)
+      .set('user_age', user.user_age)
+      .set('username', user.username)
+      .set('user_email', user.user_email)
+      .set('user_password', user.user_password)
+      .set('role_id', user.role_id);
+    return this.http.post<User>(environment.restUrl + `/api/users?${params}`, user,{withCredentials: true});
+  }
+
   addBook(newBook: Book): Observable<Book> {
     const fullBook = {
       book_title: newBook.book_title, author_fname: newBook.author_fname,
@@ -296,6 +308,7 @@ export class DataService {
       .set('book_for_reading', waitingList.book_for_reading);
     return this.http.post<WaitingList>(environment.restUrl + `/api/waitingLists?${params}`, waitingList,{withCredentials: true});
   }
+
 
   addRentingTable(rentingTable: RentingTable): Observable<RentingTable> {
     const params = new HttpParams()
