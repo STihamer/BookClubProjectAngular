@@ -27,8 +27,7 @@ export class MyListingComponent implements OnInit {
   constructor(private dataService: DataService,
               private router: Router,
               private route: ActivatedRoute,
-              private resetService: FormResetService,
-              private authService: AuthService) {
+              private resetService: FormResetService) {
   }
 
 
@@ -160,7 +159,7 @@ export class MyListingComponent implements OnInit {
             this.loadData();
           }
         )}
-    )
+    );
 
   }
 }

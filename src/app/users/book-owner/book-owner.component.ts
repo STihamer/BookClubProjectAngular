@@ -7,7 +7,6 @@ import {User} from "../../model/User";
 import {Book} from "../../model/Book";
 import {FormResetService} from "../../form-reset.service";
 import {filter} from "rxjs";
-import {AuthService} from "../../auth.service";
 
 @Component({
   selector: 'app-book-owners',
@@ -25,23 +24,23 @@ export class BookOwnerComponent implements OnInit {
   selectedBook: any = new Book()
   users: Array<User> = new Array<User>();
   books: Array<Book> = new Array<Book>();
-  toggleAccordion = false;
   searchingText = '';
   bookComponentHidden = false;
-  currentUrl = '';
-  previousUrl = '';
-
+  currentUrl: string = '';
+  previousUrl: string = '';
+  role: string = '';
+  id: number = 0;
+  isAdminUser = false;
 
   constructor(private dataService: DataService,
               private router: Router,
               private route: ActivatedRoute,
-              private resetService: FormResetService,
-              private authService:AuthService) {
+              private resetService: FormResetService) {
   }
 
   ngOnInit(): void {
     this.router.navigate(['bookOwner']);
-    this.loadData()
+    this.setupRoleAndId();
   }
 
   loadData() {
@@ -90,7 +89,7 @@ export class BookOwnerComponent implements OnInit {
       if (!this.action) {
         this.getPreviousUrl();
         if (this.previousUrl.indexOf('/bookOwner?action=openAccordion&idUser') == 0) {
-         window.location.reload();
+          window.location.reload();
         }
 
         this.bookComponentHidden = false;
@@ -111,22 +110,16 @@ export class BookOwnerComponent implements OnInit {
   }
 
   selectUserAndBookForAccordion(personNameBookTitleForBookOwner: PersonNameBookTitleForBookOwner) {
-    if (!this.toggleAccordion) {
-      this.toggleAccordion = true;
-      this.router.navigate(['bookOwner'],
-        {
-          queryParams: {
-            action: "openAccordion",
-            idUser: personNameBookTitleForBookOwner.userId,
-            idBook: personNameBookTitleForBookOwner.bookId
-          }
-        });
-    } else {
-      this.router.navigate(['bookOwner']);
-      this.toggleAccordion = false;
-    }
-
+    this.router.navigate(['bookOwner'],
+      {
+        queryParams: {
+          action: "openAccordion",
+          idUser: personNameBookTitleForBookOwner.userId,
+          idBook: personNameBookTitleForBookOwner.bookId
+        }
+      });
   }
+
 
   deleteOwnerBookField(id: number) {
     this.router.navigate(['bookOwner'], {queryParams: {action: 'delete', id: id}})
@@ -165,6 +158,24 @@ export class BookOwnerComponent implements OnInit {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: any) => {
       this.previousUrl = this.currentUrl;
       this.currentUrl = event.url;
-    })
+    });
+  }
+
+  setupRoleAndId() {
+    this.dataService.getRole().subscribe(
+      next => {
+        this.role = next.role;
+        if (this.role == 'admin') {
+          this.isAdminUser = true;
+        }
+        this.dataService.getId().subscribe(
+          next => {
+            this.id = next.id;
+            this.loadData();
+          }
+        )
+      }
+    );
+
   }
 }

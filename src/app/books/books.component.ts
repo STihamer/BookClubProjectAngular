@@ -37,11 +37,7 @@ export class BooksComponent implements OnInit {
     this.returnDate = '';
     this.authService.rolesSetEvent.subscribe(
       next => {
-        if (next === 'admin') {
-          this.isAdminUser = true;
-        } else {
-          this.isAdminUser = false;
-        }
+        this.isAdminUser = next === 'admin';
       }
     )
     this.loadData()

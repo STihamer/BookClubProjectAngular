@@ -2,7 +2,7 @@
 
   <div class="  row justify-content-center" *ngIf="action != 'add'">
     <h1 class="text-start text-center">Users</h1>
-    <div class="col-12">
+    <div  [ngClass]="setUsersComponentCol">
       <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username"
                aria-describedby="button-addon2" [(ngModel)]="searchingUser"
@@ -24,7 +24,7 @@
         </thead>
         <tbody>
         <tr *ngFor="let user of users">
-          <td>{{user.user_id}}</td>
+          <td>{{user.orderIdInFrontend}}</td>
           <td>{{user.first_name}}</td>
           <td>{{user.last_name}}</td>
           <td>{{user.username}}</td>
@@ -39,7 +39,7 @@
     </div>
     <div class="col-6">
       <app-user-detail *ngIf="action==='view'" [user]="selectedUser"></app-user-detail>
-      <app-user-edit *ngIf="action==='edit'&& isAdminUser"[user]="selectedUser"
+      <app-user-edit *ngIf="action==='edit'&& isAdminUser" [user]="selectedUser"
                      (dataChangedEvent)="loadData()"></app-user-edit>
     </div>
   </div>

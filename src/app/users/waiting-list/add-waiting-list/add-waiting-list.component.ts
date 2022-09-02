@@ -28,6 +28,8 @@ export class AddWaitingListComponent implements OnInit {
   personNameBookTitleForBookOwner: PersonNameBookTitleForBookOwner = new PersonNameBookTitleForBookOwner();
   @Output()
   dataChangeEvent = new EventEmitter();
+  role: string = '';
+  id: number = 0;
 
   constructor(private dataService: DataService,
               private router: Router,
@@ -36,12 +38,7 @@ export class AddWaitingListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataService.getUsers().subscribe(
-      readers => {
-        this.bookReaders = readers;
-      }
-    )
-
+    this.setupRoleAndId()
     this.loadData();
   }
 
@@ -126,5 +123,28 @@ export class AddWaitingListComponent implements OnInit {
         this.router.navigate(['waitingList'], {queryParams: {action: 'add', id: idBook}})
       }
     });
+  }
+
+  setupRoleAndId() {
+    this.dataService.getRole().subscribe(
+      next => {
+        this.role = next.role;
+        this.dataService.getId().subscribe(
+          next => {
+            this.id = next.id;
+            this.dataService.getUsers().subscribe(
+              readers => {
+                if (this.role == 'user') {
+                  this.bookReaders = readers.filter(reader => reader.user_id == this.id);
+                } else {
+                  this.bookReaders = readers;
+                }
+              }
+            );
+          }
+        )
+      }
+    );
+
   }
 }

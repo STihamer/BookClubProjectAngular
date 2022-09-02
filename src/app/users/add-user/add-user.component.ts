@@ -42,6 +42,7 @@ export class AddUserComponent implements OnInit {
     this.dataService.addUser(this.newUser).subscribe(
       next => this.message = "New user successfully added "
     )
+    this.closeAddUserComponent();
   }
 
   closeAddUserComponent() {

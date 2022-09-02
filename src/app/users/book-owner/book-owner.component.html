@@ -10,7 +10,7 @@
       <button class="btn btn-warning" type="button" id="button-addon2"
               (click)="deleteSearchingByNameOrBookTitle()">Abort
       </button>
-      <button class="btn btn-secondary border-secondary" type="button" id="button-addon3" (click)="addBookOwner()">Add
+      <button class="btn btn-secondary border-secondary" type="button" id="button-addon3" (click)="addBookOwner()" *ngIf="isAdminUser">Add
       </button>
     </div>
     <div class="accordion-item" *ngFor="let item of personNameBookTitleForBookOwners; let i = index">
@@ -63,7 +63,7 @@
         </div>
         <div class="container d-flex  row justify-content-end m-0 p-0">
           <button type="button" class="btn btn-secondary col-2 pe-0 me-0"
-                  (click)="deleteOwnerBookField(item.id)">Delete
+                  (click)="deleteOwnerBookField(item.id)" *ngIf="isAdminUser">Delete
           </button>
         </div>
       </div>

@@ -1,8 +1,9 @@
 export class User {
   user_id: number = 0;
+  orderIdInFrontend: number = 0;
   first_name: string = '';
   last_name: string = '';
-  user_age: number  = 0;
+  user_age: number = 0;
   username: string = '';
   user_email: string = '';
   user_password: string = '';
@@ -17,7 +18,7 @@ export class User {
     newUser.username = user.username;
     newUser.user_email = user.user_email;
     newUser.user_password = user.user_password;
-    newUser.role_id= user.role_id;
+    newUser.role_id = user.role_id;
     return newUser;
   }
 }

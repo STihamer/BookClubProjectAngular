@@ -37,12 +37,15 @@
         <td class="opacity-75">{{waitingDetail.underReading == false ? 'No' : 'Yes'}} </td>
         <td class="opacity-75">
           <button type="button" class="btn btn-outline-info text-dark"
-                  (click)="editWaitingList(waitingDetail.id)">Edit
+                  (click)="editWaitingList(waitingDetail.id)" [disabled] ="role != 'admin' && waitingDetail.readerId !=
+                  id" >Edit
           </button>
         </td>
         <td class="opacity-75">
           <button type="button" class="btn btn-outline-danger text-dark" data-bs-toggle="modal"
-                  data-bs-target="#exampleModal" (click)="setDeleteWaitingList(waitingDetail.id)">Delete
+                  data-bs-target="#exampleModal" (click)="setDeleteWaitingList(waitingDetail.id)" [disabled]
+                    ="role != 'admin' && waitingDetail.readerId !=
+                  id">Delete
           </button>
         </td>
 

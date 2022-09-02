@@ -27,6 +27,8 @@ export class WaitingListComponent implements OnInit {
   currentUrl = '';
   waitingPerson: any = new WaitingPersonsAndBookTitle();
   waitingPersonList: Array<WaitingPersonsAndBookTitle> = new Array<WaitingPersonsAndBookTitle>();
+  role = '';
+  id = 0;
 
   constructor(private dataService: DataService,
               private route: ActivatedRoute,
@@ -36,7 +38,7 @@ export class WaitingListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadData();
+    this.setupRoleAndId();
   }
 
   loadData() {
@@ -66,6 +68,7 @@ export class WaitingListComponent implements OnInit {
       const waitingListDetail: WaitingListDetail = new WaitingListDetail()
       waitingListDetail.waitingListId = el.id;
       this.dataService.getUserById(el.user_id).subscribe(next => {
+        waitingListDetail.readerId =next.user_id;
         waitingListDetail.readerFirstName = next.first_name;
         waitingListDetail.readerLastName = next.last_name;
         waitingListDetail.readerUsername = next.username;
@@ -101,7 +104,7 @@ export class WaitingListComponent implements OnInit {
       this.option = params['option'];
       this.searching = params['searching'];
       if (this.option === 'option' && idBook) {
-        this.router.navigate(['waitingList'], {queryParams: {action: 'add', option: 'option', idBook:idBook}});
+        this.router.navigate(['waitingList'], {queryParams: {action: 'add', option: 'option', idBook: idBook}});
       }
       if (this.router.url === '/waitingList') {
         this.getPreviousUrl();
@@ -193,5 +196,19 @@ export class WaitingListComponent implements OnInit {
     this.router.navigate(['waitingList']);
   }
 
+  setupRoleAndId() {
+    this.dataService.getRole().subscribe(
+      next => {
+        this.role = next.role;
+        this.dataService.getId().subscribe(
+          next => {
+            this.id = next.id;
+            this.loadData();
+          }
+        )
+      }
+    )
+
+  }
 }
 
