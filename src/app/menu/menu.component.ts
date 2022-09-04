@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../auth.service";
 
 @Component({
@@ -9,11 +9,11 @@ import {AuthService} from "../auth.service";
 })
 export class MenuComponent implements OnInit {
   userIsLoggedIn = false;
+
   constructor(private router: Router,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private route: ActivatedRoute) {
   }
-
-
 
   ngOnInit(): void {
     this.authService.rolesSetEvent.subscribe(
@@ -22,7 +22,7 @@ export class MenuComponent implements OnInit {
           this.userIsLoggedIn = true;
         }
       }
-    )
+    );
   }
 
   navigateToUsers() {
@@ -35,6 +35,7 @@ export class MenuComponent implements OnInit {
 
   navigateToHome() {
     this.router.navigate(['']);
+
   }
 
   navigateToRentingData() {
@@ -57,9 +58,14 @@ export class MenuComponent implements OnInit {
     this.router.navigate(['booksNonRented']);
   }
 
+  navigateToLogin() {
+    this.router.navigate(['login']);
+  }
+
   logout() {
     this.authService.logout();
     this.navigateToHome();
     this.userIsLoggedIn = false;
   }
+
 }

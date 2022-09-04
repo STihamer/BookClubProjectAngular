@@ -11,6 +11,7 @@ export class AuthService {
   role: string = '';
   id: number = 0;
   rolesSetEvent = new EventEmitter<String>();
+  loginComponent = false;
 
   constructor(private dataService: DataService) {
   }
@@ -31,7 +32,6 @@ export class AuthService {
   }
 
   setupRole() {
-
     this.dataService.getRole().subscribe(
       next => {
         this.role = next.role;

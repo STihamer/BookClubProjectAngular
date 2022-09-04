@@ -11,6 +11,7 @@ import {WaitingListComponent} from "./users/waiting-list/waiting-list.component"
 import {AvailableBooksComponent} from "./books/available-books/available-books.component";
 import {LoginComponent} from "./login/login.component";
 import {AuthRouteGuardService} from "./auth-route-guard.service";
+import {RegisterComponent} from "./register/register.component";
 
 const routes: Routes = [
   {path: 'users', component:UsersComponent, canActivate: [AuthRouteGuardService]},
@@ -22,6 +23,7 @@ const routes: Routes = [
   {path: 'waitingList', component:WaitingListComponent,canActivate: [AuthRouteGuardService]},
   {path: 'booksNonRented', component:AvailableBooksComponent,canActivate: [AuthRouteGuardService]},
   {path: 'login', component: LoginComponent},
+  {path: 'registration', component: RegisterComponent},
   {path: '404', component: PageNotFoundComponent},
   {path: '**', redirectTo: '/404'},
 ];

@@ -1,10 +1,10 @@
 import {User} from "./User";
-import {Book} from "./Book";
+import {BookDTO} from "./BookDTO";
 
 export class BookOwner {
 
   id: number = 0;
-  book_id: number = new Book().book_id;
+  book_id: number = new BookDTO().bookId;
   user_id: number = new User().user_id;
 
 

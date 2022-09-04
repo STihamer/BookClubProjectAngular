@@ -4,7 +4,7 @@ import {BookOwner} from "../../model/BookOwner";
 import {PersonNameBookTitleForBookOwner} from "../../model/PersonNameBookTitleForBookOwner";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {User} from "../../model/User";
-import {Book} from "../../model/Book";
+import {BookDTO} from "../../model/BookDTO";
 import {FormResetService} from "../../form-reset.service";
 import {filter} from "rxjs";
 
@@ -21,9 +21,9 @@ export class BookOwnerComponent implements OnInit {
   action: string = '';
   selectedBookOwner: any = new BookOwner();
   selectedUser: any = new User()
-  selectedBook: any = new Book()
+  selectedBook: any = new BookDTO()
   users: Array<User> = new Array<User>();
-  books: Array<Book> = new Array<Book>();
+  books: Array<BookDTO> = new Array<BookDTO>();
   searchingText = '';
   bookComponentHidden = false;
   currentUrl: string = '';
@@ -102,7 +102,7 @@ export class BookOwnerComponent implements OnInit {
       if (idUser) {
         this.selectedUser = this.users.filter(user => user.user_id === +idUser);
         this.selectedUser = this.selectedUser[0];
-        this.selectedBook = this.books.filter(book => book.book_id === +idBook)
+        this.selectedBook = this.books.filter(book => book.bookId === +idBook)
         this.selectedBook = this.selectedBook[0];
       }
 

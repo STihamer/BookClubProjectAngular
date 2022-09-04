@@ -26,7 +26,7 @@
             <label for="book">Book</label>
             <select class="form-select" id="book" [(ngModel)]="myBook" name="book_title" #bookField =
               "ngModel" required>
-              <option *ngFor="let book of books" [ngValue]="book">{{book?.book_title}}</option>
+              <option *ngFor="let book of books" [ngValue]="book">{{book?.bookTitle}}</option>
             </select>
             <div class="alert alert-danger" *ngIf="bookField.invalid && bookField.touched">
               Book is required
@@ -35,7 +35,7 @@
         </li>
         <li class="list-group-item border-bottom-0">
           <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-3">
-            <button [disabled]="myBook.book_title === '' || myUser.username === ''" type="button"
+            <button [disabled]="myBook.bookTitle === '' || myUser.username === ''" type="button"
                     class="btn btn-primary mt-3"
                     (click)="onSubmit()">Save
             </button>

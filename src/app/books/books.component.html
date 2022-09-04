@@ -11,12 +11,12 @@
   <div class="col-sm-12  col-md-6 col-lg-4 col-xl-3  " *ngFor=" let book of books">
 
     <div class="card bg-white bg-opacity-75  border-0 m-3" style="width: 18rem;">
-      <a (click)="setBook(book.book_id)">
+      <a (click)="setBook(book.bookId)">
         <div class="card-body" data-bs-toggle="modal" data-bs-target="#exampleModal">
           <h5 class="card-title " data-toggle="tooltip" title="Find out the availability of this book"
-          >{{book.book_title}}</h5>
+          >{{book.bookTitle}}</h5>
 
-          <h6 class="card-subtitle mb-2">{{book.author_fname }} {{ book.author_lname}}</h6>
+          <h6 class="card-subtitle mb-2">{{book.authorFirstName }} {{ book.authorLastName}}</h6>
         </div>
       </a>
     </div>

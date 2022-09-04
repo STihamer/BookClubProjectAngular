@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {DataService} from "../../data.service";
+import {User} from "../model/User";
+import {DataService} from "../data.service";
 import {Router} from "@angular/router";
-import {User} from "../../model/User";
 
 @Component({
-  selector: 'app-add-user',
-  templateUrl: './add-user.component.html',
-  styleUrls: ['./add-user.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class AddUserComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
   newUser: User = new User();
   message: string = '';
@@ -26,28 +26,26 @@ export class AddUserComponent implements OnInit {
   userEmailIsValid = false;
   userAgeIsValid = false;
   userAge: any = null;
-  userRoleIsValid = false;
+  role_id: number = 1;
 
   constructor(private dataService: DataService,
               private router: Router) {
   }
 
-
   ngOnInit(): void {
-
   }
 
   submit() {
+    this.newUser.role_id = this.role_id;
     this.newUser.user_age = this.userAge;
-    this.dataService.addUser(this.newUser).subscribe(
+    this.dataService.registerUser(this.newUser).subscribe(
       next => this.message = "New user successfully added "
     )
-    this.closeAddUserComponent();
+    this.closeRegistrationComponent();
   }
 
-  closeAddUserComponent() {
-    window.location.replace("users");
-
+  closeRegistrationComponent() {
+    this.router.navigate(["login"]);
   }
 
   checkIfFirstNameIsValid() {
@@ -128,6 +126,7 @@ export class AddUserComponent implements OnInit {
       }
     } else {
       this.passwordIsValid = true;
+      console.log("password length yeah")
     }
   }
 
@@ -153,19 +152,7 @@ export class AddUserComponent implements OnInit {
     }
   }
 
-  checkIfRoleIsValid() {
-    if (!this.newUser.role_id) {
-      this.userRoleIsValid = false;
-      console.log(this.userRoleIsValid)
-    } else {
-      this.userRoleIsValid = true;
-      console.log(this.userRoleIsValid)
-    }
-    console.log(this.userRoleIsValid)
-  }
-
   clearDataFromNewUsersForm() {
     window.location.reload();
   }
 }
-

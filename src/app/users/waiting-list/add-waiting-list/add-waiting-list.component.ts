@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {User} from "../../../model/User";
-import {Book} from "../../../model/Book";
+import {BookDTO} from "../../../model/BookDTO";
 import {WaitingList} from "../../../model/WaitingList";
 import {DataService} from "../../../data.service";
 import {BookOwner} from "../../../model/BookOwner";
@@ -16,7 +16,7 @@ import {AuthService} from "../../../auth.service";
 export class AddWaitingListComponent implements OnInit {
 
 
-  books: Array<Book> = new Array<Book>();
+  books: Array<BookDTO> = new Array<BookDTO>();
   bookReaders: Array<User> = new Array<User>();
   option = '';
   action = '';

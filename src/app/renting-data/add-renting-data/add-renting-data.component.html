@@ -27,7 +27,7 @@
             <select class="form-select" id="bookId" [(ngModel)]="newRentingTable.book_id" name="bookId"
                     #bookIdField=
                       "ngModel" required>
-              <option *ngFor="let book of books" [ngValue]="book?.book_id">{{book?.book_title}}</option>
+              <option *ngFor="let book of books" [ngValue]="book?.bookId">{{book?.bookTitle}}</option>
               <option value="0" selected></option>
             </select>
           </div>

@@ -28,6 +28,7 @@ import { EditRentingDataComponent } from './renting-data/edit-renting-data/edit-
 import { AddRentingDataComponent } from './renting-data/add-renting-data/add-renting-data.component';
 import { LoginComponent } from './login/login.component';
 import { AddUserComponent } from './users/add-user/add-user.component';
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { AddUserComponent } from './users/add-user/add-user.component';
     EditRentingDataComponent,
     AddRentingDataComponent,
     LoginComponent,
-    AddUserComponent
+    AddUserComponent,
+    RegisterComponent
 
   ],
   imports: [

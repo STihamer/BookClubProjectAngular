@@ -1,11 +1,7 @@
 .container .backgroundImage {
   height: 100vh;
-  background-image: url("src/assets/images/game-of-thrones-1.jpg");
+  background-image: url("src/assets/images/registerBackground.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-}
-
-.card {
-  height:fit-content;
 }

@@ -32,13 +32,19 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.route.navigateByUrl(url);
         } else {
           this.message = 'Your username or password was not recognised - try again.';
+
         }
       }
     );
+
     this.authService.checkIfAlreadyAuthenticated();
   }
 
   onSubmit() {
     this.authService.authenticate(this.name, this.password);
+  }
+
+  navigateToRegistration() {
+    this.route.navigate(["registration"])
   }
 }

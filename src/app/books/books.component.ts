@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../data.service";
-import {Book} from "../model/Book";
+import {BookDTO} from "../model/BookDTO";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormResetService} from "../form-reset.service";
 import {BooksNonRentedResponse} from "../model/BooksNonRentedResponse";
@@ -14,8 +14,8 @@ import {AuthService} from "../auth.service";
   styleUrls: ['./books.component.css']
 })
 export class BooksComponent implements OnInit {
-  books: Array<Book> = new Array<Book>();
-  selectedBook: any = new Book();
+  books: Array<BookDTO> = new Array<BookDTO>();
+  selectedBook: any = new BookDTO();
   action: string = '';
   message: string = '';
   bookHidden = false;
@@ -45,7 +45,7 @@ export class BooksComponent implements OnInit {
 
   setBook(id: number) {
     this.router.navigate(['books'], {queryParams: {id: id, action: 'view'}})
-    this.selectedBook = this.books.find(book => book.book_id === +id);
+    this.selectedBook = this.books.find(book => book.bookId === +id);
     this.getBookAvailabilityByUsernameAndTitle(id)
   }
 
@@ -53,9 +53,9 @@ export class BooksComponent implements OnInit {
     this.dataService.getBooks().subscribe(
       next => {
         this.books = next.sort((a, b) => {
-          if (a.book_id > b.book_id) {
+          if (a.bookId > b.bookId) {
             return 1;
-          } else if (a.book_id < b.book_id) {
+          } else if (a.bookId < b.bookId) {
             return -1;
           }
           return 0;
@@ -68,7 +68,7 @@ export class BooksComponent implements OnInit {
             this.router.navigate(['books']);
           }
           if (id) {
-            this.selectedBook = this.books.find(book => book.book_id === +id);
+            this.selectedBook = this.books.find(book => book.bookId === +id);
           }
           if (this.action === 'edit' && id) {
             this.bookHidden = true;
@@ -76,7 +76,7 @@ export class BooksComponent implements OnInit {
               {queryParams: {action: 'edit', id: this.selectedBook.book_id}})
           }
         });
-      }, errors => {
+      }, () => {
         this.message = 'An error occurred - please contact support';
       }
     )
@@ -87,30 +87,6 @@ export class BooksComponent implements OnInit {
     this.router.navigate(['books'],
       {queryParams: {action: 'edit', id: this.selectedBook.book_id}})
   }
-
-  findBookByTitle(title: string) {
-    if (title === '') {
-      this.dataService.getBooks().subscribe(
-        next => {
-          this.books = next.sort((a, b) => {
-            if (a.book_title > b.book_title) {
-              return 1;
-            } else if (a.book_title < b.book_title) {
-              return -1;
-            }
-            return 0;
-          });
-        })
-    } else {
-      this.dataService.getBooks().subscribe(
-        next => this.books = next.filter(
-          book => book.book_title.toLowerCase()
-            .indexOf(title.toLowerCase()) > -1));
-      this.router.navigate(['books'],
-        {queryParams: {action: title}})
-    }
-  }
-
   deleteSearchingByTitle() {
     this.router.navigate(['books']);
     this.dataService.getBooks().subscribe(next => this.books = next);
@@ -118,7 +94,7 @@ export class BooksComponent implements OnInit {
   }
 
   addBook() {
-    this.selectedBook = new Book();
+    this.selectedBook = new BookDTO();
     this.router.navigate(['books'], {queryParams: {action: 'add'}});
     this.formResetService.resetBookFormEvent.emit(this.selectedBook);
     this.bookHidden = true;
@@ -160,9 +136,9 @@ export class BooksComponent implements OnInit {
       this.dataService.getBooks().subscribe(
         next => {
           this.books = next.sort((a, b) => {
-            if (a.book_title > b.book_title) {
+            if (a.bookTitle > b.bookTitle) {
               return 1;
-            } else if (a.book_title < b.book_title) {
+            } else if (a.bookTitle < b.bookTitle) {
               return -1;
             }
             return 0;

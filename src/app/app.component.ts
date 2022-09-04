@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, OnDestroy} from '@angular/core';
+import {Subscription} from "rxjs";
+import {LoginComponent} from "./login/login.component";
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'BookClubProject';
+
 }

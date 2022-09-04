@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {User} from "../../../model/User";
-import {Book} from "../../../model/Book";
+import {BookDTO} from "../../../model/BookDTO";
 import {DataService} from "../../../data.service";
 import {Subscription} from "rxjs";
 import {BookOwner} from "../../../model/BookOwner";
@@ -16,9 +16,9 @@ import {AuthService} from "../../../auth.service";
 export class AddBookOwnerComponent implements OnInit,OnDestroy {
 
   users: Array<User> = new Array<User>();
-  books: Array<Book> = new Array<Book>();
+  books: Array<BookDTO> = new Array<BookDTO>();
   myUser = new User();
-  myBook = new Book();
+  myBook = new BookDTO();
   action = '';
 
   @Output()
@@ -59,7 +59,7 @@ export class AddBookOwnerComponent implements OnInit,OnDestroy {
 
   onSubmit() {
     this.newBookOwner.user_id = this.myUser.user_id;
-    this.newBookOwner.book_id = this.myBook.book_id;
+    this.newBookOwner.book_id = this.myBook.bookId;
     this.dataService.addBookOwner(this.newBookOwner).subscribe(
       (bookOwner) => {
         window.location.reload();

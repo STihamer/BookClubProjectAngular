@@ -3,7 +3,7 @@ import {DataService} from "../../../data.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MyListing} from "../../../model/MyListing";
 import {User} from "../../../model/User";
-import {Book} from "../../../model/Book";
+import {BookDTO} from "../../../model/BookDTO";
 import {Subscription} from "rxjs";
 import {FormResetService} from "../../../form-reset.service";
 import {AuthService} from "../../../auth.service";
@@ -16,13 +16,13 @@ import {AuthService} from "../../../auth.service";
 export class AddMyListingComponent implements OnInit, OnDestroy {
 
   users: Array<User> = new Array<User>();
-  books: Array<Book> = new Array<Book>();
+  books: Array<BookDTO> = new Array<BookDTO>();
   action = '';
   @Input()
   myNewListing: MyListing = new MyListing();
   myListingResetSubscription: Subscription = new Subscription();
   myUser = new User();
-  myBook = new Book();
+  myBook = new BookDTO();
 
   @Output()
   dataChangedEvent = new EventEmitter();
@@ -67,7 +67,7 @@ export class AddMyListingComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.myNewListing.reading_person = this.myUser.user_id;
-    this.myNewListing.book_title = this.myBook.book_id;
+    this.myNewListing.book_title = this.myBook.bookId;
     this.dataService.addMyListing(this.myNewListing).subscribe(
       (myListing) => {
         window.location.reload();

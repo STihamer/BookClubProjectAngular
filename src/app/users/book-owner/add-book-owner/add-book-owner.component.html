@@ -13,7 +13,7 @@
             <select class="form-select" id="BookTitle" [(ngModel)]="myBook"  name="bookTitle" required
                     #bookField =
               "ngModel">
-              <option *ngFor="let book of books" [ngValue]="book">{{book?.book_title}}</option>
+              <option *ngFor="let book of books" [ngValue]="book">{{book?.bookTitle}}</option>
 
             </select>
             <div class="alert alert-danger" *ngIf="bookField.invalid && bookField.touched">
@@ -35,7 +35,7 @@
         </li>
         <li class="list-group-item border-bottom-0">
           <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-3">
-            <button [disabled]="myBook.book_title === '' || myUser.username === ''" type="button"
+            <button [disabled]="myBook.bookTitle === '' || myUser.username === ''" type="button"
                     class="btn btn-primary mt-3"
                     (click)="onSubmit()">Save
             </button>

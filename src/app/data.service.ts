@@ -3,7 +3,7 @@ import {User} from "./model/User";
 import {map, Observable} from "rxjs";
 import {environment} from "../environments/environment";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {Book} from "./model/Book";
+import {BookDTO} from "./model/BookDTO";
 import {MyListing} from "./model/MyListing";
 import {BookOwner} from "./model/BookOwner";
 import {WaitingList} from "./model/WaitingList";
@@ -36,14 +36,14 @@ export class DataService {
       );
   }
 
-  getBooks(): Observable<Array<Book>> {
+  getBooks(): Observable<Array<BookDTO>> {
 
-    return this.http.get<Array<Book>>(environment.restUrl + '/api/books', {withCredentials: true})
+    return this.http.get<Array<BookDTO>>(environment.restUrl + '/api/books', {withCredentials: true})
       .pipe(
         map(data => {
-          const books = new Array<Book>();
+          const books = new Array<BookDTO>();
           for (const book of data) {
-            books.push(Book.fromHttp(book));
+            books.push(BookDTO.fromHttp(book));
           }
           return books
         })
@@ -56,9 +56,9 @@ export class DataService {
     return this.http.put<User>(environment.restUrl + `/api/users/${id}`, user, {withCredentials: true});
   }
 
-  updateBook(book: Book, id: number): Observable<any> {
+  updateBook(book: BookDTO, id: number): Observable<any> {
 
-    return this.http.put<Book>(environment.restUrl + `/api/books/${id}`, book,{withCredentials: true});
+    return this.http.put<BookDTO>(environment.restUrl + `/api/books/${id}`, book,{withCredentials: true});
   }
 
   updateWaitingList(waitingList: WaitingList, id: number): Observable<WaitingList> {
@@ -82,9 +82,9 @@ export class DataService {
   }
 
   getBookById(id: number): Observable<any> {
-    return this.http.get<Book>(environment.restUrl + `/api/books/${id}`,{withCredentials: true})
+    return this.http.get<BookDTO>(environment.restUrl + `/api/books/${id}`,{withCredentials: true})
       .pipe(map(data => {
-        return Book.fromHttp(data);
+        return BookDTO.fromHttp(data);
       }))
   }
 
@@ -184,15 +184,15 @@ export class DataService {
       );
   }
 
-  findBookByTitleOrByAuthorName(searching: string): Observable<Array<Book>> {
+  findBookByTitleOrByAuthorName(searching: string): Observable<Array<BookDTO>> {
     const params = new HttpParams()
       .set('searching', searching)
-    return this.http.get<Array<Book>>(environment.restUrl + `/api/books/findBooksByTitleOrAuthorName?${params}`,{withCredentials: true})
+    return this.http.get<Array<BookDTO>>(environment.restUrl + `/api/books/findBooksByTitleOrAuthorName?${params}`,{withCredentials: true})
       .pipe(
         map(data => {
-          const foundBooks = new Array<Book>();
+          const foundBooks = new Array<BookDTO>();
           for (const foundBook of data) {
-            foundBooks.push(Book.fromHttp(foundBook));
+            foundBooks.push(BookDTO.fromHttp(foundBook));
           }
           return foundBooks
         })
@@ -278,12 +278,24 @@ export class DataService {
     return this.http.post<User>(environment.restUrl + `/api/users?${params}`, user,{withCredentials: true});
   }
 
-  addBook(newBook: Book): Observable<Book> {
+  registerUser(user: User): Observable<User> {
+    const params = new HttpParams()
+      .set('first_name', user.first_name)
+      .set('last_name', user.last_name)
+      .set('user_age', user.user_age)
+      .set('username', user.username)
+      .set('user_email', user.user_email)
+      .set('user_password', user.user_password)
+      .set('role_id', user.role_id);
+    return this.http.post<User>(environment.restUrl + `/api/users/registration?${params}`, user,{withCredentials: true});
+  }
+
+  addBook(newBook: BookDTO): Observable<BookDTO> {
     const fullBook = {
-      book_title: newBook.book_title, author_fname: newBook.author_fname,
-      author_lname: newBook.author_lname, published: newBook.published
+      book_title: newBook.bookTitle, author_fname: newBook.authorFirstName,
+      author_lname: newBook.authorLastName, published: newBook.publishedYear
     };
-    return this.http.post<Book>(environment.restUrl + '/api/books', fullBook,{withCredentials: true});
+    return this.http.post<BookDTO>(environment.restUrl + '/api/books', fullBook,{withCredentials: true});
   }
 
   addMyListing(myListing: MyListing): Observable<MyListing> {

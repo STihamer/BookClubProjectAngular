@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {User} from "../../model/User";
-import {Book} from "../../model/Book";
+import {BookDTO} from "../../model/BookDTO";
 import {RentingPeriod} from "../../model/RentingPeriod";
 import {DataService} from "../../data.service";
 import {RentingTable} from "../../model/RentingTable";
@@ -18,7 +18,7 @@ import {AuthService} from "../../auth.service";
 export class AddRentingDataComponent implements OnInit {
 
   users: Array<User> = new Array<User>();
-  books: Array<Book> = new Array<Book>();
+  books: Array<BookDTO> = new Array<BookDTO>();
   rentingPeriods: Array<RentingPeriod> = new Array<RentingPeriod>();
   newRentingPeriod: any = new RentingPeriod();
   rentingTables: Array<RentingTable> = new Array<RentingTable>();
@@ -64,7 +64,7 @@ export class AddRentingDataComponent implements OnInit {
         for (let table of this.rentingTables) {
           this.dataService.getBookById(table.book_id).subscribe(book => {
               for (let i in this.books) {
-                if (this.books[i].book_id == book.book_id) {
+                if (this.books[i].bookId == book.book_id) {
                   this.books.splice(Number(i), 1)
                 }
               }

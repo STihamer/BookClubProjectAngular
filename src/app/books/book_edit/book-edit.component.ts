@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {Book} from "../../model/Book";
+import {BookDTO} from "../../model/BookDTO";
 import {DataService} from "../../data.service";
 import {Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
@@ -15,11 +15,11 @@ export class BookEditComponent implements OnInit, OnDestroy {
 
 
   @Input()
-  book: Book = new Book();
+  book: BookDTO = new BookDTO();
 
   @Output()
   dataChangedEvent = new EventEmitter();
-  formBook: Book = new Book();
+  formBook: BookDTO = new BookDTO();
 
   @Input()
   action: string = '';
@@ -66,32 +66,32 @@ export class BookEditComponent implements OnInit, OnDestroy {
   }
 
   checkIfBookTitleIsValid() {
-    if (this.formBook.book_title) {
-      this.bookTitleIsValid = this.formBook.book_title.trim().length > 0;
+    if (this.formBook.bookTitle) {
+      this.bookTitleIsValid = this.formBook.bookTitle.trim().length > 0;
     } else {
       this.bookTitleIsValid = false;
     }
   }
 
   checkIfAuthorFNameIsValid() {
-    if (this.formBook.author_fname) {
-      this.authorFNameIsValid = this.formBook.author_fname.trim().length > 0;
+    if (this.formBook.authorFirstName) {
+      this.authorFNameIsValid = this.formBook.authorFirstName.trim().length > 0;
     } else {
       this.authorFNameIsValid = false;
     }
   }
 
   checkIfAuthorLNameIsValid() {
-    if (this.formBook.author_lname) {
-      this.authorLNameIsValid = this.formBook.author_lname.trim().length > 0;
+    if (this.formBook.authorLastName) {
+      this.authorLNameIsValid = this.formBook.authorLastName.trim().length > 0;
     } else {
       this.authorLNameIsValid = false;
     }
   }
 
   checkIfPublishedYearIsValid() {
-    if (this.formBook.published) {
-      this.publishedYearIsValid = this.formBook.published > 0;
+    if (this.formBook.publishedYear) {
+      this.publishedYearIsValid = this.formBook.publishedYear > 0;
     } else {
       this.publishedYearIsValid = false;
     }
@@ -107,16 +107,16 @@ export class BookEditComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.message = 'saving...';
-    if (this.formBook.book_id < 1) {
+    if (this.formBook.bookId < 1) {
       this.dataService.addBook(this.formBook).subscribe(
         (book) => {
           this.dataChangedEvent.emit();
-          this.router.navigate(['books'], {queryParams: {action: 'view', id: book.book_id}});
+          this.router.navigate(['books'], {queryParams: {action: 'view', id: book.bookId}});
         },
         error => this.message = 'Something went wrong and the data wasn\'t saved. You may want to try again.' + error.status
       );
     } else {
-      this.dataService.updateBook(this.formBook, this.formBook.book_id).subscribe(
+      this.dataService.updateBook(this.formBook, this.formBook.bookId).subscribe(
         (book) => {
           this.dataChangedEvent.emit();
           this.router.navigate(['books']);
@@ -128,7 +128,7 @@ export class BookEditComponent implements OnInit, OnDestroy {
 
   deleteBook() {
     this.message = 'deleting';
-    this.dataService.deleteBook(this.formBook.book_id).subscribe(
+    this.dataService.deleteBook(this.formBook.bookId).subscribe(
       next => {
         this.dataChangedEvent.emit();
         this.router.navigate(['books']);
