@@ -25,12 +25,12 @@
         <tbody>
         <tr *ngFor="let user of users">
           <td>{{user.orderIdInFrontend}}</td>
-          <td>{{user.first_name}}</td>
-          <td>{{user.last_name}}</td>
+          <td>{{user.firstName}}</td>
+          <td>{{user.lastName}}</td>
           <td>{{user.username}}</td>
 
           <td>
-            <button type="button" class="btn btn-primary " (click)="setUser(user.user_id)">view</button>
+            <button type="button" class="btn btn-primary " (click)="setUser(user.userId)">view</button>
           </td>
         </tr>
         </tbody>

@@ -11,7 +11,6 @@ export class AuthService {
   role: string = '';
   id: number = 0;
   rolesSetEvent = new EventEmitter<String>();
-  loginComponent = false;
 
   constructor(private dataService: DataService) {
   }

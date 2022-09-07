@@ -44,6 +44,7 @@ export class BooksComponent implements OnInit {
   }
 
   setBook(id: number) {
+    console.log(id);
     this.router.navigate(['books'], {queryParams: {id: id, action: 'view'}})
     this.selectedBook = this.books.find(book => book.bookId === +id);
     this.getBookAvailabilityByUsernameAndTitle(id)
@@ -60,22 +61,8 @@ export class BooksComponent implements OnInit {
           }
           return 0;
         });
-        this.route.queryParams.subscribe(params => {
-          const id = params['id'];
-          this.action = params['action'];
-          if (!this.action || this.action === 'view') {
-            this.bookHidden = false;
-            this.router.navigate(['books']);
-          }
-          if (id) {
-            this.selectedBook = this.books.find(book => book.bookId === +id);
-          }
-          if (this.action === 'edit' && id) {
-            this.bookHidden = true;
-            this.router.navigate(['books'],
-              {queryParams: {action: 'edit', id: this.selectedBook.book_id}})
-          }
-        });
+        this.booksComponentRouting();
+
       }, () => {
         this.message = 'An error occurred - please contact support';
       }
@@ -85,8 +72,9 @@ export class BooksComponent implements OnInit {
   editBook() {
     this.bookHidden = true;
     this.router.navigate(['books'],
-      {queryParams: {action: 'edit', id: this.selectedBook.book_id}})
+      {queryParams: {action: 'edit', id: this.selectedBook.bookId}})
   }
+
   deleteSearchingByTitle() {
     this.router.navigate(['books']);
     this.dataService.getBooks().subscribe(next => this.books = next);
@@ -105,12 +93,12 @@ export class BooksComponent implements OnInit {
     this.dataService.bookNonRented.subscribe(
       next => {
         this.nonRentedBooks = next;
-        this.ifBookIsRented = this.nonRentedBooks.filter(element => element.book_id == this.selectedBook.book_id)[0];
+        this.ifBookIsRented = this.nonRentedBooks.filter(element => element.book_id == this.selectedBook.bookId)[0];
         if (!this.ifBookIsRented) {
-          this.findBookAvailability.book_title = this.selectedBook.book_title;
-          this.findBookAvailability.book_id = this.selectedBook.book_id;
-          this.findBookAvailability.author_fname = this.selectedBook.author_fname;
-          this.findBookAvailability.author_lname = this.selectedBook.author_lname;
+          this.findBookAvailability.book_title = this.selectedBook.bookTitle;
+          this.findBookAvailability.book_id = this.selectedBook.bookId;
+          this.findBookAvailability.author_fname = this.selectedBook.authorFirstName;
+          this.findBookAvailability.author_lname = this.selectedBook.authorLastName;
           this.dataService.getBookByAuthorNameOrBookTitle(this.findBookAvailability).subscribe(
             next => {
               this.findBookAvailability.return_date = next[0].return_date;
@@ -152,8 +140,29 @@ export class BooksComponent implements OnInit {
           this.books = next;
         }
       );
-
     }
+  }
 
+  booksComponentRouting() {
+    this.route.queryParams.subscribe(params => {
+      const id = params['id'];
+      this.action = params['action'];
+      if (!this.action || this.action === 'view') {
+        this.bookHidden = false;
+        this.router.navigate(['books']);
+      }
+      if (id) {
+        this.selectedBook = this.books.find(book => book.bookId === +id);
+      }
+      if (this.action === 'edit' && id) {
+        this.bookHidden = true;
+        this.router.navigate(['books'],
+          {queryParams: {action: 'edit', id: this.selectedBook.bookId}})
+      }
+      if (this.action === "add") {
+        this.router.navigate(['books'], {queryParams: {action: 'add'}});
+        this.bookHidden = true;
+      }
+    });
   }
 }

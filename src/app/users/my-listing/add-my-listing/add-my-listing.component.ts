@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {DataService} from "../../../data.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MyListing} from "../../../model/MyListing";
-import {User} from "../../../model/User";
+import {UserDTO} from "../../../model/UserDTO";
 import {BookDTO} from "../../../model/BookDTO";
 import {Subscription} from "rxjs";
 import {FormResetService} from "../../../form-reset.service";
@@ -15,13 +15,13 @@ import {AuthService} from "../../../auth.service";
 })
 export class AddMyListingComponent implements OnInit, OnDestroy {
 
-  users: Array<User> = new Array<User>();
+  users: Array<UserDTO> = new Array<UserDTO>();
   books: Array<BookDTO> = new Array<BookDTO>();
   action = '';
   @Input()
   myNewListing: MyListing = new MyListing();
   myListingResetSubscription: Subscription = new Subscription();
-  myUser = new User();
+  myUser = new UserDTO();
   myBook = new BookDTO();
 
   @Output()
@@ -49,7 +49,7 @@ export class AddMyListingComponent implements OnInit, OnDestroy {
         if(next.role != 'admin'){
           this.dataService.getId().subscribe(
             message => {
-              this.users = this.users.filter(user => user.user_id == message.id);
+              this.users = this.users.filter(user => user.userId == message.id);
             }
           )
         }
@@ -66,7 +66,7 @@ export class AddMyListingComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.myNewListing.reading_person = this.myUser.user_id;
+    this.myNewListing.reading_person = this.myUser.userId;
     this.myNewListing.book_title = this.myBook.bookId;
     this.dataService.addMyListing(this.myNewListing).subscribe(
       (myListing) => {

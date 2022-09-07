@@ -69,8 +69,8 @@ export class WaitingListComponent implements OnInit {
       waitingListDetail.waitingListId = el.id;
       this.dataService.getUserById(el.user_id).subscribe(next => {
         waitingListDetail.readerId =next.user_id;
-        waitingListDetail.readerFirstName = next.first_name;
-        waitingListDetail.readerLastName = next.last_name;
+        waitingListDetail.readerFirstName = next.firstName;
+        waitingListDetail.readerLastName = next.lastName;
         waitingListDetail.readerUsername = next.username;
 
       });
@@ -78,13 +78,13 @@ export class WaitingListComponent implements OnInit {
         waitingListDetail.ownerId = next.user_id;
         waitingListDetail.bookId = next.book_id;
         this.dataService.getUserById(waitingListDetail.ownerId).subscribe(next => {
-          waitingListDetail.ownerFirstName = next.first_name;
-          waitingListDetail.ownerLastName = next.last_name;
+          waitingListDetail.ownerFirstName = next.firstName;
+          waitingListDetail.ownerLastName = next.lastName;
           waitingListDetail.ownerUsername = next.username;
         });
         this.dataService.getBookById(waitingListDetail.bookId).subscribe(
           next => {
-            waitingListDetail.bookTitle = next.book_title;
+            waitingListDetail.bookTitle = next.bookTitle;
 
           }
         )

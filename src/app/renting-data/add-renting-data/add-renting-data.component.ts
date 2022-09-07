@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {User} from "../../model/User";
+import {UserDTO} from "../../model/UserDTO";
 import {BookDTO} from "../../model/BookDTO";
 import {RentingPeriod} from "../../model/RentingPeriod";
 import {DataService} from "../../data.service";
 import {RentingTable} from "../../model/RentingTable";
 import {formatDate} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
-import {BookOwner} from "../../model/BookOwner";
+import {BookOwnerDTO} from "../../model/BookOwnerDTO";
 import {WaitingList} from "../../model/WaitingList";
 import {AuthService} from "../../auth.service";
 
@@ -17,12 +17,12 @@ import {AuthService} from "../../auth.service";
 })
 export class AddRentingDataComponent implements OnInit {
 
-  users: Array<User> = new Array<User>();
+  users: Array<UserDTO> = new Array<UserDTO>();
   books: Array<BookDTO> = new Array<BookDTO>();
   rentingPeriods: Array<RentingPeriod> = new Array<RentingPeriod>();
   newRentingPeriod: any = new RentingPeriod();
   rentingTables: Array<RentingTable> = new Array<RentingTable>();
-  bookOwnerList: Array<BookOwner> = new Array<BookOwner>();
+  bookOwnerList: Array<BookOwnerDTO> = new Array<BookOwnerDTO>();
   waitingLists: Array<WaitingList> = new Array<WaitingList>();
   newWaitingList: Array<WaitingList> = new Array<WaitingList>();
   message: string = '';
@@ -104,7 +104,7 @@ export class AddRentingDataComponent implements OnInit {
   validateRentingTableCreation(rentingTable: RentingTable) {
     this.dataService.bookOwners.subscribe(
       next => {
-        this.bookOwnerList = next.filter(element => element.book_id == rentingTable.book_id);
+        this.bookOwnerList = next.filter(element => element.bookId == rentingTable.book_id);
         if (!this.bookOwnerList) {
           return
         } else {

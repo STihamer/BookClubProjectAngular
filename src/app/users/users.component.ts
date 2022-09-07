@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DataService} from "../data.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../auth.service";
-import {User} from "../model/User";
+import {UserDTO} from "../model/UserDTO";
 
 @Component({
   selector: 'app-users',
@@ -34,26 +34,18 @@ export class UsersComponent implements OnInit {
           this.isAdminUser = true;
         }
       }
-    )
+    );
     this.loadData();
-    this.authService.rolesSetEvent.subscribe(
-      next => {
-        if (next === 'admin') {
-          this.isAdminUser = true;
-        } else {
-          this.isAdminUser = false;
-        }
-      }
-    )
+
   }
 
   loadData() {
     this.dataService.getUsers().subscribe(
       next => {
         this.users = next.sort((a, b) => {
-          if (a.user_id > b.user_id) {
+          if (a.userId > b.userId) {
             return 1;
-          } else if (a.user_id < b.user_id) {
+          } else if (a.userId < b.userId) {
             return -1;
           }
           return 0;
@@ -115,19 +107,20 @@ export class UsersComponent implements OnInit {
       const id = params['id'];
       this.action = params['action'];
       if (id) {
-        this.selectedUser = this.users.find(user => user.user_id === +id);
+        this.selectedUser = this.users.find(user => user.userId === +id);
       }
       if (this.router.url === '/users') {
         this.setUsersComponentCol = 'col-12';
       }
 
       if (this.action === 'view') {
+
         this.setUsersComponentCol = 'col-6';
       }
     });
   }
 
-  setUsersFrontendId(users: Array<User>) {
+  setUsersFrontendId(users: Array<UserDTO>) {
     let userIdForScreen = 1;
     for (let user of users) {
       user.orderIdInFrontend = userIdForScreen;

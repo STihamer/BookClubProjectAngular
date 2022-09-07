@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../data.service";
 import {Router} from "@angular/router";
-import {User} from "../../model/User";
+import {UserDTO} from "../../model/UserDTO";
 
 @Component({
   selector: 'app-add-user',
@@ -10,7 +10,7 @@ import {User} from "../../model/User";
 })
 export class AddUserComponent implements OnInit {
 
-  newUser: User = new User();
+  newUser: UserDTO = new UserDTO();
   message: string = '';
   firstNameIsValid = false;
   firstNameContainsNumber = false;
@@ -27,6 +27,7 @@ export class AddUserComponent implements OnInit {
   userAgeIsValid = false;
   userAge: any = null;
   userRoleIsValid = false;
+  errorMessage = '';
 
   constructor(private dataService: DataService,
               private router: Router) {
@@ -38,11 +39,14 @@ export class AddUserComponent implements OnInit {
   }
 
   submit() {
-    this.newUser.user_age = this.userAge;
+    this.newUser.userAge = this.userAge;
     this.dataService.addUser(this.newUser).subscribe(
-      next => this.message = "New user successfully added "
+      next => {
+        this.message = "New user successfully added "
+        this.closeAddUserComponent();
+      },
+      error => this.errorMessage = error.error
     )
-    this.closeAddUserComponent();
   }
 
   closeAddUserComponent() {
@@ -52,8 +56,8 @@ export class AddUserComponent implements OnInit {
 
   checkIfFirstNameIsValid() {
     const regExp: RegExp = new RegExp(/\d/)
-    if (this.newUser.first_name) {
-      if (this.newUser.first_name.match(regExp) != null) {
+    if (this.newUser.firstName) {
+      if (this.newUser.firstName.match(regExp) != null) {
         this.firstNameContainsNumber = true;
         this.firstNameIsValid = false;
       }
@@ -62,7 +66,7 @@ export class AddUserComponent implements OnInit {
       this.firstNameIsValid = true;
       this.firstNameContainsNumber = false;
     }
-    if (this.newUser.first_name.length <= 1) {
+    if (this.newUser.firstName.length <= 1) {
       this.firstNameIsValid = false;
       this.firstNameLength = true;
     } else {
@@ -73,8 +77,8 @@ export class AddUserComponent implements OnInit {
 
   checkIfLastNameIsValid() {
     const regExp: RegExp = new RegExp(/\d/)
-    if (this.newUser.last_name) {
-      if (this.newUser.last_name.match(regExp) != null) {
+    if (this.newUser.lastName) {
+      if (this.newUser.lastName.match(regExp) != null) {
         this.lastNameContainsNumber = true;
         this.lastNameIsValid = false;
       }
@@ -83,7 +87,7 @@ export class AddUserComponent implements OnInit {
       this.lastNameIsValid = true;
       this.lastNameContainsNumber = false;
     }
-    if (this.newUser.last_name.length <= 1) {
+    if (this.newUser.lastName.length <= 1) {
       this.lastNameIsValid = false;
       this.lastNameLength = true;
     } else {
@@ -115,15 +119,15 @@ export class AddUserComponent implements OnInit {
 
   checkIfPasswordIsValid() {
     const regExp: RegExp = new RegExp(/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/)
-    if (this.newUser.user_password) {
-      if (this.newUser.user_password.match(regExp) == null) {
+    if (this.newUser.password) {
+      if (this.newUser.password.match(regExp) == null) {
         this.passwordIsValid = false;
         this.passwordContent = false;
       } else {
         this.passwordContent = true;
         this.passwordIsValid = true;
       }
-      if (this.newUser.user_password.length < 6) {
+      if (this.newUser.password.length < 6) {
         this.passwordIsValid = false;
       }
     } else {
@@ -133,8 +137,8 @@ export class AddUserComponent implements OnInit {
 
   checkIfEmailIsValid() {
     const regExp: RegExp = new RegExp(/^[a-z\d._\-]{3,25}@[a-z\d\-]{3,8}\.[a-z]{2,3}$/)
-    if (this.newUser.user_email) {
-      if (this.newUser.user_email.match(regExp) == null) {
+    if (this.newUser.userEmail) {
+      if (this.newUser.userEmail.match(regExp) == null) {
         this.userEmailIsValid = false;
       } else {
         this.userEmailIsValid = true;
@@ -143,9 +147,9 @@ export class AddUserComponent implements OnInit {
   }
 
   checkIfAgeIsValid() {
-    this.newUser.user_age = this.userAge;
-    if (this.newUser.user_age) {
-      if (this.newUser.user_age < 18) {
+    this.newUser.userAge = this.userAge;
+    if (this.newUser.userAge) {
+      if (this.newUser.userAge < 18) {
         this.userAgeIsValid = false;
       } else {
         this.userAgeIsValid = true;
@@ -154,14 +158,11 @@ export class AddUserComponent implements OnInit {
   }
 
   checkIfRoleIsValid() {
-    if (!this.newUser.role_id) {
-      this.userRoleIsValid = false;
+    if (!this.newUser.roleId) {
       console.log(this.userRoleIsValid)
     } else {
       this.userRoleIsValid = true;
-      console.log(this.userRoleIsValid)
     }
-    console.log(this.userRoleIsValid)
   }
 
   clearDataFromNewUsersForm() {

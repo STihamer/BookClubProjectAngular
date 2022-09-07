@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {User} from "../../model/User";
+import {UserDTO} from "../../model/UserDTO";
 import {Subscription} from "rxjs";
 import {DataService} from "../../data.service";
 import {Router} from "@angular/router";
@@ -15,11 +15,11 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
 
   @Input()
-  user: User = new User();
+  user: UserDTO = new UserDTO();
   @Output()
   dataChangedEvent = new EventEmitter();
 
-  formUser: User = new User();
+  formUser: UserDTO = new UserDTO();
 
   message: string = '';
 
@@ -39,10 +39,12 @@ export class UserEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     this.initializeForm();
     this.userResetSubscription = this.formResetService.resetUserFormEvent.subscribe(
       user => {
         this.user = user;
+
         this.initializeForm();
       }
     );
@@ -63,16 +65,16 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   checkIfFirstNameIsValid() {
 
-    if (this.formUser.first_name) {
-      this.firstNameIsValid = this.formUser.first_name.trim().length > 0;
+    if (this.formUser.firstName) {
+      this.firstNameIsValid = this.formUser.firstName.trim().length > 0;
     } else {
       this.firstNameIsValid = false;
     }
   }
 
   checkIfLastNameIsValid() {
-    if (this.formUser.last_name) {
-      this.lastNameIsValid = this.formUser.last_name.trim().length > 0;
+    if (this.formUser.lastName) {
+      this.lastNameIsValid = this.formUser.lastName.trim().length > 0;
     } else {
       this.lastNameIsValid = false;
     }
@@ -87,16 +89,16 @@ export class UserEditComponent implements OnInit, OnDestroy {
   }
 
   checkIfUserAgeIsValid() {
-    if (this.formUser.user_age) {
-      this.userAgeIsValid = this.formUser.user_age > 17;
+    if (this.formUser.userAge) {
+      this.userAgeIsValid = this.formUser.userAge > 17;
     } else {
       this.userAgeIsValid = false;
     }
   }
 
   checkIfUserEmailIsValid() {
-    if (this.formUser.user_email) {
-      this.userEmailIsValid = this.formUser.user_email.trim().length > 18;
+    if (this.formUser.userEmail) {
+      this.userEmailIsValid = this.formUser.userEmail.trim().length > 18;
     } else {
       this.userEmailIsValid = false;
     }
@@ -105,10 +107,10 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   onSubmit() {
 
-    this.dataService.updateUser(this.formUser, this.formUser.user_id).subscribe(
+    this.dataService.updateUser(this.formUser, this.formUser.userId).subscribe(
       (user) => {
         this.dataChangedEvent.emit();
-        this.router.navigate(['users'], {queryParams: {action: 'view', id: user.user_id}});
+        this.router.navigate(['users'], {queryParams: {action: 'view', id: this.formUser.userId}});
       },
       error => this.message = (error.error)
     );

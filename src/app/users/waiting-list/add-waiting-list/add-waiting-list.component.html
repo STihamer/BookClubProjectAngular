@@ -48,7 +48,7 @@
             <select class="form-select" id="readerName" [(ngModel)]="newWaitingList.user_id" name="waitingList"
                     #userIdField=
                       "ngModel" required>
-              <option *ngFor="let user of bookReaders" [ngValue]="user?.user_id">{{user?.username}}</option>
+              <option *ngFor="let user of bookReaders" [ngValue]="user?.userId">{{user?.username}}</option>
             </select>
             <div class="alert alert-danger" *ngIf="userIdField.invalid">
               Username is required

@@ -1,52 +1,49 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {User} from "../../../model/User";
+import {UserDTO} from "../../../model/UserDTO";
 import {BookDTO} from "../../../model/BookDTO";
 import {DataService} from "../../../data.service";
 import {Subscription} from "rxjs";
-import {BookOwner} from "../../../model/BookOwner";
+import {BookOwnerDTO} from "../../../model/BookOwnerDTO";
 import {FormResetService} from "../../../form-reset.service";
 import {Router} from "@angular/router";
-import {AuthService} from "../../../auth.service";
 
 @Component({
   selector: 'app-add-book-owner',
   templateUrl: './add-book-owner.component.html',
   styleUrls: ['./add-book-owner.component.css']
 })
-export class AddBookOwnerComponent implements OnInit,OnDestroy {
+export class AddBookOwnerComponent implements OnInit, OnDestroy {
 
-  users: Array<User> = new Array<User>();
+  users: Array<UserDTO> = new Array<UserDTO>();
   books: Array<BookDTO> = new Array<BookDTO>();
-  myUser = new User();
+  myUser = new UserDTO();
   myBook = new BookDTO();
   action = '';
-
+  errorMessage = '';
+  successMessage = '';
+  role = '';
+  isAdminUser = false;
+  id = 0;
   @Output()
   dataChangedEvent = new EventEmitter();
 
   @Input()
-  newBookOwner: BookOwner = new BookOwner();
+  newBookOwner: BookOwnerDTO = new BookOwnerDTO();
   bookOwnerResetSubscription: Subscription = new Subscription();
 
   constructor(private dataService: DataService,
               private formResetService: FormResetService,
-              private router: Router,
-              private authService: AuthService) {
+              private router: Router) {
   }
 
   ngOnDestroy(): void {
     this.bookOwnerResetSubscription.unsubscribe();
-    }
+  }
 
   ngOnInit(): void {
-
-    this.dataService.getUsers().subscribe(next => {
-      this.users = next;
-      console.log(this.users)
-    });
+    this.setupRoleAndId();
     this.dataService.getBooks().subscribe(next => {
       this.books = next;
-      console.log(this.books)
     });
 
     this.bookOwnerResetSubscription = this.formResetService.resetOwnerBookFormEvent.subscribe(
@@ -58,18 +55,51 @@ export class AddBookOwnerComponent implements OnInit,OnDestroy {
   }
 
   onSubmit() {
-    this.newBookOwner.user_id = this.myUser.user_id;
-    this.newBookOwner.book_id = this.myBook.bookId;
+    this.newBookOwner.userId = this.myUser.userId;
+    this.newBookOwner.bookId = this.myBook.bookId;
     this.dataService.addBookOwner(this.newBookOwner).subscribe(
       (bookOwner) => {
-        window.location.reload();
-        window.location.replace("bookOwner");
-        this.dataChangedEvent.emit();
-        this.router.navigate(['bookOwner']);
+        this.successMessage = "New book owner data successfully added"
 
+      }, error => {
+        this.errorMessage = error.error
       }
     );
   }
 
+  navigateToBookOwnersAfterSuccessfullyAdded() {
+    this.dataChangedEvent.emit();
+    this.router.navigate(['bookOwner']);
+    window.location.reload();
+    window.location.replace("bookOwner");
+  }
 
+  clearFormAfterBookOwnerInsertingFailed() {
+    this.myUser = new UserDTO();
+    this.myBook = new BookDTO();
+    this.errorMessage = '';
+  }
+
+  setupRoleAndId() {
+    this.dataService.getRole().subscribe(
+      next => {
+        this.role = next.role;
+        if (this.role == 'admin') {
+          this.isAdminUser = true;
+        }
+        this.dataService.getId().subscribe(
+          next => {
+            this.id = next.id;
+            this.dataService.getUsers().subscribe(next => {
+              if (this.role == 'admin') {
+                this.users = next;
+              } else {
+                this.users = next.filter(user => user.userId == this.id);
+              }
+            });
+          }
+        );
+      }
+    );
+  };
 }

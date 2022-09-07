@@ -10,7 +10,7 @@
       <button class="btn btn-warning" type="button" id="button-addon2"
               (click)="deleteSearchingByNameOrBookTitle()">Abort
       </button>
-      <button class="btn btn-secondary border-secondary" type="button" id="button-addon3" (click)="addBookOwner()" *ngIf="isAdminUser">Add
+      <button class="btn btn-secondary border-secondary" type="button" id="button-addon3" (click)="addBookOwner()">Add
       </button>
     </div>
     <div class="accordion-item" *ngFor="let item of personNameBookTitleForBookOwners; let i = index">
@@ -39,11 +39,11 @@
             <ul class="list-group text-center ">
               <li class="list-group-item border-start-0 border-top-0 border-end-0 text-format">Book detail</li>
               <li class="list-group-item border-start-0 border-top-0 border-end-0">Author first name:
-                {{ selectedBook.author_fname}}</li>
+                {{ selectedBook.authorFirstName}}</li>
               <li class="list-group-item border-start-0 border-end-0">Author last
-                name: {{ selectedBook.author_lname}}</li>
-              <li class="list-group-item border-start-0 border-end-0">Book title: {{selectedBook.book_title}}</li>
-              <li class="list-group-item border-start-0 border-end-0">Published year: {{selectedBook.published}}</li>
+                name: {{ selectedBook.authorLastName}}</li>
+              <li class="list-group-item border-start-0 border-end-0">Book title: {{selectedBook.bookTitle}}</li>
+              <li class="list-group-item border-start-0 border-end-0">Published year: {{selectedBook.publishedYear}}</li>
             </ul>
           </div>
           <div class="card  ms-5 card-inline-block border-start-0 border-top-0 border-bottom-0 border-end-0"
@@ -52,12 +52,12 @@
             <ul class="list-group text-center ">
               <li class="list-group-item border-start-0 border-top-0 border-end-0 text-format">User detail</li>
               <li class="list-group-item border-start-0 border-top-0 border-end-0">First
-                name: {{ selectedUser.first_name}}</li>
-              <li class="list-group-item border-start-0 border-end-0">Last name: {{ selectedUser.last_name}}</li>
-              <li class="list-group-item border-start-0 border-end-0">Age: {{selectedUser.user_age}}</li>
+                name: {{ selectedUser.firstName}}</li>
+              <li class="list-group-item border-start-0 border-end-0">Last name: {{ selectedUser.lastName}}</li>
+              <li class="list-group-item border-start-0 border-end-0">Age: {{selectedUser.userAge}}</li>
               <li class="list-group-item border-start-0 border-end-0">User name: {{selectedUser.username}}</li>
               <li class="list-group-item border-start-0 border-bottom-0 border-end-0">
-                Email: {{selectedUser.user_email}}</li>
+                Email: {{selectedUser.userEmail}}</li>
             </ul>
           </div>
         </div>

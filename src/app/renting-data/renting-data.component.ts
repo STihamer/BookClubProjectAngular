@@ -60,15 +60,15 @@ export class RentingDataComponent implements OnInit {
         for (let element of this.rentingTables) {
           const rentingDataForScreen: RentingDataForScreen = new RentingDataForScreen();
           this.dataService.getUserById(element.borrowed_by).subscribe(user => {
-            rentingDataForScreen.borrowerFirstName = user.first_name;
-            rentingDataForScreen.borrowerLastName = user.last_name;
+            rentingDataForScreen.borrowerFirstName = user.firstName;
+            rentingDataForScreen.borrowerLastName = user.lastName;
             rentingDataForScreen.borrowerUserName = user.username;
           });
           this.dataService.getBookById(element.book_id).subscribe(
             book => {
-              rentingDataForScreen.bookTitle = book.book_title;
-              rentingDataForScreen.authorFirstName = book.author_fname;
-              rentingDataForScreen.authorLastName = book.author_lname;
+              rentingDataForScreen.bookTitle = book.bookTitle;
+              rentingDataForScreen.authorFirstName = book.authorFirstName;
+              rentingDataForScreen.authorLastName = book.authorLastName;
             }
           );
           rentingDataForScreen.borrowed_date = element.borrowed_date;

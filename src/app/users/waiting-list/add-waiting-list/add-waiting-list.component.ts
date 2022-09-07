@@ -1,9 +1,9 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {User} from "../../../model/User";
+import {UserDTO} from "../../../model/UserDTO";
 import {BookDTO} from "../../../model/BookDTO";
 import {WaitingList} from "../../../model/WaitingList";
 import {DataService} from "../../../data.service";
-import {BookOwner} from "../../../model/BookOwner";
+import {BookOwnerDTO} from "../../../model/BookOwnerDTO";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PersonNameBookTitleForBookOwner} from "../../../model/PersonNameBookTitleForBookOwner";
 import {AuthService} from "../../../auth.service";
@@ -17,13 +17,13 @@ export class AddWaitingListComponent implements OnInit {
 
 
   books: Array<BookDTO> = new Array<BookDTO>();
-  bookReaders: Array<User> = new Array<User>();
+  bookReaders: Array<UserDTO> = new Array<UserDTO>();
   option = '';
   action = '';
-  anotherBookOwner: any = new BookOwner();
+  anotherBookOwner: any = new BookOwnerDTO();
   newWaitingList: WaitingList = new WaitingList()
-  users: Array<User> = new Array<User>();
-  bookOwnerList: Array<BookOwner> = new Array<BookOwner>();
+  users: Array<UserDTO> = new Array<UserDTO>();
+  bookOwnerList: Array<BookOwnerDTO> = new Array<BookOwnerDTO>();
   personNameBookTitleForBookOwners: Array<PersonNameBookTitleForBookOwner> = new Array<PersonNameBookTitleForBookOwner>();
   personNameBookTitleForBookOwner: PersonNameBookTitleForBookOwner = new PersonNameBookTitleForBookOwner();
   @Output()
@@ -81,7 +81,7 @@ export class AddWaitingListComponent implements OnInit {
   onSubmit() {
     console.log(this.personNameBookTitleForBookOwner.bookId);
     console.log(this.personNameBookTitleForBookOwner.bookOwnerId);
-    this.bookOwnerList = this.bookOwnerList.filter(element => element.book_id == this.personNameBookTitleForBookOwner.bookId && element.user_id == this.personNameBookTitleForBookOwner.bookOwnerId);
+    this.bookOwnerList = this.bookOwnerList.filter(element => element.bookId == this.personNameBookTitleForBookOwner.bookId && element.userId == this.personNameBookTitleForBookOwner.bookOwnerId);
     console.log(this.bookOwnerList)
     this.newWaitingList.book_for_reading = this.bookOwnerList[0].id;
     this.newWaitingList.finished = false;
@@ -95,22 +95,22 @@ export class AddWaitingListComponent implements OnInit {
     );
   }
 
-  createPersonNameBookTitleForBookOwners(bookOwners: Array<BookOwner>, id: number) {
+  createPersonNameBookTitleForBookOwners(bookOwners: Array<BookOwnerDTO>, id: number) {
     for (let el of this.bookOwnerList) {
       const personNameBookTitleForBookOwner: PersonNameBookTitleForBookOwner = new PersonNameBookTitleForBookOwner()
 
-      this.dataService.getUserById(el.user_id).subscribe(user => {
+      this.dataService.getUserById(el.userId).subscribe(user => {
         personNameBookTitleForBookOwner.firstName = user.first_name;
         personNameBookTitleForBookOwner.lastName = user.last_name;
         personNameBookTitleForBookOwner.userId = user.user_id;
 
       });
-      this.dataService.getBookById(el.book_id).subscribe(book => {
+      this.dataService.getBookById(el.bookId).subscribe(book => {
         personNameBookTitleForBookOwner.bookTitle = book.book_title;
         personNameBookTitleForBookOwner.bookId = book.book_id;
       });
       personNameBookTitleForBookOwner.id = id++;
-      personNameBookTitleForBookOwner.bookOwnerId = el.user_id;
+      personNameBookTitleForBookOwner.bookOwnerId = el.userId;
       this.personNameBookTitleForBookOwners.push(personNameBookTitleForBookOwner);
     }
   }
@@ -135,7 +135,7 @@ export class AddWaitingListComponent implements OnInit {
             this.dataService.getUsers().subscribe(
               readers => {
                 if (this.role == 'user') {
-                  this.bookReaders = readers.filter(reader => reader.user_id == this.id);
+                  this.bookReaders = readers.filter(reader => reader.userId == this.id);
                 } else {
                   this.bookReaders = readers;
                 }

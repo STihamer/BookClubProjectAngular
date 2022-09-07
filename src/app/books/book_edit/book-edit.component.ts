@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {BookDTO} from "../../model/BookDTO";
 import {DataService} from "../../data.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
 import {Subscription} from "rxjs";
 import {AuthService} from "../../auth.service";
@@ -24,7 +24,8 @@ export class BookEditComponent implements OnInit, OnDestroy {
   @Input()
   action: string = '';
 
-
+  @Output()
+  clearWrongData = new EventEmitter;
   message: string = '';
 
   bookTitleIsValid = false;
@@ -39,26 +40,12 @@ export class BookEditComponent implements OnInit, OnDestroy {
   constructor(private dataService: DataService,
               private router: Router,
               private formResetService: FormResetService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.authService.rolesSetEvent.subscribe(
-      next => {
-        if (next === 'admin') {
-          this.isAdminUser = true;
-        } else {
-          this.isAdminUser = false;
-        }
-      }
-    )
-    this.initializeForm();
-    this.formBook = Object.assign({}, this.book);
-    this.BookResetSubscription = this.formResetService.resetBookFormEvent.subscribe(
-      book => {
-        this.book = book;
-      }
-    );
+    this.loadData();
   }
 
   ngOnDestroy(): void {
@@ -107,13 +94,15 @@ export class BookEditComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.message = 'saving...';
+
     if (this.formBook.bookId < 1) {
+
       this.dataService.addBook(this.formBook).subscribe(
         (book) => {
           this.dataChangedEvent.emit();
           this.router.navigate(['books'], {queryParams: {action: 'view', id: book.bookId}});
         },
-        error => this.message = 'Something went wrong and the data wasn\'t saved. You may want to try again.' + error.status
+        error => this.message = error.error
       );
     } else {
       this.dataService.updateBook(this.formBook, this.formBook.bookId).subscribe(
@@ -134,6 +123,27 @@ export class BookEditComponent implements OnInit, OnDestroy {
         this.router.navigate(['books']);
       }, error => this.message = 'Sorry, this user cannot be deleted at this time.'
     )
+  }
+
+  clearWrongDataFromAddForm() {
+    window.location.reload();
+  }
+
+  loadData() {
+    this.dataService.getRole().subscribe(
+      next => {
+        if (next.role == 'admin') {
+          this.isAdminUser = true;
+        }
+      }
+    )
+    this.initializeForm();
+    this.formBook = Object.assign({}, this.book);
+    this.BookResetSubscription = this.formResetService.resetBookFormEvent.subscribe(
+      book => {
+        this.book = book;
+      }
+    );
   }
 
 }

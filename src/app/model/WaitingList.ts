@@ -1,6 +1,6 @@
 
-import {User} from "./User";
-import {BookOwner} from "./BookOwner";
+import {UserDTO} from "./UserDTO";
+import {BookOwnerDTO} from "./BookOwnerDTO";
 
 export class WaitingList {
 

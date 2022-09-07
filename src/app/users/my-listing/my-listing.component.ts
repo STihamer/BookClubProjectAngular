@@ -42,7 +42,6 @@ export class MyListingComponent implements OnInit {
     this.dataService.getMyListing().subscribe(
       next => {
         let id = 1
-
         if (this.role == 'admin') {
           this.myListings = next;
         } else {
@@ -107,12 +106,12 @@ export class MyListingComponent implements OnInit {
     for (let el of this.myListings) {
       const bookReader: PersonBookListing = new PersonBookListing()
       this.dataService.getUserById(el.reading_person).subscribe(next => {
-        bookReader.firstName = next.first_name;
-        bookReader.lastName = next.last_name;
+        bookReader.firstName = next.firstName;
+        bookReader.lastName = next.lastName;
 
       });
       this.dataService.getBookById(el.book_title).subscribe(next => {
-        bookReader.bookTitle = next.book_title;
+        bookReader.bookTitle = next.bookTitle;
 
       });
       bookReader.id = id++;

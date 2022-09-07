@@ -24,13 +24,13 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Book title: {{selectedBook?.book_title}}</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Book title: {{selectedBook?.bookTitle}}</h5>
           </div>
           <div class="modal-body">
             <ul class="list-group">
-              <li class="list-group-item"> Author name: {{selectedBook?.author_fname}}
-                {{selectedBook?.author_lname}}</li>
-              <li class="list-group-item"> Published {{selectedBook?.published}}</li>
+              <li class="list-group-item"> Author name: {{selectedBook?.authorFirstName}}
+                {{selectedBook?.authorLastName}}</li>
+              <li class="list-group-item"> Published {{selectedBook?.publishedYear}}</li>
               <li class="list-group-item">Availability:
                 {{returnDate ? 'after ' + returnDate : 'available'}}</li>
             </ul>
@@ -46,7 +46,7 @@
 
 </div>
 <app-edit-book *ngIf="bookHidden && (action==='edit' || action==='add')" [book]="selectedBook"
-               (dataChangedEvent)="loadData()" [action]="action"></app-edit-book>
+               (dataChangedEvent)="loadData()" [action]="action" (clearWrongData)="addBook()"></app-edit-book>
 
 <div class="tooltip bs-tooltip-top" role="tooltip">
   <div class="arrow"></div>

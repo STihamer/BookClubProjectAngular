@@ -7,7 +7,7 @@
         <div class="form-group align-self-center">
           <label for="title">First name</label>
           <input type="text" class="form-control" id="title" placeholder="first name" name="firstName"
-                 [(ngModel)]="newUser.first_name" (ngModelChange)="checkIfFirstNameIsValid()" required
+                 [(ngModel)]="newUser.firstName" (ngModelChange)="checkIfFirstNameIsValid()" required
                  #userFNameField="ngModel">
 
         </div>
@@ -18,7 +18,7 @@
           <div class="alert alert-danger" role="alert" *ngIf="firstNameContainsNumber">
             The first name must not contain any number
           </div>
-          <div class="alert alert-danger" role="alert" *ngIf="firstNameLength && newUser.first_name.length > 0 &&
+          <div class="alert alert-danger" role="alert" *ngIf="firstNameLength && newUser.firstName.length > 0 &&
         !firstNameContainsNumber">
             the first name must have at least 2 characters
           </div>
@@ -26,7 +26,7 @@
         <div class="form-group">
           <label for="userLastName">Last name </label>
           <input type="text" class="form-control" id="userLastName" placeholder="last name" name="lastName"
-                 [(ngModel)]="newUser.last_name" (ngModelChange)="checkIfLastNameIsValid()" required
+                 [(ngModel)]="newUser.lastName" (ngModelChange)="checkIfLastNameIsValid()" required
                  #userLNameField="ngModel">
         </div>
         <div>
@@ -36,7 +36,7 @@
           <div class="alert alert-danger" role="alert" *ngIf="lastNameContainsNumber">
             The last name must not contain any number
           </div>
-          <div class="alert alert-danger" role="alert" *ngIf="lastNameLength && newUser.last_name.length > 0 &&
+          <div class="alert alert-danger" role="alert" *ngIf="lastNameLength && newUser.lastName.length > 0 &&
         !lastNameContainsNumber">
             The last name must have at least 2 characters
           </div>
@@ -64,14 +64,14 @@
         <div class="form-group">
           <label for="email">Email</label>
           <input type="email" class="form-control" id="email" placeholder="email" name="email"
-                 [(ngModel)]="newUser.user_email" required #emailField="ngModel"
+                 [(ngModel)]="newUser.userEmail" required #emailField="ngModel"
                  (ngModelChange)="checkIfEmailIsValid()">
         </div>
         <div>
           <div class="alert alert-danger" *ngIf="emailField.invalid && emailField.touched">
             Email field is required
           </div>
-          <div class="alert alert-danger" role="alert" *ngIf="!userEmailIsValid && newUser.user_email.length > 0">
+          <div class="alert alert-danger" role="alert" *ngIf="!userEmailIsValid && newUser.userEmail.length > 0">
             This is not a valid email.
           </div>
         </div>
@@ -84,25 +84,25 @@
           <div class="alert alert-danger" *ngIf="ageField.invalid && ageField.touched">
             Age field is required
           </div>
-          <div class="alert alert-danger" role="alert" *ngIf="!userAgeIsValid && newUser.user_age > 0">
+          <div class="alert alert-danger" role="alert" *ngIf="!userAgeIsValid && newUser.userAge > 0">
             You need to be above 18 years to register.
           </div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
           <input type="password" class="form-control" id="password" placeholder="password" name="password"
-                 [(ngModel)]="newUser.user_password" (ngModelChange)="checkIfPasswordIsValid()"
+                 [(ngModel)]="newUser.password" (ngModelChange)="checkIfPasswordIsValid()"
                  #passwordField="ngModel" required>
         </div>
         <div>
           <div class="alert alert-danger" *ngIf="passwordField.invalid && passwordField.touched">
             Password field is required
           </div>
-          <div class="alert alert-danger" role="alert" *ngIf="newUser.user_password.length <6 &&
-          newUser.user_password.length > 0">
+          <div class="alert alert-danger" role="alert" *ngIf="newUser.password.length <6 &&
+          newUser.password.length > 0">
             The password must contain at least 6 characters
           </div>
-          <div class="alert alert-danger" role="alert" *ngIf="!passwordContent && newUser.user_password.length>0">
+          <div class="alert alert-danger" role="alert" *ngIf="!passwordContent && newUser.password.length>0">
             The user name must contain at least one lower case one upper case and one number.
           </div>
         </div>
