@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserDTO} from "../model/UserDTO";
 import {DataService} from "../data.service";
 import {Router} from "@angular/router";
+import {error} from "@angular/compiler-cli/src/transformers/util";
 
 @Component({
   selector: 'app-register',
@@ -27,6 +28,7 @@ export class RegisterComponent implements OnInit {
   userAgeIsValid = false;
   userAge: any = null;
   role_id: number = 1;
+  errorMessage = '';
 
   constructor(private dataService: DataService,
               private router: Router) {
@@ -39,9 +41,12 @@ export class RegisterComponent implements OnInit {
     this.newUser.roleId = this.role_id;
     this.newUser.userAge = this.userAge;
     this.dataService.registerUser(this.newUser).subscribe(
-      next => this.message = "New user successfully added "
+      next => {this.message = "New user successfully added "},
+      error => this.errorMessage = "User with this username already exists"
+
     )
-    this.closeRegistrationComponent();
+
+
   }
 
   closeRegistrationComponent() {
@@ -126,7 +131,6 @@ export class RegisterComponent implements OnInit {
       }
     } else {
       this.passwordIsValid = true;
-      console.log("password length yeah")
     }
   }
 

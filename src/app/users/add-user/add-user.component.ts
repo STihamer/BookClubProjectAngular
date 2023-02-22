@@ -43,7 +43,7 @@ export class AddUserComponent implements OnInit {
     this.dataService.addUser(this.newUser).subscribe(
       next => {
         this.message = "New user successfully added "
-        this.closeAddUserComponent();
+
       },
       error => this.errorMessage = error.error
     )
@@ -159,7 +159,6 @@ export class AddUserComponent implements OnInit {
 
   checkIfRoleIsValid() {
     if (!this.newUser.roleId) {
-      console.log(this.userRoleIsValid)
     } else {
       this.userRoleIsValid = true;
     }

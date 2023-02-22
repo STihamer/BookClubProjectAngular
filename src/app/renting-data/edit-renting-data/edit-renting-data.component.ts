@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Subscription} from "rxjs";
 import {RentingDataForScreen} from "../../model/RentingDataForScreen";
-import {RentingTable} from "../../model/RentingTable";
+import {RentingTableDTO} from "../../model/RentingTableDTO";
 import {DataService} from "../../data.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
@@ -28,7 +28,7 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
   rentingTableResetSubscription: Subscription = new Subscription();
 
   @Input()
-  newRentingTable: RentingTable = new RentingTable();
+  newRentingTable: RentingTableDTO = new RentingTableDTO();
 
 
   constructor(private dataService: DataService,
@@ -63,7 +63,7 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.newRentingTable.return_date_extended = true;
+    this.newRentingTable.returnDateExtended = true;
     this.dataService.updateRentingTableReturnDate(this.newRentingTable, this.newRentingTable.id, this.extensionPeriod).subscribe(
       (waiting) => {
         this.dataChangedEvent.emit();
@@ -92,7 +92,7 @@ export class EditRentingDataComponent implements OnInit, OnDestroy {
           message => {console.log(message.id)
             if (role.role == 'admin') {
               this.isUsersRentingData = true;
-            } else if (message.id == this.newRentingTable.borrowed_by) {
+            } else if (message.id == this.newRentingTable.borrowedBy) {
               this.isUsersRentingData = true;
             }
           }

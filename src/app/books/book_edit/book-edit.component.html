@@ -3,7 +3,9 @@
   <div class="card col-4 mt-2">
     <div class="card-body">
       <form #bookForm="ngForm">
-
+        <div class="text-end">
+          <button type="button" class="btn-close bg-info" aria-label="Close" (click)="closeAddBookComponent()"></button>
+        </div>
         <div class="form-group">
           <label for="title">Title</label>
           <input type="text" class="form-control" id="title" placeholder="book title"
@@ -65,16 +67,19 @@
 
         </div>
         <div class="container row d-flex mr-0 ms-0 ps-0 pe-0">
-          <button type="button" class="btn btn-primary mt-3" (click)="onSubmit()"
+          <button type="button" class="btn btn-primary mt-3" (click)="onSubmit()" *ngIf="errorMessage == ''"
                   [disabled]="bookForm.invalid || !bookTitleIsValid || !authorFNameIsValid || !authorLNameIsValid">Save
           </button>
           <button type="button" class="btn btn-danger mt-3 ml-2" (click)="clearWrongDataFromAddForm()"
                   *ngIf="action==='add' && isAdminUser == true && message">{{message}}
           </button>
           <button type="button" class="btn btn-primary mt-3 ml-2" (click)="deleteBook()"
-                           *ngIf="action==='edit' && isAdminUser == true">Delete
-        </button>
+                  *ngIf="action==='edit' && isAdminUser == true && errorMessage == ''">Delete
+          </button>
+          <button class="btn btn-danger  mt-3"
+                  *ngIf="errorMessage != ''" (click)="closeErrorMessage()">{{errorMessage}}</button>
         </div>
+
       </form>
     </div>
   </div>

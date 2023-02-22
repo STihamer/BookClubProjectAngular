@@ -20,7 +20,7 @@
   </div>
   <div class="row row-striped p-0 m-0" *ngFor="let renting of rentingDataForScreenList">
     <div class="text-dark">
-      <h3 class="text-uppercase"><strong> {{  renting.bookTitle }}</strong></h3>
+      <h3 class="text-uppercase"><strong> {{ renting.bookTitle }}</strong></h3>
       <div class="col-6">
         <p class="mb-0">Author name:  {{ renting.authorFirstName }} {{renting.authorLastName}}</p>
 
@@ -35,8 +35,9 @@
         </div>
         <div class="col-6">
           <a class="btn btn-warning" (click)="editRentingList(renting.id)">Edit</a>
-          <a class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#exampleModal"
-             (click)="setDeleteRentingData(renting.id)">Delete</a>
+          <button class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#exampleModal"
+             (click)="setDeleteRentingData(renting.id)" [disabled]="!isAdminUser && renting.borrowerId != id">
+            Delete</button>
         </div>
       </div>
     </div>
@@ -52,7 +53,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Close</button>
-            <button type="button" class="btn btn-primary" (click)="onSubmit()">Delete</button>
+            <button type="button" class="btn btn-primary" (click)="onSubmit()">Delete
+            </button>
           </div>
         </div>
       </div>

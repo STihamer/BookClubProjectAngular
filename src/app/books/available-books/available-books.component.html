@@ -3,8 +3,8 @@
     <h1 class="text-center text-light"> Books available for renting</h1>
     <div class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Book title" aria-label="Book title"
-             aria-describedby="button-addon2">
-      <button class="btn btn-info" type="button" id="button-addon2">Abort</button>
+             aria-describedby="button-addon2" [(ngModel)]="searchingText" (keyup)="findBookByTitle(searchingText)">
+      <button class="btn btn-info" type="button" id="button-addon2" (click)="cleanSearchingText()">Abort</button>
     </div>
   </div>
 

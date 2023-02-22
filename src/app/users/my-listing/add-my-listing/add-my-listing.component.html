@@ -1,9 +1,11 @@
 <div class="container row d-flex mt-5 justify-content-center">
+  <h5 class="card-title text-center mb-2">Add your new listing</h5>
   <div class="card" style="width: 25rem;">
     <form #myListingForm="ngForm">
       <div class="card-body">
-
-        <h5 class="card-title">Add your new listing</h5>
+        <div class="text-end">
+          <button type="button" class="btn-close bg-info" aria-label="Close" (click)="closeAddMyListing()"></button>
+        </div>
 
       </div>
       <ul class="list-group list-group-flush">
@@ -11,9 +13,9 @@
           <div class="form-group col-12">
             <label for="user">User</label>
             <select class="form-select" id="user" [(ngModel)]="myUser"  name="username" required #userField =
-              "ngModel">
-              <option value=""></option>
-              <option *ngFor="let user of users" [ngValue]="user">{{user?.username}}</option>
+              "ngModel" [disabled]="errorMessage != ''">
+              <option value="" [disabled]="errorMessage != ''"></option>
+              <option *ngFor="let user of users" [ngValue]="user" [disabled]="errorMessage != ''">{{user?.username}}</option>
 
             </select>
             <div class="alert alert-danger" *ngIf="userField.invalid && userField.touched">
@@ -25,8 +27,8 @@
           <div class="form-group col-12">
             <label for="book">Book</label>
             <select class="form-select" id="book" [(ngModel)]="myBook" name="book_title" #bookField =
-              "ngModel" required>
-              <option *ngFor="let book of books" [ngValue]="book">{{book?.bookTitle}}</option>
+              "ngModel" required [disabled]="errorMessage != ''">
+              <option *ngFor="let book of books" [ngValue]="book" [disabled]="errorMessage != ''">{{book?.bookTitle}}</option>
             </select>
             <div class="alert alert-danger" *ngIf="bookField.invalid && bookField.touched">
               Book is required
@@ -34,10 +36,17 @@
           </div>
         </li>
         <li class="list-group-item border-bottom-0">
+          <button class="btn btn-danger  mt-3" (click)="closeErrorMessage()"  *ngIf="errorMessage != ''">{{errorMessage}}
+          </button>
           <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-3">
             <button [disabled]="myBook.bookTitle === '' || myUser.username === ''" type="button"
                     class="btn btn-primary mt-3"
-                    (click)="onSubmit()">Save
+                    (click)="onSubmit()" *ngIf="errorMessage == ''">Save
+            </button>
+          </div>
+          <div class="container row d-flex mr-0 ms-0 ps-0 pe-0 mb-2">
+            <button  type="button"
+                    class="btn btn-primary mt-2" (click)="closeErrorMessage()">Clear
             </button>
           </div>
         </li>

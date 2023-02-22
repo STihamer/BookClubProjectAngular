@@ -1,6 +1,7 @@
 export class RentingDataForScreen {
 
   id: number = 0;
+  borrowerId = 0;
   rentingTableId: number = 0;
   borrowerFirstName: string = '';
   borrowerLastName: string = '';

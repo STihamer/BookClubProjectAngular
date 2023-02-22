@@ -102,4 +102,7 @@ export class AddBookOwnerComponent implements OnInit, OnDestroy {
       }
     );
   };
+  closeAddBookOwner(){
+    window.location.replace("bookOwner");
+  }
 }

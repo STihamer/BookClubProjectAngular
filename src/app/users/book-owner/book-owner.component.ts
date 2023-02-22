@@ -31,6 +31,7 @@ export class BookOwnerComponent implements OnInit {
   role: string = '';
   id: number = 0;
   isAdminUser = false;
+  errorMessage = '';
 
   constructor(private dataService: DataService,
               private router: Router,
@@ -49,13 +50,11 @@ export class BookOwnerComponent implements OnInit {
     this.books = [];
     this.personNameBookTitleForBookOwners = [];
     this.bookOwnerList = [];
-    this.dataService.getUsers().subscribe(next =>{
+    this.dataService.getUsers().subscribe(next => {
       this.users = next
-      console.log(this.users)
     });
     this.dataService.getBooks().subscribe(next => {
       this.books = next;
-      console.log(this.books)
     });
     this.dataService.bookOwners.subscribe(
       next => {
@@ -133,11 +132,19 @@ export class BookOwnerComponent implements OnInit {
     this.selectedBookOwner = this.bookOwnerList.filter(element => element.id === this.selectedPersonNameBookTitleForBookOwner.bookOwnerId);
     this.dataService.deleteOwnerBook(this.selectedBookOwner[0].id).subscribe(
       next => {
+
         window.location.reload();
         window.location.replace('bookOwner');
+      }, error => {
+        this.errorMessage = error.error;
+        setTimeout(() => {
+          this.errorMessage = '';
+          this.router.navigate(["bookOwner"])
+        }, 3000);
+
+
       }
     )
-
   }
 
   findBookOwnerByNameOrBookTitle(text: string) {
@@ -184,4 +191,5 @@ export class BookOwnerComponent implements OnInit {
     );
 
   };
+
 }

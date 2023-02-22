@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../data.service";
-import {MyListing} from "../../model/MyListing";
+import {MyListingDTO} from "../../model/MyListingDTO";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PersonBookListing} from "../../model/PersonBookListing";
 import {FormResetService} from "../../form-reset.service";
-import {AuthService} from "../../auth.service";
+
 
 @Component({
   selector: 'app-my-listing',
@@ -13,9 +13,9 @@ import {AuthService} from "../../auth.service";
 })
 export class MyListingComponent implements OnInit {
 
-  myListings: Array<MyListing> = new Array<MyListing>();
+  myListings: Array<MyListingDTO> = new Array<MyListingDTO>();
   action: string = '';
-  selectedMyListing: any = new MyListing();
+  selectedMyListing: any = new MyListingDTO();
   searchListing: string = '';
   personsListingList: Array<PersonBookListing> = new Array<PersonBookListing>();
   selectedPersonListing: PersonBookListing = new PersonBookListing();
@@ -45,7 +45,7 @@ export class MyListingComponent implements OnInit {
         if (this.role == 'admin') {
           this.myListings = next;
         } else {
-          this.myListings = next.filter(element => element.reading_person == this.id);
+          this.myListings = next.filter(element => element.readingPerson == this.id);
         }
         this.createPersonsListingList(this.myListings, id);
         this.toManageMyListingRouting();
@@ -80,7 +80,7 @@ export class MyListingComponent implements OnInit {
 
   addMyListing() {
     this.myListingComponentHidden = true;
-    this.selectedMyListing = new MyListing();
+    this.selectedMyListing = new MyListingDTO();
     this.router.navigate(['myListing'], {queryParams: {action: 'add'}});
     this.resetService.resetMyListingFormEvent.emit(this.selectedMyListing);
   }
@@ -102,21 +102,21 @@ export class MyListingComponent implements OnInit {
     });
   }
 
-  createPersonsListingList(myListings: Array<MyListing>, id: number) {
+  createPersonsListingList(myListings: Array<MyListingDTO>, id: number) {
+
     for (let el of this.myListings) {
       const bookReader: PersonBookListing = new PersonBookListing()
-      this.dataService.getUserById(el.reading_person).subscribe(next => {
+      this.dataService.getUserById(el.readingPerson).subscribe(next => {
         bookReader.firstName = next.firstName;
         bookReader.lastName = next.lastName;
 
       });
-      this.dataService.getBookById(el.book_title).subscribe(next => {
+      this.dataService.getBookById(el.bookTitle).subscribe(next => {
         bookReader.bookTitle = next.bookTitle;
 
       });
       bookReader.id = id++;
       bookReader.myListingId = el.id;
-
       this.personsListingList.push(bookReader);
       this.sortingMyListing();
     }

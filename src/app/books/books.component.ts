@@ -44,7 +44,6 @@ export class BooksComponent implements OnInit {
   }
 
   setBook(id: number) {
-    console.log(id);
     this.router.navigate(['books'], {queryParams: {id: id, action: 'view'}})
     this.selectedBook = this.books.find(book => book.bookId === +id);
     this.getBookAvailabilityByUsernameAndTitle(id)
@@ -53,6 +52,7 @@ export class BooksComponent implements OnInit {
   loadData() {
     this.dataService.getBooks().subscribe(
       next => {
+
         this.books = next.sort((a, b) => {
           if (a.bookId > b.bookId) {
             return 1;
@@ -93,7 +93,8 @@ export class BooksComponent implements OnInit {
     this.dataService.bookNonRented.subscribe(
       next => {
         this.nonRentedBooks = next;
-        this.ifBookIsRented = this.nonRentedBooks.filter(element => element.book_id == this.selectedBook.bookId)[0];
+        this.ifBookIsRented = this.nonRentedBooks
+          .filter(element => element.book_id == this.selectedBook.bookId)[0];
         if (!this.ifBookIsRented) {
           this.findBookAvailability.book_title = this.selectedBook.bookTitle;
           this.findBookAvailability.book_id = this.selectedBook.bookId;
@@ -115,7 +116,6 @@ export class BooksComponent implements OnInit {
 
   closeModal() {
     this.router.navigate(['books']);
-    window.location.reload();
   }
 
   findBookByTitleOrByAuthorName(searching: string) {
@@ -164,5 +164,9 @@ export class BooksComponent implements OnInit {
         this.bookHidden = true;
       }
     });
+  }
+  closeAddBook(){
+    this.bookHidden = false;
+    this.router.navigate(['books']);
   }
 }

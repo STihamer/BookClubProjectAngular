@@ -16,6 +16,7 @@ import {RegisterComponent} from "./register/register.component";
 const routes: Routes = [
   {path: 'users', component:UsersComponent, canActivate: [AuthRouteGuardService]},
   {path: 'books', component:BooksComponent, canActivate: [AuthRouteGuardService]},
+  {path: 'home', component:HomeComponent},
   {path: '', component:HomeComponent},
   {path: 'rentingTable', component:RentingDataComponent,canActivate: [AuthRouteGuardService]},
   {path: 'bookOwner', component:BookOwnerComponent, canActivate: [AuthRouteGuardService]},

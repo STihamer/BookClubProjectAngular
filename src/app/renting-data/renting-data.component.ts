@@ -1,12 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {RentingTable} from "../model/RentingTable";
+import {RentingTableDTO} from "../model/RentingTableDTO";
 import {DataService} from "../data.service";
 import {RentingDataForScreen} from "../model/RentingDataForScreen";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {FormResetService} from "../form-reset.service";
 import {filter} from "rxjs";
 import {formatDate} from "@angular/common";
-import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-renting-data',
@@ -18,14 +17,13 @@ export class RentingDataComponent implements OnInit {
   constructor(private dataService: DataService,
               private router: Router,
               private route: ActivatedRoute,
-              private formResetService: FormResetService,
-              private authService: AuthService) {
+              private formResetService: FormResetService) {
   }
 
-  rentingTables: Array<RentingTable> = new Array<RentingTable>();
+  rentingTables: Array<RentingTableDTO> = new Array<RentingTableDTO>();
   rentingDataForScreenList: Array<RentingDataForScreen> = new Array<RentingDataForScreen>();
   selectedRentingDetail: any = new RentingDataForScreen();
-  selectedRentingTable: any = new RentingTable();
+  selectedRentingTable: any = new RentingTableDTO();
   action = '';
   option = '';
   searching = '';
@@ -35,10 +33,12 @@ export class RentingDataComponent implements OnInit {
   searchingBookTitle = '';
   searchingAuthorFirstName = '';
   searchingAuthorLastName = '';
-
+  role = '';
+  isAdminUser = false;
+  id = 0;
 
   ngOnInit(): void {
-
+    this.setupRoleAndId()
     this.loadData();
   }
 
@@ -59,23 +59,24 @@ export class RentingDataComponent implements OnInit {
         this.sortingRentingTables(this.rentingTables);
         for (let element of this.rentingTables) {
           const rentingDataForScreen: RentingDataForScreen = new RentingDataForScreen();
-          this.dataService.getUserById(element.borrowed_by).subscribe(user => {
+          this.dataService.getUserById(element.borrowedBy).subscribe(user => {
+            rentingDataForScreen.borrowerId = user.userId;
             rentingDataForScreen.borrowerFirstName = user.firstName;
             rentingDataForScreen.borrowerLastName = user.lastName;
             rentingDataForScreen.borrowerUserName = user.username;
           });
-          this.dataService.getBookById(element.book_id).subscribe(
+          this.dataService.getBookById(element.bookId).subscribe(
             book => {
               rentingDataForScreen.bookTitle = book.bookTitle;
               rentingDataForScreen.authorFirstName = book.authorFirstName;
               rentingDataForScreen.authorLastName = book.authorLastName;
             }
           );
-          rentingDataForScreen.borrowed_date = element.borrowed_date;
-          rentingDataForScreen.return_date = element.return_date;
+          rentingDataForScreen.borrowed_date = element.borrowedDate;
+          rentingDataForScreen.return_date = element.returnDate;
           rentingDataForScreen.id = id++;
           rentingDataForScreen.rentingTableId = element.id;
-          rentingDataForScreen.return_date_extended = element.return_date_extended;
+          rentingDataForScreen.return_date_extended = element.returnDateExtended;
           this.rentingDataForScreenList.push(rentingDataForScreen);
         }
       }
@@ -123,7 +124,7 @@ export class RentingDataComponent implements OnInit {
     console.log(this.selectedRentingTable);
   }
 
-  sortingRentingTables(rentingTables: Array<RentingTable>) {
+  sortingRentingTables(rentingTables: Array<RentingTableDTO>) {
     rentingTables = rentingTables.sort(
       (a, b) => {
         if (a.id > b.id) {
@@ -156,7 +157,7 @@ export class RentingDataComponent implements OnInit {
   }
 
   addRentingTable() {
-    this.selectedRentingTable = new RentingTable();
+    this.selectedRentingTable = new RentingTableDTO();
     this.router.navigate(['rentingTable'], {queryParams: {action: 'add'}});
     this.formResetService.resetMyListingFormEvent.emit(this.selectedRentingTable);
   }
@@ -174,6 +175,7 @@ export class RentingDataComponent implements OnInit {
     this.rentingTables = [];
     this.rentingDataForScreenList = [];
     this.dataService.rentingTablesByTitleOrAuthorName(bookTitle, authorFirstName, authorLastName).subscribe(
+
       next => {
         this.rentingTables = next;
         if (this.rentingTables.length < 1) {
@@ -186,35 +188,54 @@ export class RentingDataComponent implements OnInit {
               authorLastName: this.searchingAuthorLastName.replace(/\s/g, ""),
             }
           })
-          this.createRentingDataForScreen(this.rentingTables)
+
+          this.createRentingDataForScreen(this.rentingTables);
         }
       }
     );
   }
 
-  createRentingDataForScreen(rentingTables: Array<RentingTable>) {
+  createRentingDataForScreen(rentingTables: Array<RentingTableDTO>) {
     let id = 1;
     this.sortingRentingTables(rentingTables);
     for (let element of rentingTables) {
       const rentingDataForScreen: RentingDataForScreen = new RentingDataForScreen();
-      this.dataService.getUserById(element.borrowed_by).subscribe(user => {
-        rentingDataForScreen.borrowerFirstName = user.first_name;
-        rentingDataForScreen.borrowerLastName = user.last_name;
+      this.dataService.getUserById(element.borrowedBy).subscribe(user => {
+        rentingDataForScreen.borrowerFirstName = user.firstName;
+        rentingDataForScreen.borrowerLastName = user.lastName;
         rentingDataForScreen.borrowerUserName = user.username;
       });
-      this.dataService.getBookById(element.book_id).subscribe(
+      this.dataService.getBookById(element.bookId).subscribe(
         book => {
-          rentingDataForScreen.bookTitle = book.book_title;
-          rentingDataForScreen.authorFirstName = book.author_fname;
-          rentingDataForScreen.authorLastName = book.author_lname;
+          rentingDataForScreen.bookTitle = book.bookTitle;
+          rentingDataForScreen.authorFirstName = book.authorFirstName;
+          rentingDataForScreen.authorLastName = book.authorLastName;
         }
       );
-      rentingDataForScreen.borrowed_date = element.borrowed_date;
-      rentingDataForScreen.return_date = element.return_date;
+      rentingDataForScreen.borrowed_date = element.borrowedDate;
+      rentingDataForScreen.return_date = element.returnDate;
       rentingDataForScreen.id = id++;
       rentingDataForScreen.rentingTableId = element.id;
-      rentingDataForScreen.return_date_extended = element.return_date_extended;
+      rentingDataForScreen.return_date_extended = element.returnDateExtended;
       this.rentingDataForScreenList.push(rentingDataForScreen);
     }
   }
+
+  setupRoleAndId() {
+    this.dataService.getRole().subscribe(
+      next => {
+        this.role = next.role;
+        if (this.role == 'admin') {
+
+          this.isAdminUser = true;
+        }
+        this.dataService.getId().subscribe(
+          next => {
+            this.id = next.id;
+          }
+        );
+      }
+    );
+
+  };
 }

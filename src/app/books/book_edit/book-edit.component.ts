@@ -27,7 +27,9 @@ export class BookEditComponent implements OnInit, OnDestroy {
   @Output()
   clearWrongData = new EventEmitter;
   message: string = '';
-
+  errorMessage = '';
+  @Output()
+  closeAddBook = new EventEmitter;
   bookTitleIsValid = false;
   authorFNameIsValid = false;
   authorLNameIsValid = false;
@@ -94,9 +96,7 @@ export class BookEditComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.message = 'saving...';
-
     if (this.formBook.bookId < 1) {
-
       this.dataService.addBook(this.formBook).subscribe(
         (book) => {
           this.dataChangedEvent.emit();
@@ -114,15 +114,16 @@ export class BookEditComponent implements OnInit, OnDestroy {
       );
     }
   }
-
   deleteBook() {
     this.message = 'deleting';
     this.dataService.deleteBook(this.formBook.bookId).subscribe(
       next => {
         this.dataChangedEvent.emit();
         this.router.navigate(['books']);
-      }, error => this.message = 'Sorry, this user cannot be deleted at this time.'
-    )
+      }, error =>{
+        this.errorMessage = error.error;
+      }
+    );
   }
 
   clearWrongDataFromAddForm() {
@@ -145,5 +146,11 @@ export class BookEditComponent implements OnInit, OnDestroy {
       }
     );
   }
+  closeAddBookComponent() {
+    this.closeAddBook.emit();
+  }
 
+  closeErrorMessage(){
+    window.location.replace("books");
+  }
 }

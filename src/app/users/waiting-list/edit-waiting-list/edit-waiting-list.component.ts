@@ -4,7 +4,7 @@ import {DataService} from "../../../data.service";
 import {Router} from "@angular/router";
 import {FormResetService} from "../../../form-reset.service";
 import {Subscription} from "rxjs";
-import {WaitingList} from "../../../model/WaitingList";
+import {WaitingListDTO} from "../../../model/WaitingListDTO";
 
 @Component({
   selector: 'app-edit-waiting-list',
@@ -30,9 +30,9 @@ export class EditWaitingListComponent implements OnInit, OnDestroy {
   waitingListResetSubscription: Subscription = new Subscription();
 
   @Input()
-  newWaitingList: WaitingList = new WaitingList();
+  newWaitingList: WaitingListDTO = new WaitingListDTO();
   message = '';
-  formWaitingList: WaitingList = new WaitingList();
+  formWaitingList: WaitingListDTO = new WaitingListDTO();
 
   ngOnInit(): void {
 
@@ -54,7 +54,7 @@ export class EditWaitingListComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.formWaitingList.id = this.newWaitingList.id
-    this.formWaitingList.book_for_reading = this.newWaitingList.book_for_reading
+    this.formWaitingList.bookForReading = this.newWaitingList.bookForReading
     this.formWaitingList.finished = this.waitingDetail.underReading;
 
     this.dataService.updateWaitingList(this.formWaitingList, this.formWaitingList.id).subscribe(

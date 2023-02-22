@@ -103,13 +103,17 @@
             The password must contain at least 6 characters
           </div>
           <div class="alert alert-danger" role="alert" *ngIf="!passwordContent && newUser.password.length>0">
-            The user name must contain at least one lower case one upper case and one number.
+            The password must contain at least one lower case one upper case and one number.
           </div>
         </div>
         <div class="container  row d-flex mr-0 ms-0 ps-0 pe-0">
 
           <button class="btn btn-success  mt-3" (click)="closeRegistrationComponent()" *ngIf="message != ''">New user
             successfully added
+          </button>
+          <button class="btn btn-danger  mt-3"  (click)="clearDataFromNewUsersForm()" *ngIf="errorMessage != ''">User
+            with this
+            user name already exists.
           </button>
           <button type="button" class="btn btn-secondary mt-3 fw-bold" (click)="submit()" *ngIf="message == ''"
 

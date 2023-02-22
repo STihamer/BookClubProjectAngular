@@ -1,12 +1,11 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {UserDTO} from "../../../model/UserDTO";
 import {BookDTO} from "../../../model/BookDTO";
-import {WaitingList} from "../../../model/WaitingList";
+import {WaitingListDTO} from "../../../model/WaitingListDTO";
 import {DataService} from "../../../data.service";
 import {BookOwnerDTO} from "../../../model/BookOwnerDTO";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PersonNameBookTitleForBookOwner} from "../../../model/PersonNameBookTitleForBookOwner";
-import {AuthService} from "../../../auth.service";
 
 @Component({
   selector: 'app-add-waiting-list',
@@ -21,7 +20,7 @@ export class AddWaitingListComponent implements OnInit {
   option = '';
   action = '';
   anotherBookOwner: any = new BookOwnerDTO();
-  newWaitingList: WaitingList = new WaitingList()
+  newWaitingList: WaitingListDTO = new WaitingListDTO()
   users: Array<UserDTO> = new Array<UserDTO>();
   bookOwnerList: Array<BookOwnerDTO> = new Array<BookOwnerDTO>();
   personNameBookTitleForBookOwners: Array<PersonNameBookTitleForBookOwner> = new Array<PersonNameBookTitleForBookOwner>();
@@ -30,11 +29,11 @@ export class AddWaitingListComponent implements OnInit {
   dataChangeEvent = new EventEmitter();
   role: string = '';
   id: number = 0;
+  errorMessage = '';
 
   constructor(private dataService: DataService,
               private router: Router,
-              private route: ActivatedRoute,
-              private authService: AuthService) {
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -73,7 +72,7 @@ export class AddWaitingListComponent implements OnInit {
   clearDataFromAddForm() {
     this.personNameBookTitleForBookOwner.bookOwnerId = 0;
     this.personNameBookTitleForBookOwner.bookId = 0;
-    this.newWaitingList.user_id = 0;
+    this.newWaitingList.userId = 0;
     window.location.reload()
 
   }
@@ -83,7 +82,7 @@ export class AddWaitingListComponent implements OnInit {
     console.log(this.personNameBookTitleForBookOwner.bookOwnerId);
     this.bookOwnerList = this.bookOwnerList.filter(element => element.bookId == this.personNameBookTitleForBookOwner.bookId && element.userId == this.personNameBookTitleForBookOwner.bookOwnerId);
     console.log(this.bookOwnerList)
-    this.newWaitingList.book_for_reading = this.bookOwnerList[0].id;
+    this.newWaitingList.bookForReading = this.bookOwnerList[0].id;
     this.newWaitingList.finished = false;
     this.dataService.addWaitingList(this.newWaitingList).subscribe(
       (newWaitingList) => {
@@ -91,6 +90,9 @@ export class AddWaitingListComponent implements OnInit {
         window.location.replace("waitingList");
         this.dataChangeEvent.emit();
         this.router.navigate(['waitingList']);
+      }, error => {
+        this.errorMessage = error.error;
+        console.log(this.errorMessage);
       }
     );
   }
@@ -100,14 +102,14 @@ export class AddWaitingListComponent implements OnInit {
       const personNameBookTitleForBookOwner: PersonNameBookTitleForBookOwner = new PersonNameBookTitleForBookOwner()
 
       this.dataService.getUserById(el.userId).subscribe(user => {
-        personNameBookTitleForBookOwner.firstName = user.first_name;
-        personNameBookTitleForBookOwner.lastName = user.last_name;
-        personNameBookTitleForBookOwner.userId = user.user_id;
+        personNameBookTitleForBookOwner.firstName = user.firstName;
+        personNameBookTitleForBookOwner.lastName = user.lastName;
+        personNameBookTitleForBookOwner.userId = user.userId;
 
       });
       this.dataService.getBookById(el.bookId).subscribe(book => {
-        personNameBookTitleForBookOwner.bookTitle = book.book_title;
-        personNameBookTitleForBookOwner.bookId = book.book_id;
+        personNameBookTitleForBookOwner.bookTitle = book.bookTitle;
+        personNameBookTitleForBookOwner.bookId = book.bookId;
       });
       personNameBookTitleForBookOwner.id = id++;
       personNameBookTitleForBookOwner.bookOwnerId = el.userId;
@@ -145,6 +147,12 @@ export class AddWaitingListComponent implements OnInit {
         )
       }
     );
+  }
+  closeErrorMessage() {
+    window.location.replace("waitingList?action=add");
+  }
 
+  closeAddWaitingList() {
+    window.location.replace("waitingList")
   }
 }

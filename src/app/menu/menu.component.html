@@ -1,4 +1,4 @@
-<div class="container p-0 m-0" *ngIf="userIsLoggedIn">
+<div class="container p-0 m-0" *ngIf="!isMenuHidden">
   <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
     <div class="container-fluid">
       <a class="navbar-brand" (click)="navigateToHome()"><span id="logo">Book club</span></a>
@@ -9,11 +9,11 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" (click)="navigateToHome()">Home</a>
+            <a class="nav-link"  aria-current="page" (click)="navigateToHome()" [ngClass]="setHomeMenuActive">Home</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle  active" id="navbarDropdown1" role="button" data-bs-toggle="dropdown"
-               aria-expanded="false">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-bs-toggle="dropdown"
+               aria-expanded="false" [ngClass]="setBooksMenuActive">
               Books
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
@@ -23,8 +23,8 @@
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle  active" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-               aria-expanded="false">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+               aria-expanded="false" [ngClass]="setUsersMenuActive">
               Users
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -38,13 +38,13 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link  active" (click)="navigateToRentingData()">Renting</a>
+            <a class="nav-link" (click)="navigateToRentingData()" [ngClass]="setRentingMenuActive">Renting</a>
           </li>
           <li class="nav-item">
             <a class="nav-link  active" (click)="navigateToLogin()" *ngIf="!userIsLoggedIn">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link  active" (click)="logout()" *ngIf="userIsLoggedIn">Logout</a>
+            <a class="nav-link" (click)="logout()" *ngIf="userIsLoggedIn">Logout</a>
           </li>
         </ul>
       </div>

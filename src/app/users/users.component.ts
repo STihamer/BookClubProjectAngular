@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../data.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AuthService} from "../auth.service";
 import {UserDTO} from "../model/UserDTO";
 
 @Component({
@@ -10,7 +9,6 @@ import {UserDTO} from "../model/UserDTO";
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-
   users: Array<any> = new Array<any>();
   action: string = '';
   message = 'Loading dat ... please wait';
@@ -19,26 +17,17 @@ export class UsersComponent implements OnInit {
   searchingUser: string = '';
   isAdminUser = false;
   setUsersComponentCol = 'col-12';
+  role = '';
+  id = 0;
 
   constructor(private dataService: DataService,
               private router: Router,
-              private route: ActivatedRoute,
-              private authService: AuthService) {
+              private route: ActivatedRoute) {
   }
-
-
   ngOnInit(): void {
-    this.dataService.getRole().subscribe(
-      next => {
-        if (next.role == 'admin') {
-          this.isAdminUser = true;
-        }
-      }
-    );
+    this.setupRoleAndId();
     this.loadData();
-
   }
-
   loadData() {
     this.dataService.getUsers().subscribe(
       next => {
@@ -127,4 +116,20 @@ export class UsersComponent implements OnInit {
       userIdForScreen++;
     }
   }
+
+  setupRoleAndId() {
+    this.dataService.getRole().subscribe(
+      next => {
+        this.role = next.role;
+        if (this.role == 'admin') {
+          this.isAdminUser = true;
+        }
+        this.dataService.getId().subscribe(
+          next => {
+            this.id = next.id;
+          }
+        );
+      }
+    );
+  };
 }

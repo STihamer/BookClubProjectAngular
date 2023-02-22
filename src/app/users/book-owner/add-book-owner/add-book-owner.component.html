@@ -1,9 +1,12 @@
 <div class="container row d-flex mt-5 justify-content-center">
+  <h5 class="card-title text-center mb-2">Add your new book owner</h5>
   <div class="card" style="width: 25rem;">
     <form #bookOwnerForm="ngForm">
       <div class="card-body">
+        <div class="text-end">
+          <button type="button" class="btn-close bg-info" aria-label="Close" (click)="closeAddBookOwner()"></button>
+        </div>
 
-        <h5 class="card-title">Add your new book owner</h5>
 
       </div>
       <ul class="list-group list-group-flush">

@@ -1,5 +1,4 @@
 <div class="container m-0 p-0">
-
   <div class="  row justify-content-center" *ngIf="action != 'add'">
     <h1 class="text-start text-center">Users</h1>
     <div  [ngClass]="setUsersComponentCol">
@@ -28,9 +27,9 @@
           <td>{{user.firstName}}</td>
           <td>{{user.lastName}}</td>
           <td>{{user.username}}</td>
-
           <td>
-            <button type="button" class="btn btn-primary " (click)="setUser(user.userId)">view</button>
+            <button type="button" class="btn btn-primary "
+                    (click)="setUser(user.userId)">view</button>
           </td>
         </tr>
         </tbody>
@@ -39,7 +38,7 @@
     </div>
     <div class="col-6">
       <app-user-detail *ngIf="action==='view'" [user]="selectedUser"></app-user-detail>
-      <app-user-edit *ngIf="action==='edit'&& isAdminUser" [user]="selectedUser"
+      <app-user-edit *ngIf="action==='edit'&&(isAdminUser || id == selectedUser.userId)" [user]="selectedUser"
                      (dataChangedEvent)="loadData()"></app-user-edit>
     </div>
   </div>

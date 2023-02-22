@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../data.service";
-import {WaitingList} from "../../model/WaitingList";
+import {WaitingListDTO} from "../../model/WaitingListDTO";
 import {WaitingListDetail} from "../../model/WaitingListDetail";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {FormResetService} from "../../form-reset.service";
@@ -14,11 +14,11 @@ import {AuthService} from "../../auth.service";
   styleUrls: ['./waiting-list.component.css']
 })
 export class WaitingListComponent implements OnInit {
-  waitingLists: Array<WaitingList> = new Array<WaitingList>();
+  waitingLists: Array<WaitingListDTO> = new Array<WaitingListDTO>();
   waitingListDetailList: Array<WaitingListDetail> = new Array<WaitingListDetail>();
   selectedWaitingListDetail: any = new WaitingListDetail();
   setWaitingListComponentCol = 'col-12';
-  selectedWaitingList: any = new WaitingList()
+  selectedWaitingList: any = new WaitingListDTO()
   action = '';
   option = '';
   searching: string = '';
@@ -63,20 +63,20 @@ export class WaitingListComponent implements OnInit {
     )
   }
 
-  createWaitingListDetailList(newWaitingLists: Array<WaitingList>, id: number) {
+  createWaitingListDetailList(newWaitingLists: Array<WaitingListDTO>, id: number) {
     for (let el of newWaitingLists) {
       const waitingListDetail: WaitingListDetail = new WaitingListDetail()
       waitingListDetail.waitingListId = el.id;
-      this.dataService.getUserById(el.user_id).subscribe(next => {
-        waitingListDetail.readerId =next.user_id;
+      this.dataService.getUserById(el.userId).subscribe(next => {
+        waitingListDetail.readerId =next.userId;
         waitingListDetail.readerFirstName = next.firstName;
         waitingListDetail.readerLastName = next.lastName;
         waitingListDetail.readerUsername = next.username;
 
       });
-      this.dataService.getBookOwnerById(el.book_for_reading).subscribe(next => {
-        waitingListDetail.ownerId = next.user_id;
-        waitingListDetail.bookId = next.book_id;
+      this.dataService.getBookOwnerById(el.bookForReading).subscribe(next => {
+        waitingListDetail.ownerId = next.userId;
+        waitingListDetail.bookId = next.bookId;
         this.dataService.getUserById(waitingListDetail.ownerId).subscribe(next => {
           waitingListDetail.ownerFirstName = next.firstName;
           waitingListDetail.ownerLastName = next.lastName;
@@ -146,7 +146,7 @@ export class WaitingListComponent implements OnInit {
   }
 
   addWaitingList() {
-    this.selectedWaitingList = new WaitingList();
+    this.selectedWaitingList = new WaitingListDTO();
     this.router.navigate(['waitingList'], {queryParams: {action: 'add'}});
     this.formResetService.resetMyListingFormEvent.emit(this.selectedWaitingList);
   }

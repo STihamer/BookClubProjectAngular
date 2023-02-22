@@ -18,12 +18,41 @@
         <tr>
           <td>Email:</td><td>{{user.userEmail}}</td>
         </tr>
-      </table>
-      <div class="links">
-        <a class="card-link" (click)="editUser()" *ngIf="isAdminUser">Edit</a>
-        <a class="card-link" *ngIf="isAdminUser">Delete</a>
-      </div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-white">
+              <div class="modal-header">
 
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body bg-warning">
+                <p class="text-dark">Are you sure you want to delete?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary"  data-bs-dismiss="modal"
+                        (click)="deleteUser(user.userId)">Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </table>
+
+      <div class="links">
+        <a class="card-link " (click)="editUser()" *ngIf="errorMessage == '' &&(isAdminUser || id == user.userId)">Edit
+        </a>
+        <a class="card-link text-warning" *ngIf= "errorMessage == '' && (isAdminUser || id == user.userId)"
+           data-bs-toggle="modal"
+           data-bs-target="#exampleModal">Delete</a>
+        <a class="card-link text-info" (click)="closeUserDetail()"
+           *ngIf="errorMessage == ''">Close
+        </a>
+        <button class="btn btn-danger  mt-3 text-white" *ngIf="errorMessage != ''"
+                (click)="closeErrorMessage()">{{errorMessage}}</button>
+      </div>
     </div>
   </div>
 </div>
+

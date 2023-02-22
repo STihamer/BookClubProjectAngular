@@ -63,7 +63,9 @@
         </div>
         <div class="container d-flex  row justify-content-end m-0 p-0">
           <button type="button" class="btn btn-secondary col-2 pe-0 me-0"
-                  (click)="deleteOwnerBookField(item.id)" *ngIf="isAdminUser">Delete
+                  (click)="deleteOwnerBookField(item.id)" *ngIf="isAdminUser && errorMessage == ''">Delete
+          </button>
+          <button class="btn btn-danger  mt-3" *ngIf="errorMessage != ''">{{errorMessage}}
           </button>
         </div>
       </div>

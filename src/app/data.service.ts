@@ -4,24 +4,20 @@ import {map, Observable} from "rxjs";
 import {environment} from "../environments/environment";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {BookDTO} from "./model/BookDTO";
-import {MyListing} from "./model/MyListing";
+import {MyListingDTO} from "./model/MyListingDTO";
 import {BookOwnerDTO} from "./model/BookOwnerDTO";
-import {WaitingList} from "./model/WaitingList";
-import {RentingTable} from "./model/RentingTable";
+import {WaitingListDTO} from "./model/WaitingListDTO";
+import {RentingTableDTO} from "./model/RentingTableDTO";
 import {BooksNonRentedResponse} from "./model/BooksNonRentedResponse";
-import {RentingPeriod} from "./model/RentingPeriod";
+import {RentingPeriodDTO} from "./model/RentingPeriodDTO";
 import {WaitingPersonsAndBookTitle} from "./model/WaitingPersonsAndBookTitle";
 import {FindBookByTitleOrAuthorIfAvailable} from "./model/FindBookByTitleOrAuthorIfAvailable";
-
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
   constructor(private http: HttpClient) {
-
   }
-
-
   getUsers(): Observable<Array<UserDTO>> {
     return this.http.get<Array<UserDTO>>(environment.restUrl + '/api/users', {withCredentials: true})
       .pipe(
@@ -34,9 +30,7 @@ export class DataService {
         })
       );
   }
-
   getBooks(): Observable<Array<BookDTO>> {
-
     return this.http.get<Array<BookDTO>>(environment.restUrl + '/api/books', {withCredentials: true})
       .pipe(
         map(data => {
@@ -48,65 +42,33 @@ export class DataService {
         })
       );
   }
-
-
-  updateUser(user: UserDTO, id: number): Observable<any> {
-
-    return this.http.put<UserDTO>(environment.restUrl + `/api/users/${id}`, user, {withCredentials: true});
-  }
-
-  updateBook(book:BookDTO, id: number): Observable<any> {
-
-    return this.http.put<BookDTO>(environment.restUrl + `/api/books/${id}`, book,{withCredentials: true});
-  }
-
-  updateWaitingList(waitingList: WaitingList, id: number): Observable<WaitingList> {
-    const param = new HttpParams()
-      .set('finished', waitingList.finished)
-    return this.http.put<WaitingList>(environment.restUrl + `/api/waitingLists/${id}?${param}`, waitingList,{withCredentials: true});
-  }
-
-  updateRentingTableReturnDate(rentingTable: RentingTable, id: number, period: number): Observable<RentingTable> {
-    const param = new HttpParams()
-      .set('period', period)
-    return this.http.put<RentingTable>(environment.restUrl + `/api/rentingTables/${id}?${param}`, rentingTable,{withCredentials: true});
-  }
-
   getUserById(id: number): Observable<any> {
     return this.http.get<UserDTO>(environment.restUrl + `/api/users/${id}`, {withCredentials: true})
       .pipe(map(data => {
         return UserDTO.fromHttp(data);
       }))
   }
-
   getBookById(id: number): Observable<any> {
-    return this.http.get<BookDTO>(environment.restUrl + `/api/books/${id}`,{withCredentials: true})
+    return this.http.get<BookDTO>(environment.restUrl + `/api/books/${id}`, {withCredentials: true})
       .pipe(map(data => {
         return BookDTO.fromHttp(data);
       }))
   }
 
   getBookOwnerById(id: number): Observable<any> {
-    return this.http.get<BookOwnerDTO>(environment.restUrl + `/api/bookOwners/${id}`,{withCredentials: true})
+    return this.http.get<BookOwnerDTO>(environment.restUrl + `/api/bookOwners/${id}`, {withCredentials: true})
       .pipe(map(data => {
         return BookOwnerDTO.fromHttp(data);
       }))
   }
 
-  getUserByUsername(username: string): Observable<any> {
-    return this.http.get<UserDTO>(environment.restUrl + `/api/users/${username}`,{withCredentials: true})
-      .pipe(map(data => {
-        return UserDTO.fromHttp(data);
-      }))
-  }
-
-  getMyListing(): Observable<Array<MyListing>> {
-    return this.http.get<Array<MyListing>>(environment.restUrl + '/api/myListings', {withCredentials: true})
+  getMyListing(): Observable<Array<MyListingDTO>> {
+    return this.http.get<Array<MyListingDTO>>(environment.restUrl + '/api/myListings', {withCredentials: true})
       .pipe(
         map(data => {
-          const myListings = new Array<MyListing>();
+          const myListings = new Array<MyListingDTO>();
           for (const myListing of data) {
-            myListings.push(MyListing.fromHttp(myListing));
+            myListings.push(MyListingDTO.fromHttp(myListing));
           }
           return myListings
         })
@@ -114,7 +76,7 @@ export class DataService {
   }
 
   get bookOwners(): Observable<Array<BookOwnerDTO>> {
-    return this.http.get<Array<BookOwnerDTO>>(environment.restUrl + '/api/bookOwners',{withCredentials: true})
+    return this.http.get<Array<BookOwnerDTO>>(environment.restUrl + '/api/bookOwners', {withCredentials: true})
       .pipe(
         map(data => {
           const bookOwners = new Array<BookOwnerDTO>();
@@ -126,26 +88,26 @@ export class DataService {
       );
   }
 
-  get waitingLists(): Observable<Array<WaitingList>> {
-    return this.http.get<Array<WaitingList>>(environment.restUrl + '/api/waitingLists',{withCredentials: true})
+  get waitingLists(): Observable<Array<WaitingListDTO>> {
+    return this.http.get<Array<WaitingListDTO>>(environment.restUrl + '/api/waitingLists', {withCredentials: true})
       .pipe(
         map(data => {
-          const waitingLists = new Array<WaitingList>();
+          const waitingLists = new Array<WaitingListDTO>();
           for (const waitingList of data) {
-            waitingLists.push(WaitingList.fromHttp(waitingList));
+            waitingLists.push(WaitingListDTO.fromHttp(waitingList));
           }
           return waitingLists
         })
       );
   }
 
-  get rentingTables(): Observable<Array<RentingTable>> {
-    return this.http.get<Array<RentingTable>>(environment.restUrl + '/api/rentingTables', {withCredentials: true})
+  get rentingTables(): Observable<Array<RentingTableDTO>> {
+    return this.http.get<Array<RentingTableDTO>>(environment.restUrl + '/api/rentingTables', {withCredentials: true})
       .pipe(
         map(data => {
-          const rentingTables = new Array<RentingTable>();
+          const rentingTables = new Array<RentingTableDTO>();
           for (const rentingTable of data) {
-            rentingTables.push(RentingTable.fromHttp(rentingTable));
+            rentingTables.push(RentingTableDTO.fromHttp(rentingTable));
           }
           return rentingTables
         })
@@ -153,7 +115,7 @@ export class DataService {
   }
 
   get bookNonRented(): Observable<Array<BooksNonRentedResponse>> {
-    return this.http.get<Array<BooksNonRentedResponse>>(environment.restUrl + '/api/booksNonRented',{withCredentials: true})
+    return this.http.get<Array<BooksNonRentedResponse>>(environment.restUrl + '/api/booksNonRented', {withCredentials: true})
       .pipe(
         map(data => {
           const booksNonRented = new Array<BooksNonRentedResponse>();
@@ -165,17 +127,17 @@ export class DataService {
       );
   }
 
-  rentingTablesByTitleOrAuthorName(bookTitle: string, authorFirstName: string, authorLastName: string): Observable<Array<RentingTable>> {
+  rentingTablesByTitleOrAuthorName(bookTitle: string, authorFirstName: string, authorLastName: string): Observable<Array<RentingTableDTO>> {
     const params = new HttpParams()
       .set('book_title', bookTitle)
       .set('author_fname', authorFirstName)
       .set('author_lname', authorLastName)
-    return this.http.get<Array<RentingTable>>(environment.restUrl + `/api/rentingTables/findBooksByTitleOrAuthorName?${params}`,{withCredentials: true})
+    return this.http.get<Array<RentingTableDTO>>(environment.restUrl + `/api/rentingTables/findBooksByTitleOrAuthorName?${params}`, {withCredentials: true})
       .pipe(
         map(data => {
-          const foundBooks = new Array<RentingTable>();
+          const foundBooks = new Array<RentingTableDTO>();
           for (const foundBook of data) {
-            foundBooks.push(RentingTable.fromHttp(foundBook));
+            foundBooks.push(RentingTableDTO.fromHttp(foundBook));
           }
           return foundBooks
         })
@@ -185,7 +147,7 @@ export class DataService {
   findBookByTitleOrByAuthorName(searching: string): Observable<Array<BookDTO>> {
     const params = new HttpParams()
       .set('searching', searching)
-    return this.http.get<Array<BookDTO>>(environment.restUrl + `/api/books/findBooksByTitleOrAuthorName?${params}`,{withCredentials: true})
+    return this.http.get<Array<BookDTO>>(environment.restUrl + `/api/books/findBooksByTitleOrAuthorName?${params}`, {withCredentials: true})
       .pipe(
         map(data => {
           const foundBooks = new Array<BookDTO>();
@@ -197,13 +159,13 @@ export class DataService {
       );
   }
 
-  get rentingPeriods(): Observable<Array<RentingPeriod>> {
-    return this.http.get<Array<RentingPeriod>>(environment.restUrl + '/api/rentingPeriods',{withCredentials: true})
+  get rentingPeriods(): Observable<Array<RentingPeriodDTO>> {
+    return this.http.get<Array<RentingPeriodDTO>>(environment.restUrl + '/api/rentingPeriods', {withCredentials: true})
       .pipe(
         map(data => {
-          const rentingPeriods = new Array<RentingPeriod>();
+          const rentingPeriods = new Array<RentingPeriodDTO>();
           for (const rentingPeriod of data) {
-            rentingPeriods.push(RentingPeriod.fromHttp(rentingPeriod));
+            rentingPeriods.push(RentingPeriodDTO.fromHttp(rentingPeriod));
           }
           return rentingPeriods
         })
@@ -214,7 +176,7 @@ export class DataService {
     const params = new HttpParams()
       .set('first_name', waitingPerson.first_name)
       .set('last_name', waitingPerson.last_name)
-    return this.http.get<Array<WaitingPersonsAndBookTitle>>(environment.restUrl + `/api/waitingPersonsAndBookTitle?${params}`,{withCredentials: true})
+    return this.http.get<Array<WaitingPersonsAndBookTitle>>(environment.restUrl + `/api/waitingPersonsAndBookTitle?${params}`, {withCredentials: true})
       .pipe(
         map(data => {
           const waitingPersonsAndBookTitle = new Array<WaitingPersonsAndBookTitle>();
@@ -231,7 +193,7 @@ export class DataService {
       .set('book_title', bookByAuthorAndTitle.book_title)
       .set('first_name', bookByAuthorAndTitle.author_fname)
       .set('last_name', bookByAuthorAndTitle.author_lname)
-    return this.http.get<Array<FindBookByTitleOrAuthorIfAvailable>>(environment.restUrl + `/api/bookAvailabilityByAuthorOrTitle?${params}`,{withCredentials: true})
+    return this.http.get<Array<FindBookByTitleOrAuthorIfAvailable>>(environment.restUrl + `/api/bookAvailabilityByAuthorOrTitle?${params}`, {withCredentials: true})
       .pipe(
         map(data => {
           const availableBooksByTitle = new Array<FindBookByTitleOrAuthorIfAvailable>();
@@ -243,25 +205,49 @@ export class DataService {
       );
   }
 
+  updateUser(user: UserDTO, id: number): Observable<any> {
+
+    return this.http.put<UserDTO>(environment.restUrl + `/api/users/${id}`, user, {withCredentials: true});
+  }
+
+  updateBook(book: BookDTO, id: number): Observable<any> {
+
+    return this.http.put<BookDTO>(environment.restUrl + `/api/books/${id}`, book, {withCredentials: true});
+  }
+
+  updateWaitingList(waitingList: WaitingListDTO, id: number): Observable<WaitingListDTO> {
+    const param = new HttpParams()
+      .set('finished', waitingList.finished)
+    return this.http.put<WaitingListDTO>(environment.restUrl + `/api/waitingLists/${id}?${param}`, waitingList, {withCredentials: true});
+  }
+
+  updateRentingTableReturnDate(rentingTable: RentingTableDTO, id: number, period: number): Observable<RentingTableDTO> {
+    const param = new HttpParams()
+      .set('period', period)
+    return this.http.put<RentingTableDTO>(environment.restUrl + `/api/rentingTables/${id}?${param}`, rentingTable, {withCredentials: true});
+  }
+  deleteUser(id: number): Observable<any> {
+    return this.http.delete(environment.restUrl + `/api/users/${id}`, {withCredentials: true});
+  }
 
   deleteBook(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/api/books/${id}`,{withCredentials: true});
+    return this.http.delete(environment.restUrl + `/api/books/${id}`, {withCredentials: true});
   }
 
   deleteMyListing(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/api/myListings/${id}`,{withCredentials: true});
+    return this.http.delete(environment.restUrl + `/api/myListings/${id}`, {withCredentials: true});
   }
 
   deleteOwnerBook(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/api/bookOwners/${id}`,{withCredentials: true});
+    return this.http.delete(environment.restUrl + `/api/bookOwners/${id}`, {withCredentials: true});
   }
 
   deleteWaitingListById(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/api/waitingLists/${id}`,{withCredentials: true});
+    return this.http.delete(environment.restUrl + `/api/waitingLists/${id}`, {withCredentials: true});
   }
 
   deleteRentingTableById(id: number): Observable<any> {
-    return this.http.delete(environment.restUrl + `/api/rentingTables/${id}`,{withCredentials: true});
+    return this.http.delete(environment.restUrl + `/api/rentingTables/${id}`, {withCredentials: true});
   }
 
   addUser(user: UserDTO): Observable<UserDTO> {
@@ -273,7 +259,7 @@ export class DataService {
       .set('user_email', user.userEmail)
       .set('user_password', user.password)
       .set('role_id', user.roleId);
-    return this.http.post<UserDTO>(environment.restUrl + `/api/users?${params}`, user,{withCredentials: true});
+    return this.http.post<UserDTO>(environment.restUrl + `/api/users?${params}`, user, {withCredentials: true});
   }
 
   registerUser(user: UserDTO): Observable<UserDTO> {
@@ -285,7 +271,7 @@ export class DataService {
       .set('user_email', user.userEmail)
       .set('user_password', user.password)
       .set('role_id', user.roleId);
-    return this.http.post<UserDTO>(environment.restUrl + `/api/users/registration?${params}`, user,{withCredentials: true});
+    return this.http.post<UserDTO>(environment.restUrl + `/api/users/registration?${params}`, user, {withCredentials: true});
   }
 
   addBook(newBook: BookDTO): Observable<BookDTO> {
@@ -293,14 +279,14 @@ export class DataService {
       bookTitle: newBook.bookTitle, authorFirstName: newBook.authorFirstName,
       authorLastName: newBook.authorLastName, publishedYear: newBook.publishedYear
     };
-    return this.http.post<BookDTO>(environment.restUrl + '/api/books', fullBook,{withCredentials: true});
+    return this.http.post<BookDTO>(environment.restUrl + '/api/books', fullBook, {withCredentials: true});
   }
 
-  addMyListing(myListing: MyListing): Observable<MyListing> {
+  addMyListing(myListing: MyListingDTO): Observable<MyListingDTO> {
     const params = new HttpParams()
-      .set('reading_person', myListing.reading_person)
-      .set('book_title', myListing.book_title);
-    return this.http.post<MyListing>(environment.restUrl + `/api/myListings?${params}`, myListing,{withCredentials: true});
+      .set('reading_person', myListing.readingPerson)
+      .set('book_title', myListing.bookTitle);
+    return this.http.post<MyListingDTO>(environment.restUrl + `/api/myListings?${params}`, myListing, {withCredentials: true});
   }
 
   addBookOwner(newBookOwner: BookOwnerDTO): Observable<BookOwnerDTO> {
@@ -308,24 +294,24 @@ export class DataService {
       bookId: newBookOwner.bookId,
       userId: newBookOwner.userId
     };
-    return this.http.post<BookOwnerDTO>(environment.restUrl + '/api/bookOwners', fullBookOwner,{withCredentials: true});
+    return this.http.post<BookOwnerDTO>(environment.restUrl + '/api/bookOwners', fullBookOwner, {withCredentials: true});
   }
 
-  addWaitingList(waitingList: WaitingList): Observable<WaitingList> {
+  addWaitingList(waitingList: WaitingListDTO): Observable<WaitingListDTO> {
     const params = new HttpParams()
-      .set('user_id', waitingList.user_id)
+      .set('user_id', waitingList.userId)
       .set('finished', waitingList.finished)
-      .set('book_for_reading', waitingList.book_for_reading);
-    return this.http.post<WaitingList>(environment.restUrl + `/api/waitingLists?${params}`, waitingList,{withCredentials: true});
+      .set('book_for_reading', waitingList.bookForReading);
+    return this.http.post<WaitingListDTO>(environment.restUrl + `/api/waitingLists?${params}`, waitingList, {withCredentials: true});
   }
 
 
-  addRentingTable(rentingTable: RentingTable): Observable<RentingTable> {
+  addRentingTable(rentingTable: RentingTableDTO): Observable<RentingTableDTO> {
     const params = new HttpParams()
-      .set('borrowed_by', rentingTable.borrowed_by)
-      .set('book_id', rentingTable.book_id)
-      .set('renting_period', rentingTable.renting_period);
-    return this.http.post<RentingTable>(environment.restUrl + `/api/rentingTables?${params}`, rentingTable,{withCredentials: true});
+      .set('borrowed_by', rentingTable.borrowedBy)
+      .set('book_id', rentingTable.bookId)
+      .set('renting_period', rentingTable.rentingPeriod);
+    return this.http.post<RentingTableDTO>(environment.restUrl + `/api/rentingTables?${params}`, rentingTable, {withCredentials: true});
   }
 
   validateUser(name: string, password: string): Observable<{ result: string }> {
@@ -339,7 +325,8 @@ export class DataService {
 
   getRole(): Observable<{ role: string }> {
     const headers = new HttpHeaders().append("X-Requested-With", "XMLHttpRequest");
-    return this.http.get<{ role: string }>(environment.restUrl + '/api/users/currentUserRole', {headers,
+    return this.http.get<{ role: string }>(environment.restUrl + '/api/users/currentUserRole', {
+      headers,
       withCredentials: true
     });
   }
@@ -347,8 +334,9 @@ export class DataService {
   getId(): Observable<{ id: number }> {
     return this.http.get<{ id: number }>(environment.restUrl + '/api/users/currentUserId', {withCredentials: true});
   }
-  logout(): Observable<string>{
-      return this.http.get<string>(environment.restUrl + '/api/users/logout', {
+
+  logout(): Observable<string> {
+    return this.http.get<string>(environment.restUrl + '/api/users/logout', {
       withCredentials: true
     });
   }
